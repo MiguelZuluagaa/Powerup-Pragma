@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.MicroserviceUserNotWorking;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserItsNotOwner;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserNotFoundException;
@@ -30,7 +31,14 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     @Override
     public void saveRestaurant(Restaurant restaurant){
-        Optional<UserFeignDto> userRequested = Optional.ofNullable(userFeignClient.getUserById(restaurant.getIdUserOwner()));
+        Optional<UserFeignDto> userRequested = null;
+
+        try {
+            userRequested = Optional.ofNullable(userFeignClient.getUserById(restaurant.getIdUserOwner()));
+        }catch (Exception e) {
+            throw new MicroserviceUserNotWorking();
+        }
+
         if(userRequested.isPresent()){
             if(userRequested.get().getIdRole().getName().contains(OWNER_ROLE_NAME)){
                 restaurantPersistencePort.saveRestaurant(restaurant);

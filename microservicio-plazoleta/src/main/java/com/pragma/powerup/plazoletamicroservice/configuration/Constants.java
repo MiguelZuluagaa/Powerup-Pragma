@@ -1,5 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.configuration;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.MicroserviceUserNotWorking;
+
 public class Constants {
 
     private Constants() {
@@ -26,6 +28,7 @@ public class Constants {
     public static final String PERSON_NOT_FOUND_MESSAGE = "No person found with the id provided";
     public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
     public static final String USER_ITS_NOT_OWNER = "The user with the id provided does not correspond to an owner";
+    public static final String MICROSERVICE_USER_NOT_WORKING = "We are currently experiencing internal problems, please try again later! ";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";
