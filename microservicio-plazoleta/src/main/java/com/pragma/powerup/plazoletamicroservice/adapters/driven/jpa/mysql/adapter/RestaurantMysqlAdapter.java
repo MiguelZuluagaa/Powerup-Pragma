@@ -17,14 +17,13 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
     private final IRestaurantRepository restaurantRepository;
     private final IRestaurantEntityMapper restaurantEntityMapper;
 
-    
     @Override
     public List<Restaurant> getAllRestaurants() {
         List<RestaurantEntity> roleEntityList = restaurantRepository.findAll();
         if (roleEntityList.isEmpty()) {
             throw new NoDataFoundException();
         }
-        return restaurantEntityMapper.toRestaranteList(roleEntityList);
+        return restaurantEntityMapper.toRestarantList(roleEntityList);
     }
 
     @Override
@@ -36,22 +35,5 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
 
         restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant));
 
-
-
-
-
-
-        //RestauranteEntity restauranteEntity = restauranteEntityMapper.toEntity(restaurante);
-        //Optional<UsuarioEntity> usuarioEntity = usuarioRepository.findById(restauranteEntity.getIdUsuarioPropietario().getId());
-        //if(usuarioEntity.isPresent()){
-        //    Optional<RoleEntity> roleUsuarioEntity = roleRepository.findById(usuarioEntity.get().getIdRol().getId());
-        //    if(roleUsuarioEntity.isPresent() && roleUsuarioEntity.get().getName().equals("ROLE_PROPIETARIO")){
-                //restauranteRepository.save(restauranteEntityMapper.toEntity(restaurante));
-        //    }else{
-        //        throw new UserItsNotPropietario();
-        //    }
-        //}else{
-        //    throw new UserNotFoundException();
-        //}
     }
 }

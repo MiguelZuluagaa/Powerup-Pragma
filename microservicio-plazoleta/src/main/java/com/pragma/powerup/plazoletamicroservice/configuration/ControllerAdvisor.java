@@ -39,7 +39,6 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, WRONG_CREDENTIALS_MESSAGE));
     }*/
-
     @ExceptionHandler(NoDataFoundException.class)
     public ResponseEntity<Map<String, String>> handleNoDataFoundException(NoDataFoundException noDataFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -51,7 +50,6 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PERSON_ALREADY_EXISTS_MESSAGE));
     }
-
     @ExceptionHandler(MailAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleMailAlreadyExistsException(
             MailAlreadyExistsException mailAlreadyExistsException) {

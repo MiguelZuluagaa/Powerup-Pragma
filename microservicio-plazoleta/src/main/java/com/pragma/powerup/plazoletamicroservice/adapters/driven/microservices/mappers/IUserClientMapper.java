@@ -1,6 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.mappers;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dto.UserResponseDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dto.UserFeignDto;
 import com.pragma.powerup.plazoletamicroservice.domain.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -9,5 +9,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IUserClientMapper {
-    User toUser(UserResponseDto user);
+    User toUser(UserFeignDto user);
 }

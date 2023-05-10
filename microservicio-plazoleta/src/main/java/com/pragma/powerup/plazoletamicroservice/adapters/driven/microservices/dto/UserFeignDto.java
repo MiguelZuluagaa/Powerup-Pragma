@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserResponseDto { // Required
+public class UserFeignDto {
     private String name;
     private String surname;
     private String email;

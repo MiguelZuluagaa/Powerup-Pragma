@@ -1,7 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dto.UserResponseDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
+
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IRestaurantHandler;
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +25,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RestaurantRestController {
     private final IRestaurantHandler restaurantHandler;
-
-    @Autowired
-    IUserFeignClient userFeignClient;
 
     @Operation(summary = "Get all restaurants",
             responses = {
@@ -54,13 +49,5 @@ public class RestaurantRestController {
         restaurantHandler.saveRestaurant(restaurantRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
-    }
-
-    @GetMapping("/getUserByDni/{dni}")
-    public ResponseEntity<UserResponseDto> getUserByDni(@PathVariable String dni){
-        //System.out.println(dni);
-        UserResponseDto test = userFeignClient.getUserByDni(dni);
-
-        return ResponseEntity.ok(test);
     }
 }
