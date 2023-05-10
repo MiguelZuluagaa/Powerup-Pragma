@@ -92,4 +92,10 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ROLE_NOT_FOUND_MESSAGE));
     }
+    @ExceptionHandler(UserItsNotOwner.class)
+    public ResponseEntity<Map<String, String>> handleUserItsNotOwner(
+            UserItsNotOwner userItsNotOwner) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OWNER));
+    }
 }

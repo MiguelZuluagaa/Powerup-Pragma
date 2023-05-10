@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotFoundException;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserItsNotOwner;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserNotFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dto.UserFeignDto;
@@ -34,7 +35,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             if(userRequested.get().getIdRole().getName().contains(OWNER_ROLE_NAME)){
                 restaurantPersistencePort.saveRestaurant(restaurant);
             }else{
-                throw new RoleNotFoundException();
+                throw new UserItsNotOwner();
             }
         }else{
             throw new UserNotFoundException();
