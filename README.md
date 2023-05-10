@@ -35,40 +35,40 @@ To get a local copy up and running follow these steps.
 ### Installation
 
 1. Clone 2 repository's
-   ```sh
-   git clone https://github.com/MiguelZuluagaa/Powerup-Pragma.git
-   ```
-    ```sh
-   git clone https://github.com/MiguelZuluagaa/configs-data.git
-   ```
-3. Create a 2 new database in MySQL called "usuarios" and "plazoleta"
-4. Update the path of previously cloned configurations (config-data):
+  ```sh
+    git clone https://github.com/MiguelZuluagaa/Powerup-Pragma.git
+  ```
+  ```sh
+    git clone https://github.com/MiguelZuluagaa/configs-data.git
+  ```
+2. Create a 2 new database in MySQL called "usuarios" and "plazoleta"
+3. Update the path of previously cloned configurations (config-data):
   ```yml
-   # MICROSERVICE:CONFIG-SERVICE --> resources/application.properties
+  # MICROSERVICE:CONFIG-SERVICE --> resources/application.properties
     server.port= 9000
     spring.cloud.config.server.git.uri= file://<<YOUR RUTE IN THE SAME FORMAT WITH "/" >>
     spring.security.user.name=root
     spring.security.user.password=root
-   ```
-5. Update the database connection settings on the proyect configs-data.git
-   ```yml
-   # config-data/plazoleta-service and config-data/user-service
-   spring:
-    main:
-      allow-bean-definition-overriding: true
-    datasource:
-      url: jdbc:mysql://localhost:<<YOUR_MYSQL_PORT>>/plazoleta
-      username: <<YOUR_USERNAME>>
-      password: <<YOUR_PASSWORD>>
-   ```
-6. After the tables are created execute the next content to populate the database
+  ```
+4. Update the database connection settings on the proyect configs-data.git
+  ```yml
+  # config-data/plazoleta-service and config-data/user-service
+  spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:mysql://localhost:<<YOUR_MYSQL_PORT>>/plazoleta
+    username: <<YOUR_USERNAME>>
+    password: <<YOUR_PASSWORD>>
+  ```
+5. After the tables are created execute the next content to populate the database
 ```sql
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('1', 'ROLE_ADMIN', 'ROLE_ADMIN');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('2', 'ROLE_PROPIETARIO', 'ROLE_PROPIETARIO');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('3', 'ROLE_EMPLEADO', 'ROLE_EMPLEADO');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('4', 'ROLE_CLIENTE', 'ROLE_CLIENTE');
 ```
-7. Open Swagger UI and search the /user/ POST endpoint and create the user
+6. Open Swagger UI and search the /user/ POST endpoint and create the user
 
 <!-- USAGE -->
 ## Usage
