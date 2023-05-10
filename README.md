@@ -68,19 +68,19 @@ To get a local copy up and running follow these steps.
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('3', 'ROLE_EMPLEADO', 'ROLE_EMPLEADO');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('4', 'ROLE_CLIENTE', 'ROLE_CLIENTE');
 ```
+6. To execute the project you must run each microservice as follows: </br>
+  6.1 Run ConfigServiceApplication </br>
+  6.2 Run RegistryServiceApplication </br>
+  6.3 Run UserMicroserviceApplication </br>
+  6.4 Run PlazoletaMicroserviceApplication
 6. Open Swagger UI and search the /user/ POST endpoint and create the user
 
 <!-- USAGE -->
 ## Usage
 
-1. To execute the project you must run each microservice as follows: 
-  1.1 Run ConfigServiceApplication
-  1.2 Run RegistryServiceApplication
-  1.3 Run UserMicroserviceApplication
-  1.4 Run PlazoletaMicroserviceApplication
-3. Open Microservices user [http://localhost:8090/swagger-ui/index.html](http://localhost:8090/swagger-ui/index.html) in your web browser
-4. Open Microservices plazoleta [http://localhost:8091/swagger-ui/index.html](http://localhost:8091/swagger-ui/index.html) in your web browser
-5. Open Eureka Server [http://localhost:8099](http://localhost:8099) in your web browser
+1. Open Microservices user [http://localhost:8090/swagger-ui/index.html](http://localhost:8090/swagger-ui/index.html) in your web browser
+2. Open Microservices plazoleta [http://localhost:8091/swagger-ui/index.html](http://localhost:8091/swagger-ui/index.html) in your web browser
+3. Open Eureka Server [http://localhost:8099](http://localhost:8099) in your web browser
 
 <!-- ROADMAP -->
 ## Tests
