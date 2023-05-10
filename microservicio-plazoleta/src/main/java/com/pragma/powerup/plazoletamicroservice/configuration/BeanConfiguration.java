@@ -20,7 +20,6 @@ public class BeanConfiguration {
     private final IRestaurantEntityMapper restaurantEntityMapper;
     private final IUserFeignClient userFeignClient;
 
-
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
         return new RestaurantUseCase(restaurantPersistencePort(), userFeignClient);
@@ -30,5 +29,4 @@ public class BeanConfiguration {
     public IRestaurantPersistencePort restaurantPersistencePort() {
         return new RestaurantMysqlAdapter(restaurantRepository, restaurantEntityMapper);
     }
-
 }

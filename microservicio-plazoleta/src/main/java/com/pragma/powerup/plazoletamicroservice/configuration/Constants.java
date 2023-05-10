@@ -9,6 +9,7 @@ public class Constants {
     public static final Long CLIENT_ROLE_ID = 1L;
     public static final Long EMPLOYEE_ROLE_ID = 2L;
     public static final Long PROVIDER_ROLE_ID = 3L;
+    public static final String OWNER_ROLE_NAME = "PROPIETARIO";
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
     public static final int MAX_PAGE_SIZE = 2;
@@ -24,6 +25,7 @@ public class Constants {
     public static final String MAIL_ALREADY_EXISTS_MESSAGE = "A person with that mail already exists";
     public static final String PERSON_NOT_FOUND_MESSAGE = "No person found with the id provided";
     public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
+    public static final String USER_ITS_NOT_OWNER = "The user with the id provided does not correspond to an owner";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

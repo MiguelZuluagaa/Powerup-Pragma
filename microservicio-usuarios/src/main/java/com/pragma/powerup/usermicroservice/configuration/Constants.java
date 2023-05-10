@@ -12,7 +12,7 @@ public class Constants {
     public static final int MAX_PAGE_SIZE = 2;
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";
-    public static final String RESTAURANTE_CREATED_MESSAGE = "Restaurante created successfully";
+    public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
     public static final String USER_DELETED_MESSAGE = "User deleted successfully";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
@@ -23,6 +23,7 @@ public class Constants {
     public static final String PERSON_NOT_FOUND_MESSAGE = "No person found with the id provided";
     public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
     public static final String USER_ITS_NOT_OLDER_MESSAGE = "User its not older";
+    public static final String SOMETHING_WRONG_WITH_THE_DATE = "Something is wrong with the date please check it, correct format dd-mm-yyyy";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String USER_NOT_FOUND_MESSAGE = "No user found";

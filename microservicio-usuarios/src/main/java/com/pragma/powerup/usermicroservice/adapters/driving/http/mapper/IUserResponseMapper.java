@@ -11,14 +11,14 @@ import java.util.List;
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public interface IUsuarioResponseMapper {
-    @Mapping(source = "usuario.name", target = "name")
-    @Mapping(source = "usuario.surname", target = "surname")
-    @Mapping(source = "usuario.email", target = "email")
-    @Mapping(source = "usuario.phone", target = "phone")
-    @Mapping(source = "usuario.birdDate", target = "birdDate")
-    @Mapping(source = "usuario.dni", target = "dni")
-    @Mapping(source = "usuario.idRole", target = "idRole")
-    UserResponseDto toResponse(User usuario);
+public interface IUserResponseMapper {
+    @Mapping(source = "user.name", target = "name")
+    @Mapping(source = "user.surname", target = "surname")
+    @Mapping(source = "user.email", target = "email")
+    @Mapping(source = "user.phone", target = "phone")
+    @Mapping(source = "user.birdDate", target = "birdDate")
+    @Mapping(source = "user.dni", target = "dni")
+    @Mapping(source = "user.idRole", target = "idRole")
+    UserResponseDto toResponse(User user);
     List<UserResponseDto> userListToUserResponseList(List<User> userList);
 }

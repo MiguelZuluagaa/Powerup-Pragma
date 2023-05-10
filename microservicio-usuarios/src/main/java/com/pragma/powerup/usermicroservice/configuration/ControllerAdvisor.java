@@ -94,4 +94,10 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OLDER_MESSAGE));
     }
+    @ExceptionHandler(SomethingWrongWithTheDate.class)
+    public ResponseEntity<Map<String, String>> handleSomethingWrongWithTheDate(
+            SomethingWrongWithTheDate somethingWrongWithTheDate) {
+        return ResponseEntity.status(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, SOMETHING_WRONG_WITH_THE_DATE));
+    }
 }

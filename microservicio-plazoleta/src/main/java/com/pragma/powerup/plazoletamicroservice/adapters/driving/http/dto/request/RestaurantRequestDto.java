@@ -10,23 +10,23 @@ import lombok.Getter;
 @Getter
 public class RestaurantRequestDto {
 
-    @NotEmpty(message = "El campo nombre no puede estar vacio")
+    @NotEmpty(message = "The name cannot be empty")
     private String name;
 
-    @NotEmpty(message = "El campo nit no puede estar vacio")
-    @Digits(integer=13, fraction=0, message="El campo debe contener solo números enteros")
+    @NotEmpty(message = "The nit cannot be empty")
+    @Digits(integer=13, fraction=0, message="The nit must be integer")
     private String nit;
 
-    @NotEmpty(message = "El campo direccion no puede estar vacia")
+    @NotEmpty(message = "The direction cannot be empty")
     private String direction;
 
-    @NotEmpty(message = "El campo telefono no puede estar vacio")
-    @Digits(integer=13, fraction=0, message="El campo telefono debe contener solo números enteros")
+    @NotEmpty(message = "The phone cannot be empty")
+    @Digits(integer=13, fraction=0, message="The nit must be an integer and may contain the + symbol")
     private String phone;
 
-    @NotEmpty(message = "El campo logo no puede estar vacio")
+    @NotEmpty(message = "The urlLogo cannot be empty")
     private String urlLogo;
 
-    @NotNull(message = "El campo idUserOwner no puede estar vacio")
+    @NotNull(message = "The idUserOwner cannot be empty")
     private Long idUserOwner;
 }
