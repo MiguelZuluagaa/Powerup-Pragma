@@ -16,20 +16,19 @@ public class UserUseCase implements IUserServicePort {
     }
 
     @Override
-    public void saveUser(User usuario) {
+    public void saveUser(User user) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate fechaNacimientoParsed = LocalDate.parse(usuario.getBirdDate(), formatter);
-        Integer age = LocalDate.now().getYear()-fechaNacimientoParsed.getYear();
+        LocalDate birdDateParsed = LocalDate.parse(user.getBirdDate(), formatter);
+        Integer age = LocalDate.now().getYear()-birdDateParsed.getYear();
         if(age < 18 ){
             throw new UserItsNotOlder();
         }
-
-        userPersistencePort.saveUser(usuario);
+        userPersistencePort.saveUser(user);
     }
 
     @Override
-    public User findUserByDni(String numeroDocumento){
-        return userPersistencePort.findUserByDni(numeroDocumento);
+    public User findUserByDni(String dni){
+        return userPersistencePort.findUserByDni(dni);
     }
 
     @Override

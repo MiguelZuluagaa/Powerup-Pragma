@@ -19,33 +19,32 @@ public class UserMysqlAdapter implements IUserPersistencePort {
     private final IUserEntityMapper userEntityMapper;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public void saveUser(User usuario) {
-        if (userRepository.findByDni(usuario.getDni()).isPresent()) {
+    public void saveUser(User user) {
+        if (userRepository.findByDni(user.getDni()).isPresent()) {
             throw new PersonAlreadyExistsException();
         }
-        if (userRepository.existsByEmail(usuario.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())){
             throw new MailAlreadyExistsException();
         }
-
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        UserEntity testUser = userEntityMapper.toEntity(usuario);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        UserEntity testUser = userEntityMapper.toEntity(user);
         userRepository.save(testUser);
     }
 
     @Override
-    public User findUserByDni(String numeroDocumento){
-        Optional<UserEntity> usuario = userRepository.findByDni(numeroDocumento);
-        if (userRepository.findByDni(numeroDocumento).isPresent()){
-            return userEntityMapper.ofUserEntitytoUsuario(usuario.get());
+    public User findUserByDni(String dni){
+        Optional<UserEntity> user = userRepository.findByDni(dni);
+        if (userRepository.findByDni(dni).isPresent()){
+            return userEntityMapper.ofUserEntityToUser(user.get());
         }
         throw new UserNotFoundException();
     }
 
     @Override
     public User findUserById(Long id){
-        Optional<UserEntity> usuario = userRepository.findById(id);
+        Optional<UserEntity> user = userRepository.findById(id);
         if (userRepository.findById(id).isPresent()){
-            return userEntityMapper.ofUserEntitytoUsuario(usuario.get());
+            return userEntityMapper.ofUserEntityToUser(user.get());
         }
         throw new UserNotFoundException();
     }

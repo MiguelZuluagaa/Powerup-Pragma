@@ -2,7 +2,7 @@ package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.UserRequestDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.UserResponseDto;
-import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.IUsuarioHandler;
+import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.IUserHandler;
 import com.pragma.powerup.usermicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("/user/")
 @RequiredArgsConstructor
 public class UserRestController {
-    private final IUsuarioHandler usuarioHandler;
+    private final IUserHandler usuarioHandler;
 
     @Operation(summary = "Add a new user",
             responses = {
@@ -30,8 +30,8 @@ public class UserRestController {
                 @ApiResponse(responseCode = "409", description = "User already exists",
                         content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping
-    public ResponseEntity<Map<String, String>> saveUser(@Valid @RequestBody UserRequestDto usuarioRequestDto) {
-        usuarioHandler.saveUser(usuarioRequestDto);
+    public ResponseEntity<Map<String, String>> saveUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+        usuarioHandler.saveUser(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.PERSON_CREATED_MESSAGE));
     }

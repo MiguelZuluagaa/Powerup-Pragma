@@ -4,6 +4,6 @@ import com.pragma.powerup.usermicroservice.domain.model.User;
 
 public interface IUserPersistencePort {
     void saveUser(User user);
-    User findUserByDni(String numeroDocumento);
+    User findUserByDni(String dni);
     User findUserById(Long id);
 }

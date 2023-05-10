@@ -21,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class BeanConfiguration {
     private final IRoleRepository roleRepository;
-    private final IUserRepository usuarioRepository;
+    private final IUserRepository userRepository;
     private final IRoleEntityMapper roleEntityMapper;
     private final IUserEntityMapper userEntityMapper;
     private final PasswordEncoder passwordEncoder;
@@ -42,6 +42,6 @@ public class BeanConfiguration {
 
     @Bean
     public IUserPersistencePort personPersistencePort() {
-        return new UserMysqlAdapter(usuarioRepository, userEntityMapper, passwordEncoder);
+        return new UserMysqlAdapter(userRepository, userEntityMapper, passwordEncoder);
     }
 }
