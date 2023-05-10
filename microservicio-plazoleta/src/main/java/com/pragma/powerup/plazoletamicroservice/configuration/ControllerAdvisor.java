@@ -98,4 +98,11 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OWNER));
     }
+
+    @ExceptionHandler(MicroserviceUserNotWorking.class)
+    public ResponseEntity<Map<String, String>> handlerMicroserviceUserNotWorking(
+            MicroserviceUserNotWorking microserviceUserNotWorking) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, MICROSERVICE_USER_NOT_WORKING));
+    }
 }
