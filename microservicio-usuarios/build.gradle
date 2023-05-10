@@ -1,0 +1,46 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.0.4'
+	id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.ti.acelera'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-web:3.0.4'
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.4'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config:4.0.2'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap:4.0.1'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.0'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	compileOnly 'org.projectlombok:lombok:1.18.26'
+	runtimeOnly 'com.mysql:mysql-connector-j:8.0.32'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5',
+			'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.4'
+	testImplementation 'org.springframework.security:spring-security-test:6.0.2'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.30.2'
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
