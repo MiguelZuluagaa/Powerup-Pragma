@@ -42,7 +42,15 @@ To get a local copy up and running follow these steps.
    git clone https://github.com/MiguelZuluagaa/configs-data.git
    ```
 3. Create a 2 new database in MySQL called "usuarios" and "plazoleta"
-4. Update the database connection settings on the proyect configs-data.git
+4. Update the path of previously cloned configurations (config-data):
+  ```yml
+   # MICROSERVICE:CONFIG-SERVICE --> resources/application.properties
+    server.port= 9000
+    spring.cloud.config.server.git.uri= file://<<YOUR RUTE IN THE SAME FORMAT WITH "/" >>
+    spring.security.user.name=root
+    spring.security.user.password=root
+   ```
+5. Update the database connection settings on the proyect configs-data.git
    ```yml
    # config-data/plazoleta-service and config-data/user-service
    spring:
@@ -53,7 +61,7 @@ To get a local copy up and running follow these steps.
       username: <<YOUR_USERNAME>>
       password: <<YOUR_PASSWORD>>
    ```
-5. After the tables are created execute the next content to populate the database
+6. After the tables are created execute the next content to populate the database
 ```sql
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('1', 'ROLE_ADMIN', 'ROLE_ADMIN');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('2', 'ROLE_PROPIETARIO', 'ROLE_PROPIETARIO');
