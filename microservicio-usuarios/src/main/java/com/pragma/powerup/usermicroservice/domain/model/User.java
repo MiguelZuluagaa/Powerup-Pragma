@@ -11,9 +11,9 @@ public class User {
     private String birdDate;
     private String email;
     private String password;
-    private RoleEntity idRole;
+    private Role idRole;
 
-    public User(Long id, String name, String surname, String dni, String phone, String birdDate, String email, String password, RoleEntity idRole) {
+    public User(Long id, String name, String surname, String dni, String phone, String birdDate, String email, String password, Role idRole) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -89,11 +89,11 @@ public class User {
         this.password = password;
     }
 
-    public RoleEntity getIdRole() {
+    public Role getIdRole() {
         return idRole;
     }
 
-    public void setIdRole(RoleEntity idRole) {
+    public void setIdRole(Role idRole) {
         this.idRole = idRole;
     }
 }
