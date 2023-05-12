@@ -32,7 +32,6 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public void saveRestaurant(Restaurant restaurant){
         Optional<UserFeignDto> userRequested = null;
-
         try {
             userRequested = Optional.ofNullable(userFeignClient.getUserById(restaurant.getIdUserOwner()));
         }catch (Exception e) {
