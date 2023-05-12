@@ -12,7 +12,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class UserUseCaseTest {
 
@@ -43,6 +45,12 @@ class UserUseCaseTest {
     void findUserByDni() {
         when(userPersistencePort.findUserByDni("123")).thenReturn(user);
         assertNotNull(userUseCase.findUserByDni("123"));
+    }
+
+    @Test
+    void saveUser() {
+        userUseCase.saveUser(user);
+        verify(userPersistencePort, times(1)).saveUser(user);
     }
 
 }
