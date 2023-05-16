@@ -8,10 +8,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -21,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/user/")
 @RequiredArgsConstructor
 public class UserRestController {
-    private final IUserHandler usuarioHandler;
+    private final IUserHandler userHandler;
 
     @Operation(summary = "Add a new user",
             responses = {
@@ -29,9 +34,9 @@ public class UserRestController {
                         content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
                 @ApiResponse(responseCode = "409", description = "User already exists",
                         content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @PostMapping
+    @PostMapping("saveUser/")
     public ResponseEntity<Map<String, String>> saveUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        usuarioHandler.saveUser(userRequestDto);
+        userHandler.saveUser(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.PERSON_CREATED_MESSAGE));
     }
@@ -43,8 +48,10 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Error internal Server",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/dni/{dni}")
+    @SecurityRequirement(name = "jwt")
     public ResponseEntity<UserResponseDto> getUserByDni(@PathVariable String dni){
-        return ResponseEntity.ok(usuarioHandler.findUserByDni(dni));
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok(userHandler.findUserByDni(dni));
     }
 
     @Operation(summary = "Get user by ID",
@@ -54,7 +61,8 @@ public class UserRestController {
                     @ApiResponse(responseCode = "500", description = "Error internal Server",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/id/{id}")
+    @SecurityRequirement(name = "jwt")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id){
-        return ResponseEntity.ok(usuarioHandler.findUserById(id));
+        return ResponseEntity.ok(userHandler.findUserById(id));
     }
 }

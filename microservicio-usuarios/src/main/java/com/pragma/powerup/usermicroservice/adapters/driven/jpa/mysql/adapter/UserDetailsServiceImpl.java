@@ -20,11 +20,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     IUserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String documentID) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByDni(documentID).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         List<UserEntity> usersEntity = userRepository.findAllById(userEntity.getId());
         if (usersEntity.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with documentID: " + documentID);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
         List<RoleEntity> roles = new ArrayList<>();
 

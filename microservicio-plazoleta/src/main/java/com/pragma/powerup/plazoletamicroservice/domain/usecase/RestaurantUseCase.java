@@ -13,7 +13,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistenc
 import java.util.List;
 import java.util.Optional;
 
-import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.OWNER_ROLE_NAME;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.ROLE_OWNER;
 
 public class RestaurantUseCase implements IRestaurantServicePort {
     private final IRestaurantPersistencePort restaurantPersistencePort;
@@ -39,7 +39,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         }
 
         if(userRequested.isPresent()){
-            if(userRequested.get().getIdRole().getName().contains(OWNER_ROLE_NAME)){
+            if(userRequested.get().getIdRole().getName().contains(ROLE_OWNER)){
                 restaurantPersistencePort.saveRestaurant(restaurant);
             }else{
                 throw new UserItsNotOwner();
