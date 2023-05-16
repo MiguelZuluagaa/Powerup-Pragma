@@ -9,8 +9,6 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dt
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +31,6 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     @Override
     public void saveRestaurant(Restaurant restaurant){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         Optional<UserFeignDto> userRequested = null;
         try {
             userRequested = Optional.ofNullable(userFeignClient.getUserById(restaurant.getIdUserOwner()));
