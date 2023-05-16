@@ -8,9 +8,15 @@ public class Constants {
         throw new IllegalStateException("Utility class");
     }
 
-    public static final Long CLIENT_ROLE_ID = 1L;
-    public static final Long EMPLOYEE_ROLE_ID = 2L;
-    public static final Long PROVIDER_ROLE_ID = 3L;
+    public static final Long ROLE_ADMIN_ID = 1L;
+    public static final Long ROLE_OWNER_ID = 2L;
+    public static final Long ROLE_EMPLOYEE_ID = 3L;
+    public static final Long ROLE_CUSTOMER_ID = 4L;
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_OWNER = "OWNER";
+    public static final String ROLE_EMPLOYEE = "EMPLOYEE";
+    public static final String ROLE_CUSTOMER = "CUSTOMER";
+    public static final String ROLE_ANONYMOUS = "ANONYMOUS";
     public static final String OWNER_ROLE_NAME = "PROPIETARIO";
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";

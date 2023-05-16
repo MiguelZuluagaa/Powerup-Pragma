@@ -34,8 +34,7 @@ public class UserRequestDto {
     @NotEmpty(message = "The password cannot be empty")
     private String password;
 
-
-    @NotNull(message = "The idRole cannot be empty")
-    private RoleEntity idRole;
+    /*@NotNull(message = "The idRole cannot be empty")
+    private RoleEntity idRole;*/
 
 }

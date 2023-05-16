@@ -52,8 +52,7 @@ class UserRestControllerTest {
                 "1234567",
                 "1256",
                 "12-12-2001",
-                "1256",
-                role);
+                "1256");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
