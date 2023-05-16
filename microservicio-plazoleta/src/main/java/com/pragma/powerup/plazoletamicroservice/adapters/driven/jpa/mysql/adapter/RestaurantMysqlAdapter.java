@@ -23,7 +23,7 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         if (roleEntityList.isEmpty()) {
             throw new NoDataFoundException();
         }
-        return restaurantEntityMapper.toRestarantList(roleEntityList);
+        return restaurantEntityMapper.toRestaurantList(roleEntityList);
     }
 
     @Override
