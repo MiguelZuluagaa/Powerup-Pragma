@@ -4,6 +4,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dt
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.NAME_MICROSERVICE_USER;
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.RUTE_MICROSERVICE_USER;
@@ -12,8 +13,11 @@ import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.R
 public interface IUserFeignClient {
 
     @GetMapping("/user/dni/{dni}")
-    UserFeignDto getUserByDni(@PathVariable String dni);
+    UserFeignDto getUserByDni(@PathVariable String dni, @RequestHeader("Authorization") String token);
 
     @GetMapping("/user/id/{id}")
-    UserFeignDto getUserById(@PathVariable Long id);
+    UserFeignDto getUserById(@PathVariable Long id, @RequestHeader("Authorization") String token);
+
+    @GetMapping("/user/findByEmail/{email}")
+    UserFeignDto getUserByEmail(@PathVariable String email, @RequestHeader("Authorization") String token);
 }

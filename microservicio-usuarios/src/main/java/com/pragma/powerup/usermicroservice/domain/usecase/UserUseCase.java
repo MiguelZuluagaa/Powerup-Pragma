@@ -67,4 +67,9 @@ public class UserUseCase implements IUserServicePort {
     public User findUserById(Long id){
         return userPersistencePort.findUserById(id);
     }
+
+    @Override
+    public User findUserByEmail(String email){
+        return userPersistencePort.findUserByEmail(email);
+    }
 }

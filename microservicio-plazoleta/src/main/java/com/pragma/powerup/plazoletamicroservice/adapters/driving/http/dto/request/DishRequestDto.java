@@ -20,7 +20,7 @@ public class DishRequestDto {
     private String description;
 
     @NotNull(message = "The price cannot be empty")
-    @Positive(message = "The price must be a positive number")
+    @Positive(message = "The price must be a positive number and greater than zero")
     private Double price;
 
     @NotEmpty(message = "The urlImage cannot be empty")

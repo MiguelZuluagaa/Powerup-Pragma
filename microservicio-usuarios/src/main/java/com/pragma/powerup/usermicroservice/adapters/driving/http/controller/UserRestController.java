@@ -65,4 +65,16 @@ public class UserRestController {
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id){
         return ResponseEntity.ok(userHandler.findUserById(id));
     }
+
+    @Operation(summary = "Get user by Email",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "500", description = "Error internal Server",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/findByEmail/{email}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable String email){
+        return ResponseEntity.ok(userHandler.findUserByEmail(email));
+    }
 }

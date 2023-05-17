@@ -30,4 +30,9 @@ public class UserHandlerImpl implements IUserHandler {
     public UserResponseDto findUserById(Long id){
         return  usuarioResponseMapper.toResponse(usuarioServicePort.findUserById(id));
     }
+
+    @Override
+    public UserResponseDto findUserByEmail(String email){
+        return  usuarioResponseMapper.toResponse(usuarioServicePort.findUserByEmail(email));
+    }
 }

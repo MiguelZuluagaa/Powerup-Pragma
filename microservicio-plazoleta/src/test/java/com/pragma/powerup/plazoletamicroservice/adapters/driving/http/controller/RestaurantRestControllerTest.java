@@ -34,12 +34,13 @@ class RestaurantRestControllerTest {
     void saveRestaurant() throws Exception {
         // Please note that you must be a registered user with owner role to run this test successfully.
         Restaurant restaurant =
-                new Restaurant(10L,"TEST NAME","919191","TEST DIRECTION",
-                                "123456778", "https://www.testlogo.com/",3L);
+                new Restaurant(10L,"TEST NAME","919191231","TEST DIRECTION",
+                                "123456778", "https://www.testlogo.com/",8L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lckBnbWFpbC5jb20iLCJyb2xlcyI6WyJST0xFX09XTkVSIl0sImlhdCI6MTY4NDI4NzMxMCwiZXhwIjoxNjg0OTM1MzEwfQ.SrrMA3px1x2oAow6EjWnUFcMaXOl15BCCOVSY4N4Ig8");// You need put a token here.
 
         HttpEntity<Restaurant> request  = new HttpEntity<>(restaurant, headers);
 
