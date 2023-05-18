@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface IRestaurantRepository extends JpaRepository<RestaurantEntity, Long> {
     Optional<RestaurantEntity> findByNit(String nit);
+    Boolean existsByIdUserOwner(Long idUserOwner);
+    Optional<RestaurantEntity> findById(Long id);
 }

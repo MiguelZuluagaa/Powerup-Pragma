@@ -8,4 +8,5 @@ import java.util.List;
 public interface IDishServicePort {
     List<Dish> getAllDishes();
     void saveDish(Dish dish);
+    void updateDish(Dish dish);
 }

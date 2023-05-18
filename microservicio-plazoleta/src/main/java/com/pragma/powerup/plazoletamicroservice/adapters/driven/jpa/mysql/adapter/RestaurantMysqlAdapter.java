@@ -4,6 +4,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantAlreadyExistException;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
@@ -11,6 +12,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistenc
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
@@ -36,4 +38,21 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant));
 
     }
+
+    @Override
+    public Boolean existsByIdUserOwner(Long idUserOwner) {
+        return restaurantRepository.existsByIdUserOwner(idUserOwner);
+    }
+
+    @Override
+    public Optional<Restaurant> findRestaurantById(Long id) {
+        Optional<RestaurantEntity> restaurantEntity = restaurantRepository.findById(id);
+        if (restaurantEntity.isEmpty()) {
+            throw new RestaurantNotExist();
+        }
+
+        return Optional.of(restaurantEntityMapper.toRestaurant(restaurantEntity.get()));
+    }
+
+
 }

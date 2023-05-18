@@ -1,6 +1,8 @@
 package com.pragma.powerup.plazoletamicroservice.configuration;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.*;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.AuthenticationException;
@@ -104,5 +106,17 @@ public class ControllerAdvisor {
             MicroserviceUserNotWorking microserviceUserNotWorking) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, MICROSERVICE_USER_NOT_WORKING));
+    }
+    @ExceptionHandler(RestaurantNotExist.class)
+    public ResponseEntity<Map<String, String>> handlerRestaurantNotExist(
+            RestaurantNotExist restaurantNotExist) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_DOES_NOT_EXIST));
+    }
+    @ExceptionHandler(UserItsNotOwnerOfTheRestaurant.class)
+    public ResponseEntity<Map<String, String>> handlerUserItsNotOwnerOfTheRestaurant(
+            UserItsNotOwnerOfTheRestaurant userItsNotOwnerOfTheRestaurant) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OWNER_OF_THE_RESTAURANT));
     }
 }

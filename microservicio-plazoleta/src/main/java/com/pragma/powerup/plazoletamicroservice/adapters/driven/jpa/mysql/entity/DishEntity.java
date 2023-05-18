@@ -23,8 +23,6 @@ public class DishEntity {
     private Double price;
     @JoinColumn(name = "url_image")
     private String urlImage;
-
-    @Column(columnDefinition = "BIT(1) DEFAULT b'1'")
     private Boolean active;
 
     @ManyToOne

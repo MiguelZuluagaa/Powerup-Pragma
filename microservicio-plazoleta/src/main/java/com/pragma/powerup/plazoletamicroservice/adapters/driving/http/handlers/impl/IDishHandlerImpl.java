@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.DishRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.UpdateDishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IDishHandler;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IDishResponseMapper;
@@ -26,5 +27,10 @@ public class IDishHandlerImpl implements IDishHandler {
     @Override
     public void saveDish(DishRequestDto dish) {
         dishServicePort.saveDish(dishResponseMapper.toDish(dish));
+    }
+
+    @Override
+    public void updateDish(UpdateDishRequestDto dish) {
+        dishServicePort.updateDish(dishResponseMapper.toDish(dish));
     }
 }

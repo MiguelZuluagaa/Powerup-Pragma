@@ -25,6 +25,7 @@ public class Constants {
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
+    public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
     public static final String USER_DELETED_MESSAGE = "User deleted successfully";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
@@ -36,6 +37,8 @@ public class Constants {
     public static final String ROLE_NOT_FOUND_MESSAGE = "No role found with the id provided";
     public static final String USER_ITS_NOT_OWNER = "The user with the id provided does not correspond to an owner";
     public static final String MICROSERVICE_USER_NOT_WORKING = "We are currently experiencing internal problems, please try again later! ";
+    public static final String RESTAURANT_DOES_NOT_EXIST = "The restaurant with the id provided does not exist";
+    public static final String USER_ITS_NOT_OWNER_OF_THE_RESTAURANT = "The user logged is not the owner of the restaurant";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

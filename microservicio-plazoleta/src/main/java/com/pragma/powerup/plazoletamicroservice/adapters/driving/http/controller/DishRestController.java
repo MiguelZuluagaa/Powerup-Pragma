@@ -2,6 +2,7 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controlle
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.UpdateDishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IDishHandler;
@@ -54,6 +55,20 @@ public class DishRestController {
         dishHandler.saveDish(dishRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_CREATED_MESSAGE));
+    }
+
+    @Operation(summary = "Update a new dish",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Dish created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Dish already exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PutMapping("/updateDish/")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> updateDish(@Valid @RequestBody UpdateDishRequestDto updateDishRequestDto) {
+        dishHandler.updateDish(updateDishRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 
 }

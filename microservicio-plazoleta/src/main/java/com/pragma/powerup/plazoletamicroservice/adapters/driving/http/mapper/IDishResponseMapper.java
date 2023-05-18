@@ -2,6 +2,7 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.UpdateDishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
@@ -17,4 +18,5 @@ import java.util.List;
 public interface IDishResponseMapper {
     List<DishResponseDto> toDishResponseList(List<Dish> dishList);
     Dish toDish(DishRequestDto dishRequestDto);
+    Dish toDish(UpdateDishRequestDto updateDishRequestDto);
 }

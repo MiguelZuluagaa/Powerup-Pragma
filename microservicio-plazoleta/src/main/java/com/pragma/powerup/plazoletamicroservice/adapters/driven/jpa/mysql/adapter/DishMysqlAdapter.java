@@ -9,6 +9,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class DishMysqlAdapter implements IDishPersistencePort {
@@ -26,6 +27,17 @@ public class DishMysqlAdapter implements IDishPersistencePort {
 
     @Override
     public void saveDish(Dish dish) {
-        dishRepository.save(dishEntityMapper.toDish(dish));
+        dishRepository.save(dishEntityMapper.toDishEntity(dish));
+    }
+
+    @Override
+    public void updateDish(Dish dish) {
+        dishRepository.save(dishEntityMapper.toDishEntity(dish));
+    }
+
+    @Override
+    public Optional<Dish> findDishById(Long id) {
+        Optional<DishEntity> dishEntity = dishRepository.findById(id);
+        return Optional.ofNullable(dishEntityMapper.toDish(dishEntity.get()));
     }
 }
