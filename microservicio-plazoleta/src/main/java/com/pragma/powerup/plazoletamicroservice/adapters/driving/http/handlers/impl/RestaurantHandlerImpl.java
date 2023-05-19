@@ -22,7 +22,7 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     }
 
     @Override
-    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto, String authorization){
-        restaurantServicePort.saveRestaurant(restaurantResponseMapper.toRestaurant(restaurantRequestDto), authorization);
+    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto){
+        restaurantServicePort.saveRestaurant(restaurantResponseMapper.toRestaurant(restaurantRequestDto));
     }
 }

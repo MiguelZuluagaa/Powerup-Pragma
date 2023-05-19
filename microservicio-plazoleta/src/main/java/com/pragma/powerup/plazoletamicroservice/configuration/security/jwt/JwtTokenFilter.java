@@ -24,17 +24,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     UserDetailsServiceImpl usuarioDetailsService;
 
+    private String GLOBAL_TOKEN;
+
     private List<String> excludedPrefixes = Arrays.asList("/swagger-ui/**", "/actuator/**", "/dish/", "/restaurant/");
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = getToken(req);
-        if (token != null && jwtProvider.validateToken(token)) {
-            String nameUser = jwtProvider.getUserNameFromToken(token);
-            UserDetails userDetails = usuarioDetailsService.loadUserByUsername(nameUser, "Bearer "+token);
-
+        String tokenWithoutBearer = getToken(req);
+        GLOBAL_TOKEN = "Bearer "+tokenWithoutBearer;
+        if (tokenWithoutBearer != null && jwtProvider.validateToken(tokenWithoutBearer)) {
+            String nameUser = jwtProvider.getUserNameFromToken(tokenWithoutBearer);
+            UserDetails userDetails = usuarioDetailsService.loadUserByUsername(nameUser, GLOBAL_TOKEN);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
@@ -59,5 +61,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return header.substring(7); // return everything after "Bearer "
         }
         return null;
+    }
+
+    public String getGLOBAL_TOKEN() {
+        return GLOBAL_TOKEN;
+    }
+
+    public void setGLOBAL_TOKEN(String GLOBAL_TOKEN) {
+        this.GLOBAL_TOKEN = GLOBAL_TOKEN;
     }
 }

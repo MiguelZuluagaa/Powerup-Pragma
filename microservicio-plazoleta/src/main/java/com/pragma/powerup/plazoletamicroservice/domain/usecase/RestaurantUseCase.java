@@ -9,10 +9,14 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dt
 import com.pragma.powerup.plazoletamicroservice.configuration.security.jwt.JwtTokenFilter;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
+import com.pragma.powerup.plazoletamicroservice.domain.spi.ICategoryPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +26,9 @@ import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.R
 public class RestaurantUseCase implements IRestaurantServicePort {
     private final IRestaurantPersistencePort restaurantPersistencePort;
     private final IUserFeignClient userFeignClient;
+
+    @Autowired
+    private JwtTokenFilter jwtTokenFilter;
 
     public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserFeignClient userFeignClient) {
         this.restaurantPersistencePort = restaurantPersistencePort;
@@ -34,14 +41,18 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
-    public void saveRestaurant(Restaurant restaurant, String authorization){
+    public void saveRestaurant(Restaurant restaurant){
+        String TOKEN = jwtTokenFilter.getGLOBAL_TOKEN();
         Optional<UserFeignDto> userRequested = null;
         try {
-            userRequested = Optional.ofNullable(userFeignClient.getUserById(restaurant.getIdUserOwner(),authorization));
-            if(!userRequested.isPresent()){
+            userRequested = Optional.ofNullable(userFeignClient.getUserById(restaurant.getIdUserOwner(),TOKEN));
+        }catch (FeignException e) {
+            HttpStatus statusCode = HttpStatus.valueOf(e.status());
+            if (statusCode == HttpStatus.NOT_FOUND) {
                 throw new UserNotFoundException();
             }
-        }catch (Exception e) {
+            throw new MicroserviceUserNotWorking();
+        }catch (Exception e){
             throw new MicroserviceUserNotWorking();
         }
 

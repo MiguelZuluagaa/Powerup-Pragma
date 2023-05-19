@@ -34,9 +34,7 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         if(restaurantRepository.findByNit(restaurant.getNit()).isPresent()){
             throw new RestaurantAlreadyExistException();
         }
-
         restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant));
-
     }
 
     @Override
@@ -53,6 +51,4 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
 
         return Optional.of(restaurantEntityMapper.toRestaurant(restaurantEntity.get()));
     }
-
-
 }

@@ -5,12 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class RestaurantResponseDto {
+public class CategoryResponseDto {
     private Long id;
     private String name;
-    private String nit;
-    private String direction;
-    private String phone;
-    private String urlLogo;
-    private Long idUserOwner;
+    private String description;
 }

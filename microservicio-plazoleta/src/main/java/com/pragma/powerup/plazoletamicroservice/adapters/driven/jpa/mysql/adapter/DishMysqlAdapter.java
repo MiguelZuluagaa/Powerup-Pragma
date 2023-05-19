@@ -4,6 +4,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,9 @@ public class DishMysqlAdapter implements IDishPersistencePort {
     @Override
     public Optional<Dish> findDishById(Long id) {
         Optional<DishEntity> dishEntity = dishRepository.findById(id);
+        if(!dishEntity.isPresent()){
+            throw new DishNotFound();
+        }
         return Optional.ofNullable(dishEntityMapper.toDish(dishEntity.get()));
     }
 }

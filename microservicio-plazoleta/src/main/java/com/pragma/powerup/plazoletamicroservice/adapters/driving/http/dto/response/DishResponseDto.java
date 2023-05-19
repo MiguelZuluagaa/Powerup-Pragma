@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class DishResponseDto {
+    private Long id;
     private String name;
     private String description;
     private Double price;

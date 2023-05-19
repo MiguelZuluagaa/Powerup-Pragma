@@ -45,12 +45,12 @@ public class MainSecurity {
         http.cors().and().csrf().disable()
                 .authorizeRequests(requests -> requests
                         // Public endpoints
-                        .requestMatchers("/dish/**", "/restaurant/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
                         // Private endpoints
-                        //.requestMatchers("/user/**").hasAnyRole(ROLE_ADMIN,ROLE_OWNER,ROLE_EMPLOYEE,ROLE_CUSTOMER)
-                        //.requestMatchers("/restaurant/**").hasAnyRole(ROLE_ADMIN,ROLE_OWNER,ROLE_EMPLOYEE,ROLE_CUSTOMER)
+                        .requestMatchers("/restaurant/","/restaurant/**","/category/**").hasAnyRole(ROLE_ADMIN)
+                        .requestMatchers("/dish/**").hasAnyRole(ROLE_OWNER)
                         //OTHERS ENDPOINTS NEED AUTHENTICATION
-                        //.anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

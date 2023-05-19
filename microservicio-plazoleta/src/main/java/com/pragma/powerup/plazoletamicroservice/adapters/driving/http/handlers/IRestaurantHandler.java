@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IRestaurantHandler {
     List<RestaurantResponseDto> getAllRestaurants();
-    void saveRestaurant(RestaurantRequestDto restaurant, String authorization);
+    void saveRestaurant(RestaurantRequestDto restaurant);
 }

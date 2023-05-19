@@ -1,16 +1,22 @@
 package com.pragma.powerup.plazoletamicroservice.configuration;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.CategoryMysqlAdapter;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.ICategoryEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.ICategoryRepository;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
+import com.pragma.powerup.plazoletamicroservice.domain.api.ICategoryServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.plazoletamicroservice.domain.spi.ICategoryPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
+import com.pragma.powerup.plazoletamicroservice.domain.usecase.CategoryUseCase;
 import com.pragma.powerup.plazoletamicroservice.domain.usecase.DishUseCase;
 import com.pragma.powerup.plazoletamicroservice.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +33,9 @@ public class BeanConfiguration {
 
     private final IDishRepository dishRepository;
     private final IDishEntityMapper dishEntityMapper;
+
+    private final ICategoryRepository categoryRepository;
+    private final ICategoryEntityMapper categoryEntityMapper;
 
     private final IUserFeignClient userFeignClient;
 
@@ -48,5 +57,15 @@ public class BeanConfiguration {
     @Bean
     public IDishPersistencePort dishPersistencePort() {
         return new DishMysqlAdapter(dishRepository, dishEntityMapper);
+    }
+
+    @Bean
+    public ICategoryServicePort categoryServicePort() {
+        return new CategoryUseCase(categoryPersistencePort());
+    }
+
+    @Bean
+    public ICategoryPersistencePort categoryPersistencePort() {
+        return new CategoryMysqlAdapter(categoryRepository, categoryEntityMapper);
     }
 }
