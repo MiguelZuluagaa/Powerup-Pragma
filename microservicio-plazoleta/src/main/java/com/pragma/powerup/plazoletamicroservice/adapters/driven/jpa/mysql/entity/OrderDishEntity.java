@@ -1,6 +1,5 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,15 +7,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "category")
+@Table(name = "orders_dishes")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class CategoryEntity {
+public class OrderDishEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "id_order")
+    private OrderEntity idOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "id_dish")
+    private DishEntity idDish;
+
+    private Long quantity;
 }

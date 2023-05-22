@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "category")
+@Table(name = "order_status")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class CategoryEntity {
+public class OrderStatusEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
