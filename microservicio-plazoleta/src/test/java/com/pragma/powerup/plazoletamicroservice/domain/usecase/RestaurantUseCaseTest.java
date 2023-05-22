@@ -34,4 +34,8 @@ class RestaurantUseCaseTest {
         when(restaurantPersistencePort.getAllRestaurants()).thenReturn(Arrays.asList(restaurant));
         assertNotNull(restaurantUseCase.getAllRestaurants());
     }
+
+    @Test
+    void saveRestaurant() {
+    }
 }

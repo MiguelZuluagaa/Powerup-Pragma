@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class RestaurantResponseDto {
+    private Long id;
     private String name;
     private String nit;
     private String direction;

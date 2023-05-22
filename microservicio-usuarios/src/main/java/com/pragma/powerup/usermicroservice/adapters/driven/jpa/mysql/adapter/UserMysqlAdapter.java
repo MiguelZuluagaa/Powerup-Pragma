@@ -34,7 +34,7 @@ public class UserMysqlAdapter implements IUserPersistencePort {
     @Override
     public User findUserByDni(String dni){
         Optional<UserEntity> user = userRepository.findByDni(dni);
-        if (userRepository.findByDni(dni).isPresent()){
+        if (user.isPresent()){
             return userEntityMapper.ofUserEntityToUser(user.get());
         }
         throw new UserNotFoundException();
@@ -43,7 +43,16 @@ public class UserMysqlAdapter implements IUserPersistencePort {
     @Override
     public User findUserById(Long id){
         Optional<UserEntity> user = userRepository.findById(id);
-        if (userRepository.findById(id).isPresent()){
+        if (user.isPresent()){
+            return userEntityMapper.ofUserEntityToUser(user.get());
+        }
+        throw new UserNotFoundException();
+    }
+
+    @Override
+    public User findUserByEmail(String email){
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        if (user.isPresent()){
             return userEntityMapper.ofUserEntityToUser(user.get());
         }
         throw new UserNotFoundException();

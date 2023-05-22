@@ -2,12 +2,16 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controlle
 
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,23 +27,61 @@ class RestaurantRestControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private String token = null;
+
+    @BeforeEach
+    void setUp() {
+        String email = "admin@gmail.com";
+        String password = "999";
+
+        Map<String, Object> user = new HashMap<>();
+        user.put("email", email);
+        user.put("password", password);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+
+        HttpEntity<Map<String, Object>> request  = new HttpEntity<>(user, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:8090/auth/login",
+                HttpMethod.POST,
+                request,
+                String.class);
+
+        token = response.getBody().replace("{\"token\":\"","").replace("\"}","");
+    }
+
     @Test
     void getAllRestaurants() throws Exception {
-        Assertions.assertThat(restTemplate
-                .getForObject(("http://localhost:" + port + "/restaurant"), String.class))
-            .contains("urlLogo");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/restaurant",
+                HttpMethod.GET,
+                request,
+                String.class);
+
+        Assertions.assertThat(response.getBody()).contains("urlLogo");
     }
 
     @Test
     void saveRestaurant() throws Exception {
         // Please note that you must be a registered user with owner role to run this test successfully.
+        // The microservice User must be running.
         Restaurant restaurant =
-                new Restaurant(10L,"TEST NAME","919191","TEST DIRECTION",
-                                "123456778", "https://www.testlogo.com/",3L);
+                new Restaurant(10L,"TEST NAME","123123123123","TEST DIRECTION",
+                                "123456778", "https://www.testlogo.com/",8L);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ token);// You need put a token here.
 
         HttpEntity<Restaurant> request  = new HttpEntity<>(restaurant, headers);
 

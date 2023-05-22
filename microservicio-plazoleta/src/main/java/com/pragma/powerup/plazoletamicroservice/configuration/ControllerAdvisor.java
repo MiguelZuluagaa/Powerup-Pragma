@@ -1,9 +1,13 @@
 package com.pragma.powerup.plazoletamicroservice.configuration;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.*;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,11 +38,11 @@ public class ControllerAdvisor {
         return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
     }
 
-    /*@ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, String>> handleAuthenticationException(AuthenticationException noDataFoundException) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, WRONG_CREDENTIALS_MESSAGE));
-    }*/
+    }
     @ExceptionHandler(NoDataFoundException.class)
     public ResponseEntity<Map<String, String>> handleNoDataFoundException(NoDataFoundException noDataFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -75,7 +79,7 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ALREADY_EXISTS_MESSAGE));
     }
     @ExceptionHandler(RestaurantAlreadyExistException.class)
-    public ResponseEntity<Map<String, String>> handleRestauranteAlreadyExistsException(
+    public ResponseEntity<Map<String, String>> handleRestaurantAlreadyExistsException(
             RestaurantAlreadyExistException restaurantAlreadyExistException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_ALREADY_EXISTS_MESSAGE));
@@ -98,11 +102,35 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OWNER));
     }
-
     @ExceptionHandler(MicroserviceUserNotWorking.class)
     public ResponseEntity<Map<String, String>> handlerMicroserviceUserNotWorking(
             MicroserviceUserNotWorking microserviceUserNotWorking) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, MICROSERVICE_USER_NOT_WORKING));
     }
+    @ExceptionHandler(RestaurantNotExist.class)
+    public ResponseEntity<Map<String, String>> handlerRestaurantNotExist(
+            RestaurantNotExist restaurantNotExist) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_DOES_NOT_EXIST));
+    }
+    @ExceptionHandler(UserItsNotOwnerOfTheRestaurant.class)
+    public ResponseEntity<Map<String, String>> handlerUserItsNotOwnerOfTheRestaurant(
+            UserItsNotOwnerOfTheRestaurant userItsNotOwnerOfTheRestaurant) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OWNER_OF_THE_RESTAURANT));
+    }
+    @ExceptionHandler(DishNotFound.class)
+    public ResponseEntity<Map<String, String>> handlerDishNotFound(
+            DishNotFound dishNotFound) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_NOT_FOUND));
+    }
+    @ExceptionHandler(CategoryDontExistException.class)
+    public ResponseEntity<Map<String, String>> handlerCategoryDontExistException(
+            CategoryDontExistException categoryNotFound) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_NOT_FOUND));
+    }
+
 }

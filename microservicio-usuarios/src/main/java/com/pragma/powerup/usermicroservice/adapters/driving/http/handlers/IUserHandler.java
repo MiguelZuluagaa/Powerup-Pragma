@@ -9,4 +9,5 @@ public interface IUserHandler {
     void saveUser(UserRequestDto userRequestDto);
     UserResponseDto findUserByDni(String dni);
     UserResponseDto findUserById(Long id);
+    UserResponseDto findUserByEmail(String email);
 }

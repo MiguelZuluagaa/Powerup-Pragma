@@ -5,6 +5,7 @@ import com.pragma.powerup.usermicroservice.configuration.security.jwt.JwtTokenFi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.pragma.powerup.usermicroservice.configuration.Constants.*;
 
 @Configuration
 @EnableWebSecurity
@@ -42,9 +45,12 @@ public class MainSecurity {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests(requests -> requests
-                        .requestMatchers("/auth/login", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
-                        .requestMatchers("/user").permitAll()//.hasRole("ADMIN")
-                        //.anyRequest().authenticated()
+                        // Public endpoints
+                        .requestMatchers("/auth/login","/user/saveUser/", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
+                        // Private endpoints
+                        .requestMatchers("/user/**").hasAnyRole(ROLE_ADMIN,ROLE_OWNER,ROLE_EMPLOYEE,ROLE_CUSTOMER)
+                        //OTHERS ENDPOINTS NEED AUTHENTICATION
+                        .anyRequest().authenticated()
                 )
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

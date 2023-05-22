@@ -6,4 +6,5 @@ public interface IUserPersistencePort {
     void saveUser(User user);
     User findUserByDni(String dni);
     User findUserById(Long id);
+    User findUserByEmail(String email);
 }

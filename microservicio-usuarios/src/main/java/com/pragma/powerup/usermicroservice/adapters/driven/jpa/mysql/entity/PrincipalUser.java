@@ -9,26 +9,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PrincipalUser implements UserDetails {
-    private String nombre;
-    private String nombreUsuario;
+    private Long id;
+    private String name;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public PrincipalUser(String nombre, String nombreUsuario, String email, String password,
+    public PrincipalUser(Long id,String name, String email, String password,
                          Collection<? extends GrantedAuthority> authorities) {
-        this.nombre = nombre;
-        this.nombreUsuario = nombreUsuario;
+        this.id = id;
+        this.name = name;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static PrincipalUser build(UserEntity usuario, List<RoleEntity> roles) {
-        List<GrantedAuthority> authorities = roles.stream()
-                .map(rol -> new SimpleGrantedAuthority(rol.getName())).collect(Collectors.toList());
-        return new PrincipalUser(usuario.getName(), usuario.getDni(), usuario.getEmail(),
-                usuario.getPassword(), authorities);
+    public static PrincipalUser build(UserEntity user, List<RoleEntity> roles) {
+        List<GrantedAuthority> authorities = roles.stream().map(rol -> new SimpleGrantedAuthority(rol.getName())).collect(Collectors.toList());
+        return new PrincipalUser(user.getId(), user.getName(), user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class PrincipalUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nombreUsuario;
+        return this.email;
     }
 
     @Override
@@ -66,11 +64,19 @@ public class PrincipalUser implements UserDetails {
         return true;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

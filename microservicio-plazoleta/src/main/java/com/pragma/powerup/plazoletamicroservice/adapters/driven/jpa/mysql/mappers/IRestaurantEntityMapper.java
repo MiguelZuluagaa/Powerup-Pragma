@@ -11,6 +11,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IRestaurantEntityMapper {
-    List<Restaurant> toRestarantList(List<RestaurantEntity> restaurantEntityList);
+    List<Restaurant> toRestaurantList(List<RestaurantEntity> restaurantEntityList);
     RestaurantEntity toEntity(Restaurant restaurant);
+    Restaurant toRestaurant(RestaurantEntity restaurantEntity);
 }
