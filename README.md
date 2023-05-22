@@ -67,6 +67,20 @@ To get a local copy up and running follow these steps.
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('2', 'ROLE_PROPIETARIO', 'ROLE_PROPIETARIO');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('3', 'ROLE_EMPLEADO', 'ROLE_EMPLEADO');
   INSERT INTO `usuarios`.`role` (`id`, `description`, `name`) VALUES ('4', 'ROLE_CLIENTE', 'ROLE_CLIENTE');
+  
+  /* For a better understanding, the password for each user is the same value contained in the user's DNI. */
+  INSERT INTO `usuarios`.`user` (`id`, `bird_date`, `dni`, `email`, `name`, `password`, `phone`, `surname`, `id_role`) VALUES ('1', '20-01-2001', '999', 'admin@gmail.com','admin',   '$10$JQSdrv00xsq/mpR9zd2TKOic.FPCetQJLKhBAQe188hOpFA8sFQM.', '123456789', 'admin', '1');
+  INSERT INTO `usuarios`.`user` (`id`, `bird_date`, `dni`, `email`, `name`, `password`, `phone`, `surname`, `id_role`) VALUES ('8', '20-01-2001', '123', 'owner@gmail.com','admin', '$10$o4w4Bb/0/JV9UZvMOLHtiOivt3tq5p2akqbeWQaPJx5mVEZ7/HncG', '12345654', 'owner', '2');
+  INSERT INTO `usuarios`.`user` (`id`, `bird_date`, `dni`, `email`, `name`, `password`, `phone`, `surname`, `id_role`) VALUES ('9', '20-01-2001', '333', 'employee@gmail.com','employee', '$10$d3S1HpQQufLKVdbvZDX7ieWBReCD0zJUVjR8qa/hh49zkDviCkYnq', '12345654', 'employee', '3');
+  INSERT INTO `usuarios`.`user` (`id`, `bird_date`, `dni`, `email`, `name`, `password`, `phone`, `surname`, `id_role`) VALUES ('10', '20-01-2001', '444', 'customer@gmail.com','customer', '$10$5hJQzCjwr6i2fJuhEgwzuu6mqHx4UxbfvLNoZQ4UooGtKmpHgAS/i', '12345654', 'customer', '4');
+
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('1', 'ENTRANCE', 'ENTRANCE');
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('2', 'SNAKS', 'SNAKS');
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('3', 'APPETIZERS', 'APPETIZERS');
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('4', 'SOUPS', 'SOUPS');
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('5', 'MAIN COURSES', 'MAIN COURSES');
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('6', 'DESSERTS', 'DESSERTS');
+  INSERT INTO `plazoleta`.`category` (`id`, `description`, `name`) VALUES ('7', 'DRINKS', 'DRINKS');
 ```
 6. To execute the project you must run each microservice as follows: </br>
   6.1 Run ConfigServiceApplication </br>
