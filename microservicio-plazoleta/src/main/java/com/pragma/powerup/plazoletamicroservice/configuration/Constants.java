@@ -41,6 +41,8 @@ public class Constants {
     public static final String USER_ITS_NOT_OWNER_OF_THE_RESTAURANT = "The user logged is not the owner of the restaurant";
     public static final String DISH_NOT_FOUND = "The dish with the id provided does not exist";
     public static final String CATEGORY_NOT_FOUND = "The category with the id provided does not exist";
+    public static final String DISH_IS_ALREADY_ACTIVE = "The dish is already active";
+    public static final String DISH_IS_ALREADY_DISABLE = "The dish is already disable";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

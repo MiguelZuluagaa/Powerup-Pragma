@@ -33,4 +33,14 @@ public class IDishHandlerImpl implements IDishHandler {
     public void updateDish(UpdateDishRequestDto dish) {
         dishServicePort.updateDish(dishResponseMapper.toDish(dish));
     }
+
+    @Override
+    public void activeDish(Long idDish) {
+        dishServicePort.activeDish(idDish);
+    }
+
+    @Override
+    public void disableDish(Long idDish) {
+        dishServicePort.disableDish(idDish);
+    }
 }

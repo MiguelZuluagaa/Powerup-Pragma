@@ -9,4 +9,6 @@ public interface IDishServicePort {
     List<Dish> getAllDishes();
     void saveDish(Dish dish);
     void updateDish(Dish dish);
+    void activeDish(Long idDish);
+    void disableDish(Long idDish);
 }

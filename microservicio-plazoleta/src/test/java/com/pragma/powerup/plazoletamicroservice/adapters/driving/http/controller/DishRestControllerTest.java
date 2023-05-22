@@ -126,4 +126,40 @@ class DishRestControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
+
+    @Test
+    void activeDish(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/dish/activeDish/1",
+                HttpMethod.PUT,
+                request,
+                String.class);
+
+        Assertions.assertThat(response.getBody()).contains("Dish updated successfully");
+    }
+
+    @Test
+    void disableDish(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/dish/disableDish/1",
+                HttpMethod.PUT,
+                request,
+                String.class);
+
+        Assertions.assertThat(response.getBody()).contains("Dish updated successfully");
+    }
 }

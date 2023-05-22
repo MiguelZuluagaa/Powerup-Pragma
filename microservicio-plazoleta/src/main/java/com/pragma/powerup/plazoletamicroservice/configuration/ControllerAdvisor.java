@@ -2,6 +2,8 @@ package com.pragma.powerup.plazoletamicroservice.configuration;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyActiveException;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyDisableException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
 import org.springframework.http.HttpStatus;
@@ -132,5 +134,18 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_NOT_FOUND));
     }
+    @ExceptionHandler(DishIsAlreadyActiveException.class)
+    public ResponseEntity<Map<String, String>> handlerDishIsAlreadyActiveException(
+            DishIsAlreadyActiveException dishIsAlreadyActiveException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_IS_ALREADY_ACTIVE));
+    }
+    @ExceptionHandler(DishIsAlreadyDisableException.class)
+    public ResponseEntity<Map<String, String>> handlerDishIsAlreadyDisableException(
+            DishIsAlreadyDisableException dishIsAlreadyDisableException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_IS_ALREADY_DISABLE));
+    }
+
 
 }

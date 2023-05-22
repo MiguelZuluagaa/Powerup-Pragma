@@ -3,6 +3,8 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.PrincipalUser;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserItsNotOwner;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IDishServicePort;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyActiveException;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyDisableException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
@@ -39,12 +41,8 @@ public class DishUseCase implements IDishServicePort {
 
     @Override
     public void saveDish(Dish dish) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
-        String roleUser = authentication.getAuthorities().toArray()[0].toString(); // Get the role of the user authenticated
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
-        Long idUserLogged = principalUser.getId(); // Get the id of the user authenticated
-        if(itsOwner(roleUser)){ // Validate de user, need be owner to create a dish
-            if(userAuthenticatedItsOwnerOfTheRestaurant(dish.getIdRestaurant().getId(), idUserLogged)){ // Validate if the user authenticated is the owner of the restaurant
+        if(itsOwner()){ // Validate de user, need be owner to create a dish
+            if(userAuthenticatedItsOwnerOfTheRestaurant(dish.getIdRestaurant().getId())){ // Validate if the user authenticated is the owner of the restaurant
                 if(categoryPersistencePort.existCategoryById(dish.getIdCategory().getId())){ // Validate if the category of the dish exist
                     dish.setActive(true); // Always the dish is active when the owner create it
                     dishPersistencePort.saveDish(dish);
@@ -53,14 +51,19 @@ public class DishUseCase implements IDishServicePort {
         }
     }
 
-    private Boolean itsOwner(String roleToValidate){
+    private Boolean itsOwner(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        String roleToValidate = authentication.getAuthorities().toArray()[0].toString(); // Get the role of the user authenticated
         if(!roleToValidate.contains(ROLE_OWNER)){
             throw new UserItsNotOwner();
         }
         return true;
     }
 
-    private Boolean userAuthenticatedItsOwnerOfTheRestaurant(Long idRestaurant, Long idUserAuthenticated){
+    private Boolean userAuthenticatedItsOwnerOfTheRestaurant(Long idRestaurant){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
         Optional<Restaurant> restaurant = restaurantPersistencePort.findRestaurantById(idRestaurant);
         if(restaurant.get().getIdUserOwner() != idUserAuthenticated){
             throw new UserItsNotOwnerOfTheRestaurant();
@@ -70,15 +73,11 @@ public class DishUseCase implements IDishServicePort {
 
     @Override
     public void updateDish(Dish dish) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
-        String roleUser = authentication.getAuthorities().toArray()[0].toString(); // Get the role of the user authenticated
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
-        Long idUserLogged = principalUser.getId(); // Get the id of the user authenticated
         Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getId());
         if(!dishFound.isPresent()){
             throw new DishNotFound();
         }
-        if(itsOwner(roleUser) && userAuthenticatedItsOwnerOfTheRestaurant(dishFound.get().getIdRestaurant().getId(),idUserLogged)) {
+        if(itsOwner() && userAuthenticatedItsOwnerOfTheRestaurant(dishFound.get().getIdRestaurant().getId())) {
             try {
                 dish.setId(dishFound.get().getId());
                 dish.setName(dishFound.get().getName());
@@ -91,6 +90,36 @@ public class DishUseCase implements IDishServicePort {
             } catch (Exception e) {
                 throw new RuntimeException();
             }
+        }
+    }
+
+    @Override
+    public void activeDish(Long idDish) {
+        Optional<Dish> dishFound = dishPersistencePort.findDishById(idDish);
+        if(!dishFound.isPresent()){
+            throw new DishNotFound();
+        }
+        if(itsOwner() && userAuthenticatedItsOwnerOfTheRestaurant(dishFound.get().getIdRestaurant().getId())) {
+            if (dishFound.get().getActive()) { // Validate if the dish is active already
+                throw new DishIsAlreadyActiveException();
+            }
+            dishFound.get().setActive(true);
+            dishPersistencePort.updateDish(dishFound.get());
+        }
+    }
+
+    @Override
+    public void disableDish(Long idDish) {
+        Optional<Dish> dishFound = dishPersistencePort.findDishById(idDish);
+        if(!dishFound.isPresent()){
+            throw new DishNotFound();
+        }
+        if(itsOwner() && userAuthenticatedItsOwnerOfTheRestaurant(dishFound.get().getIdRestaurant().getId())) {
+            if (!dishFound.get().getActive()) { // Validate if the dish is disabled already
+                throw new DishIsAlreadyDisableException();
+            }
+            dishFound.get().setActive(false);
+            dishPersistencePort.updateDish(dishFound.get());
         }
     }
 }

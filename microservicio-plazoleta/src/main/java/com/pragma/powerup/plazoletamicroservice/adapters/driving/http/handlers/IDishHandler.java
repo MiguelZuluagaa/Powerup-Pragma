@@ -10,4 +10,6 @@ public interface IDishHandler {
     List<DishResponseDto> getAllDishes();
     void saveDish(DishRequestDto dish);
     void updateDish(UpdateDishRequestDto dish);
+    void activeDish(Long idDish);
+    void disableDish(Long idDish);
 }
