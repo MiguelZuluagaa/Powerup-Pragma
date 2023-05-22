@@ -10,6 +10,9 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.reposi
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,16 +24,24 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
 
     @Override
     public List<Restaurant> getAllRestaurants() {
-        List<RestaurantEntity> roleEntityList = restaurantRepository.findAll();
-        if (roleEntityList.isEmpty()) {
+        List<RestaurantEntity> restaurantEntityList = restaurantRepository.findAll();
+        if (restaurantEntityList.isEmpty()) {
             throw new NoDataFoundException();
         }
-        return restaurantEntityMapper.toRestaurantList(roleEntityList);
+        return restaurantEntityMapper.toRestaurantList(restaurantEntityList);
+    }
+
+    @Override
+    public List<Restaurant> getRestaurantsWithPagination(Long pageSize, Long offset) {
+        Page<RestaurantEntity> restaurantEntityList = restaurantRepository.findAll(PageRequest.of(Math.toIntExact(offset), Math.toIntExact(pageSize)).withSort(Sort.by(Sort.Direction.ASC,"name")));
+        if (restaurantEntityList.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+        return restaurantEntityMapper.toRestaurantList(restaurantEntityList.getContent());
     }
 
     @Override
     public void saveRestaurant(Restaurant restaurant){
-
         if(restaurantRepository.findByNit(restaurant.getNit()).isPresent()){
             throw new RestaurantAlreadyExistException();
         }
@@ -48,7 +59,6 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         if (restaurantEntity.isEmpty()) {
             throw new RestaurantNotExist();
         }
-
         return Optional.of(restaurantEntityMapper.toRestaurant(restaurantEntity.get()));
     }
 }

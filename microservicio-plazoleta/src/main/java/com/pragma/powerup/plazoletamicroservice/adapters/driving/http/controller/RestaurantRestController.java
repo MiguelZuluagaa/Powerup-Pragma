@@ -1,7 +1,9 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.RestaurantForCustomersResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.plazoletamicroservice.configuration.Constants;
@@ -12,7 +14,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,4 +57,18 @@ public class RestaurantRestController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
     }
+
+    @Operation(summary = "Get Restaurants with pagination",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Restaurants returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = RestaurantResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/getRestaurantsWithPagination/{pageSize}/{offset}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<List<RestaurantForCustomersResponseDto>> getRestaurantsWithPagination(@PathVariable Long pageSize, @PathVariable Long offset) {
+        return ResponseEntity.ok(restaurantHandler.getRestaurantsWithPagination(pageSize,offset));
+    }
+
 }

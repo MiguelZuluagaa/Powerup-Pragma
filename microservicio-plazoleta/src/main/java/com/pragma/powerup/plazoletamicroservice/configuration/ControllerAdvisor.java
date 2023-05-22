@@ -2,10 +2,7 @@ package com.pragma.powerup.plazoletamicroservice.configuration;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyActiveException;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyDisableException;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.AuthenticationException;
@@ -146,6 +143,11 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_IS_ALREADY_DISABLE));
     }
-
+    @ExceptionHandler(PageAndOffsetMustBePositive.class)
+    public ResponseEntity<Map<String, String>> handlerPageAndOffsetMustBePositive(
+            PageAndOffsetMustBePositive pageAndOffsetMustBePositive) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PAGE_AND_OFFSET_MUST_BE_POSITIVE));
+    }
 
 }
