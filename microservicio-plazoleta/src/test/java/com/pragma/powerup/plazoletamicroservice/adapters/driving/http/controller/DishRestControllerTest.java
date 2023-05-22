@@ -1,5 +1,9 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Category;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +20,10 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class RestaurantRestControllerTest {
+class DishRestControllerTest {
 
     @Autowired
-    private RestaurantRestController restaurantRestController;
+    private DishRestController dishRestController;
 
     @LocalServerPort
     private int port;
@@ -29,10 +33,21 @@ class RestaurantRestControllerTest {
 
     private String token = null;
 
+    private CategoryEntity category = null;
+    private RestaurantEntity restaurant = null;
+    private Dish dish = null;
+
     @BeforeEach
     void setUp() {
-        String email = "admin@gmail.com";
-        String password = "999";
+
+        category = new CategoryEntity(1L,null,null);
+        restaurant = new RestaurantEntity(11L,null,null,null,null,null,null);
+
+        dish = new Dish(null,"TEST DISH","TEST DISH",200.0,
+                        "http://www.test.com.co/",null,category,restaurant);
+
+        String email = "owner@gmail.com";
+        String password = "123";
 
         Map<String, Object> user = new HashMap<>();
         user.put("email", email);
@@ -41,6 +56,7 @@ class RestaurantRestControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ token);
 
         HttpEntity<Map<String, Object>> request  = new HttpEntity<>(user, headers);
         ResponseEntity<String> response = restTemplate.exchange(
@@ -53,7 +69,7 @@ class RestaurantRestControllerTest {
     }
 
     @Test
-    void getAllRestaurants() throws Exception {
+    void getAllDishes() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
@@ -62,32 +78,49 @@ class RestaurantRestControllerTest {
         HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:" + port + "/restaurant",
+                "http://localhost:" + port + "/dish/getAllDishes/",
                 HttpMethod.GET,
                 request,
                 String.class);
 
-        Assertions.assertThat(response.getBody()).contains("urlLogo");
+        Assertions.assertThat(response.getBody()).contains("name");
     }
 
     @Test
-    void saveRestaurant() throws Exception {
-        // Please note that you must be a registered user with owner role to run this test successfully.
-        // The microservice User must be running.
-        Restaurant restaurant =
-                new Restaurant(10L,"TEST NAME","123123123123","TEST DIRECTION",
-                                "123456778", "https://www.testlogo.com/",8L);
+    void saveDish() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+
+        HttpEntity<Dish> request  = new HttpEntity<>(dish, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/dish/saveDish/",
+                HttpMethod.POST,
+                request,
+                String.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    void updateDish() {
+
+        dish.setId(20L);
+        dish.setDescription("CHANGE DESCRIPTION");
+        dish.setPrice(500.0);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
         headers.set("Authorization","Bearer "+ token);// You need put a token here.
 
-        HttpEntity<Restaurant> request  = new HttpEntity<>(restaurant, headers);
+        HttpEntity<Dish> request  = new HttpEntity<>(dish, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:" + port + "/restaurant",
-                HttpMethod.POST,
+                "http://localhost:" + port + "/dish/updateDish/",
+                HttpMethod.PUT,
                 request,
                 String.class);
 

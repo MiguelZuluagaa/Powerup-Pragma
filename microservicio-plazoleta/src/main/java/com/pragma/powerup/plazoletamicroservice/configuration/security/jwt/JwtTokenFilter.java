@@ -22,11 +22,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     JwtProvider jwtProvider;
 
     @Autowired
-    UserDetailsServiceImpl usuarioDetailsService;
+    UserDetailsServiceImpl userDetailsService;
 
     private String GLOBAL_TOKEN;
 
-    private List<String> excludedPrefixes = Arrays.asList("/swagger-ui/**", "/actuator/**", "/dish/", "/restaurant/");
+    private List<String> excludedPrefixes = Arrays.asList("/swagger-ui/**", "/actuator/**", "/dish/", "/restaurant/","/category/");
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         GLOBAL_TOKEN = "Bearer "+tokenWithoutBearer;
         if (tokenWithoutBearer != null && jwtProvider.validateToken(tokenWithoutBearer)) {
             String nameUser = jwtProvider.getUserNameFromToken(tokenWithoutBearer);
-            UserDetails userDetails = usuarioDetailsService.loadUserByUsername(nameUser, GLOBAL_TOKEN);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(nameUser, GLOBAL_TOKEN);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
                     userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);

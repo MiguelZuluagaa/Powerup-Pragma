@@ -32,7 +32,7 @@ public class CategoryRestController {
     private final ICategoryHandler categoryHandler;
 
 
-    @Operation(summary = "Get all coregories",
+    @Operation(summary = "Get all categories",
             responses = {
                     @ApiResponse(responseCode = "200", description = "All categories returned",
                             content = @Content(mediaType = "application/json",

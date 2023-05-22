@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserRestController {
     private final IUserHandler userHandler;
@@ -34,7 +34,7 @@ public class UserRestController {
                         content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
                 @ApiResponse(responseCode = "409", description = "User already exists",
                         content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @PostMapping("saveUser/")
+    @PostMapping("/saveUser/")
     public ResponseEntity<Map<String, String>> saveUser(@Valid @RequestBody UserRequestDto userRequestDto) {
         userHandler.saveUser(userRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,7 +50,6 @@ public class UserRestController {
     @GetMapping("/dni/{dni}")
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<UserResponseDto> getUserByDni(@PathVariable String dni){
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(userHandler.findUserByDni(dni));
     }
 

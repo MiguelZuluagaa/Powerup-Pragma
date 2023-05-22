@@ -9,14 +9,10 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dt
 import com.pragma.powerup.plazoletamicroservice.configuration.security.jwt.JwtTokenFilter;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
-import com.pragma.powerup.plazoletamicroservice.domain.spi.ICategoryPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Optional;

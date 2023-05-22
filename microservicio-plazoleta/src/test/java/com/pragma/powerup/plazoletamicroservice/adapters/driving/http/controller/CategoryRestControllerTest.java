@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.plazoletamicroservice.domain.model.Category;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +17,10 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class RestaurantRestControllerTest {
+class CategoryRestControllerTest {
 
     @Autowired
-    private RestaurantRestController restaurantRestController;
+    private CategoryRestController categoryRestController;
 
     @LocalServerPort
     private int port;
@@ -53,7 +54,7 @@ class RestaurantRestControllerTest {
     }
 
     @Test
-    void getAllRestaurants() throws Exception {
+    void getAllCategories() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
@@ -62,31 +63,28 @@ class RestaurantRestControllerTest {
         HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:" + port + "/restaurant",
+                "http://localhost:" + port + "/category/getAllCategories/",
                 HttpMethod.GET,
                 request,
                 String.class);
 
-        Assertions.assertThat(response.getBody()).contains("urlLogo");
+        Assertions.assertThat(response.getBody()).contains("name");
     }
 
     @Test
-    void saveRestaurant() throws Exception {
-        // Please note that you must be a registered user with owner role to run this test successfully.
-        // The microservice User must be running.
-        Restaurant restaurant =
-                new Restaurant(10L,"TEST NAME","123123123123","TEST DIRECTION",
-                                "123456778", "https://www.testlogo.com/",8L);
+    void saveCategory() {
+        Category category =
+                new Category(null,"TEST","TEST");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
         headers.set("Authorization","Bearer "+ token);// You need put a token here.
 
-        HttpEntity<Restaurant> request  = new HttpEntity<>(restaurant, headers);
+        HttpEntity<Category> request  = new HttpEntity<>(category, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:" + port + "/restaurant",
+                "http://localhost:" + port + "/category/saveCategory/",
                 HttpMethod.POST,
                 request,
                 String.class);
