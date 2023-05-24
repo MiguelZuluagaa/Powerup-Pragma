@@ -52,7 +52,7 @@ public class OrderUseCase implements IOrderServicePort {
 
         OrderEntity order = new OrderEntity();
         order.setIdUser(idUserAuthenticated);
-        order.setIdChef(idChef);
+        //order.setIdChef(idChef);
         order.setDate(new Date());
         order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PROGRESS_ID,null,null));
         order.setIdRestaurant(restaurant);
