@@ -26,7 +26,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private String GLOBAL_TOKEN;
 
-    private List<String> excludedPrefixes = Arrays.asList("/swagger-ui/**", "/actuator/**", "/dish/", "/restaurant/","/category/");
+    private List<String> excludedPrefixes = Arrays.asList("/swagger-ui/**", "/actuator/**", "/dish/", "/restaurant/","/category/","/order/");
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override

@@ -149,5 +149,18 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PAGE_AND_OFFSET_MUST_BE_POSITIVE));
     }
+    @ExceptionHandler(SomeDishesAreNotFromRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handlerSomeDishesAreNotFromRestaurantException(
+            SomeDishesAreNotFromRestaurantException someDishesAreNotFromRestaurantException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, SOME_DISHES_ARE_NOT_FROM_RESTAURANT));
+    }
+    @ExceptionHandler(UserWithOrderInProgressException.class)
+    public ResponseEntity<Map<String, String>> handlerUserWithOrderInProgressException(
+            UserWithOrderInProgressException userWithOrderInProgressException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_WITH_ORDER_IN_PROGRESS));
+    }
+
 
 }

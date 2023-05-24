@@ -1,6 +1,8 @@
 package com.pragma.powerup.plazoletamicroservice.configuration;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.MicroserviceUserNotWorking;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserWithOrderInProgressException;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
 
 public class Constants {
 
@@ -17,7 +19,10 @@ public class Constants {
     public static final String ROLE_EMPLOYEE = "EMPLOYEE";
     public static final String ROLE_CUSTOMER = "CUSTOMER";
     public static final String ROLE_ANONYMOUS = "ANONYMOUS";
-    public static final String OWNER_ROLE_NAME = "PROPIETARIO";
+    public static final Long STATUS_ORDER_IN_PROGRESS_ID = 1L;
+
+
+
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
     public static final int MAX_PAGE_SIZE = 2;
@@ -25,6 +30,7 @@ public class Constants {
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
+    public static final String ORDER_CREATED_MESSAGE = "Dish created successfully";
     public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
     public static final String USER_DELETED_MESSAGE = "User deleted successfully";
@@ -44,6 +50,8 @@ public class Constants {
     public static final String DISH_IS_ALREADY_ACTIVE = "The dish is already active";
     public static final String DISH_IS_ALREADY_DISABLE = "The dish is already disable";
     public static final String PAGE_AND_OFFSET_MUST_BE_POSITIVE = "The parameters page and offset must be positive";
+    public static final String SOME_DISHES_ARE_NOT_FROM_RESTAURANT = "Some dishes are not from the restaurant";
+    public static final String USER_WITH_ORDER_IN_PROGRESS = "The user has an order in progress";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";
