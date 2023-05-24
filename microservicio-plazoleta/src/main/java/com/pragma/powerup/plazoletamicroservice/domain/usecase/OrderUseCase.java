@@ -3,8 +3,6 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
@@ -104,6 +102,19 @@ public class OrderUseCase implements IOrderServicePort {
             throw new ParametersNegativesException();
         }
         return orderPersistencePort.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize);
+    }
+
+    @Override
+    public void takeOrder(Long idOrder) {
+        if (idOrder < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        orderPersistencePort.takeOrder(idOrder,idUserAuthenticated);
     }
 
 }

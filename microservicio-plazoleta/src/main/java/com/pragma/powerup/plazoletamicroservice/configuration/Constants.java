@@ -20,9 +20,9 @@ public class Constants {
     public static final String ROLE_CUSTOMER = "CUSTOMER";
     public static final String ROLE_ANONYMOUS = "ANONYMOUS";
     public static final Long STATUS_ORDER_IN_PROGRESS_ID = 1L;
-
-
-
+    public static final Long STATUS_ORDER_IN_PREPARATION_ID = 2L;
+    public static final Long STATUS_ORDER_IN_PENDING_ID = 3L;
+    public static final Long STATUS_ORDER_IN_READY_ID = 4L;
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
     public static final int MAX_PAGE_SIZE = 2;
@@ -31,6 +31,7 @@ public class Constants {
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
     public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
+    public static final String ORDER_TOOK_MESSAGE = "The order was taken correctly";
     public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
     public static final String USER_DELETED_MESSAGE = "User deleted successfully";
@@ -53,6 +54,8 @@ public class Constants {
     public static final String SOME_DISHES_ARE_NOT_FROM_RESTAURANT = "Some dishes are not from the restaurant";
     public static final String USER_WITH_ORDER_IN_PROGRESS = "The user has an order in progress";
     public static final String PARAMETER_NEGATIVES = "Parameters cannot be negative";
+    public static final String ORDER_NOT_FOUND = "The order with the id provided does not exist";
+    public static final String ORDER_IS_ALREADY_TAKEN = "The order is already taken";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

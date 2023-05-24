@@ -167,8 +167,16 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PARAMETER_NEGATIVES));
     }
-
-
-
-
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlerOrderNotFoundException(
+            OrderNotFoundException orderNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_FOUND));
+    }
+    @ExceptionHandler(OrderIsAlreadyTakenException.class)
+    public ResponseEntity<Map<String, String>> handlerOrderIsAlreadyTakenException(
+            OrderIsAlreadyTakenException orderIsAlreadyTakenException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IS_ALREADY_TAKEN));
+    }
 }

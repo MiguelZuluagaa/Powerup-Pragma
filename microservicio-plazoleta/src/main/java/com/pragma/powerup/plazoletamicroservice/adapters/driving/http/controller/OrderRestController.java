@@ -1,11 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.DishRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazoletamicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,8 +53,24 @@ public class OrderRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> createOrder(@Valid @RequestBody CreateOrderRequestDto createOrderRequestDto) {
         orderHandler.createOrder(createOrderRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
     }
+
+    @Operation(summary = "Take a new order",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Order took",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error creating order",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/takeOrder/{idOrder}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> takeOrder(@PathVariable Long idOrder) {
+        orderHandler.takeOrder(idOrder);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_TOOK_MESSAGE));
+    }
+
+
 
 }

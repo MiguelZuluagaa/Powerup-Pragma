@@ -3,9 +3,12 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapt
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderStatusEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserWithOrderInProgressException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.OrderIsAlreadyTakenException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +18,13 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PREPARATION_ID;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PROGRESS_ID;
+
 @RequiredArgsConstructor
 public class OrderMysqlAdapter implements IOrderPersistencePort {
     private final IOrderRepository orderRepository;
     private final IOrderEntityMapper orderEntityMapper;
-
-    private OrderStatusEntity statusInProgress = new OrderStatusEntity(1L,null,null);
 
     @Override
     public void createOrder(OrderEntity orderEntity) {
@@ -29,7 +33,7 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
 
     @Override
     public Boolean userCanCreateNewOrder(Long idUser) {
-        Optional<OrderEntity> orderEntity = orderRepository.findFirstByIdUserAndIdStatus(idUser, statusInProgress);
+        Optional<OrderEntity> orderEntity = orderRepository.findFirstByIdUserAndIdStatus(idUser, new OrderStatusEntity(STATUS_ORDER_IN_PROGRESS_ID));
         if(orderEntity.isPresent()){
             throw new UserWithOrderInProgressException();
         }
@@ -55,8 +59,28 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
                 (PageRequest.of(Math.toIntExact(offset), Math.toIntExact(pageSize))));
 
         if(!ordersFound.isPresent()){
-            throw new RuntimeException();
+            throw new NoDataFoundException();
         }
         return orderEntityMapper.toOrderList(ordersFound.get());
+    }
+
+    @Override
+    public void takeOrder(Long idOrder, Long idUser) {
+        Optional<OrderEntity> orderFound = findOrderById(idOrder);
+        if(orderFound.get().getIdStatus().getId() == STATUS_ORDER_IN_PREPARATION_ID){
+            throw new OrderIsAlreadyTakenException();
+        }
+        orderFound.get().setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PREPARATION_ID));
+        orderFound.get().setIdChef(idUser);
+        orderRepository.save(orderFound.get());
+    }
+
+    @Override
+    public Optional<OrderEntity> findOrderById(Long idOrder) {
+        Optional<OrderEntity> orderFound = orderRepository.findById(idOrder);
+        if(!orderFound.isPresent()){
+            throw new OrderNotFoundException();
+        }
+        return orderFound;
     }
 }

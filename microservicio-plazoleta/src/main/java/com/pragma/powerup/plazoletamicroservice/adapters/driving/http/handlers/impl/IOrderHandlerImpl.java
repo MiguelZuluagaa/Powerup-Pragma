@@ -1,10 +1,8 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IDishResponseMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IOrderResponseMapper;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +24,10 @@ public class IOrderHandlerImpl implements IOrderHandler {
     @Override
     public List<OrderResponseDto> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
         return orderResponseMapper.toResponseDto(orderServicePort.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
+    }
+
+    @Override
+    public void takeOrder(Long idOrder) {
+        orderServicePort.takeOrder(idOrder);
     }
 }

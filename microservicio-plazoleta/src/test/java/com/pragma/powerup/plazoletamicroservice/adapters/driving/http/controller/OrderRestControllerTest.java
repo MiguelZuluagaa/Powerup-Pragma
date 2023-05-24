@@ -135,4 +135,22 @@ class OrderRestControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
+
+    @Test
+    void takeOrder() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ tokenEmployee);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/order/takeOrder/29",
+                HttpMethod.POST,
+                request,
+                String.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
 }
