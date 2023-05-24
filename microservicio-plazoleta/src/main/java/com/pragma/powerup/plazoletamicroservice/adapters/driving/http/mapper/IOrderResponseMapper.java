@@ -1,6 +1,6 @@
-package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers;
+package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
-public interface IOrderEntityMapper {
-    List<Order> toOrderList(List<OrderEntity> listOrderEntity);
+public interface IOrderResponseMapper {
+    List<OrderResponseDto> toResponseDto(List<Order> orders);
 }

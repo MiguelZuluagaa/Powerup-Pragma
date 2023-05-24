@@ -3,9 +3,12 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
@@ -16,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PROGRESS_ID;
@@ -90,6 +94,11 @@ public class OrderUseCase implements IOrderServicePort {
 
     private void deleteOrderById(Long idOrder){
         orderPersistencePort.deleteOrderById(idOrder);
+    }
+
+    @Override
+    public List<Order> getOrdersByStatus(OrderRequestDto orderRequestDto) {
+        return orderPersistencePort.getOrdersByStatus(orderRequestDto);
     }
 
 }

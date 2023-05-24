@@ -6,9 +6,13 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.except
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -38,5 +42,14 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         if(!orderFound.isPresent()){
             orderRepository.deleteById(idOrder);
         }
+    }
+
+    @Override
+    public List<Order> getOrdersByStatus(OrderRequestDto orderRequestDto) {
+        Optional<List<OrderEntity>> ordersFound = orderRepository.findAllByIdStatusAndIdRestaurant(orderRequestDto.getIdStatus(), orderRequestDto.getIdRestaurant());
+        if(!ordersFound.isPresent()){
+            throw new RuntimeException();
+        }
+        return orderEntityMapper.toOrderList(ordersFound.get());
     }
 }
