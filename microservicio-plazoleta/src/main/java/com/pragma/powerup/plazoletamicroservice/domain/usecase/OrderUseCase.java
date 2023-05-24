@@ -38,40 +38,22 @@ public class OrderUseCase implements IOrderServicePort {
         this.orderPersistencePort = orderPersistencePort;
     }
 
-    public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
+    private Boolean userCanCreateNewOrder(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+        return orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated);
+    }
+
+    private OrderEntity initializeOrder(Long idChef, RestaurantEntity restaurant){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
 
-        if(orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated)) {
+        restaurantPersistencePort.findRestaurantById(restaurant.getId());
 
-            OrderEntity order = initializeOrder(idUserAuthenticated, createOrderRequestDto.getIdChef(), createOrderRequestDto.getIdRestaurant());
-            restaurantPersistencePort.findRestaurantById(order.getIdRestaurant().getId());
-            orderPersistencePort.createOrder(order);
-
-            ArrayList<OrderDishEntity> dishesRequestDto = createOrderRequestDto.getDishes();
-            ArrayList<OrderDishEntity> dishesToSave = new ArrayList<>();
-
-            for(OrderDishEntity dish : dishesRequestDto){
-                Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish().getId());
-                if (dishFound.get().getIdRestaurant().getId() != createOrderRequestDto.getIdRestaurant().getId()) {
-                    deleteOrderById(order.getId());
-                    throw new SomeDishesAreNotFromRestaurantException();
-                }
-                DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
-                dishesToSave.add( new OrderDishEntity(null, order, dishEntity, dish.getQuantity()) );
-            }
-            orderDishPersistencePort.saveOrderDishes(dishesToSave);
-        }
-    }
-
-    private void deleteOrderById(Long idOrder){
-        orderPersistencePort.deleteOrderById(idOrder);
-    }
-
-    private OrderEntity initializeOrder(Long idUser, Long idChef, RestaurantEntity restaurant){
         OrderEntity order = new OrderEntity();
-        order.setIdUser(idUser);
+        order.setIdUser(idUserAuthenticated);
         order.setIdChef(idChef);
         order.setDate(new Date());
         order.setIdStatus(statusInProgress);
@@ -80,10 +62,43 @@ public class OrderUseCase implements IOrderServicePort {
         return order;
     }
 
+    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<OrderDishEntity> dishesRequestDto, Long idRestaurant, OrderEntity order){
+        ArrayList<OrderDishEntity> dishesToSave = new ArrayList<>();
+
+        for(OrderDishEntity dish : dishesRequestDto){
+            Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish().getId());
+            if (dishFound.get().getIdRestaurant().getId() != idRestaurant) {
+                deleteOrderById(order.getId());
+                throw new SomeDishesAreNotFromRestaurantException();
+            }
+            DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
+            dishesToSave.add( new OrderDishEntity(null, order, dishEntity, dish.getQuantity()) );
+        }
+    }
+
+    public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
+        Long idChefDto = createOrderRequestDto.getIdChef();
+        RestaurantEntity restaurantDto = createOrderRequestDto.getIdRestaurant();
+        if(userCanCreateNewOrder()) {
+
+            OrderEntity order = initializeOrder(idChefDto, restaurantDto);
+            orderPersistencePort.createOrder(order);
+
+            ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
+            orderDishPersistencePort.saveOrderDishes(dishesToSave);
+        }
+    }
+
+    private void deleteOrderById(Long idOrder){
+        orderPersistencePort.deleteOrderById(idOrder);
+    }
+
+
+
     private ArrayList<Optional<Dish>> getDataDishes(ArrayList<OrderDishEntity> dishes){
         ArrayList<Optional<Dish>> dishesToReturn = new ArrayList<>();
         for (OrderDishEntity dish : dishes) {
-            Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getId());
+            Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getId(), restaurantDto.getId(),);
             dishesToReturn.add(dishFound);
         }
         return dishesToReturn;
