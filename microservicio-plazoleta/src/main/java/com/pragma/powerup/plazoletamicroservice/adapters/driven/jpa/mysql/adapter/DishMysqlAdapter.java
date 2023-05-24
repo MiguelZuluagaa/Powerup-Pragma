@@ -1,6 +1,8 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
@@ -8,6 +10,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,20 @@ public class DishMysqlAdapter implements IDishPersistencePort {
             throw new NoDataFoundException();
         }
         return dishEntityMapper.toDishList(dishEntityList);
+    }
+
+    @Override
+    public List<Dish> getDishesByCategory(Long idCategory, Long pageSize, Long offset) {
+        CategoryEntity category = new CategoryEntity(idCategory);
+
+        Optional<List<DishEntity>> dishesFound = dishRepository.findAllByIdCategory(
+                category,
+                (PageRequest.of(Math.toIntExact(offset), Math.toIntExact(pageSize))));
+
+        if (dishesFound.isEmpty()) {
+            throw new NoDataFoundException();
+        }
+        return dishEntityMapper.toDishList(dishesFound.get());
     }
 
     @Override

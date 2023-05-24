@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.PrincipalUser;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.CategoryDontExistException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserItsNotOwner;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyActiveException;
@@ -37,6 +38,12 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public List<Dish> getAllDishes() {
         return dishPersistencePort.getAllDishes();
+    }
+
+    @Override
+    public List<Dish> getDishesByCategory(Long idCategory, Long pageSize, Long offset) {
+        categoryPersistencePort.existCategoryById(idCategory);
+        return dishPersistencePort.getDishesByCategory(idCategory, pageSize, offset);
     }
 
     @Override

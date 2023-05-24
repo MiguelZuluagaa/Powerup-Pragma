@@ -43,6 +43,21 @@ public class DishRestController {
         return ResponseEntity.ok(dishHandler.getAllDishes());
     }
 
+    @Operation(summary = "Get dishes by category",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Dishes returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DishResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/getDishesByCategory/{idCategory}/{pageSize}/{offset}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<List<DishResponseDto>> getDishesByCategory(@PathVariable Long idCategory,
+                                                                     @PathVariable Long pageSize,
+                                                                     @PathVariable Long offset) {
+        return ResponseEntity.ok(dishHandler.getDishesByCategory(idCategory, pageSize, offset));
+    }
+
     @Operation(summary = "Add a new dish",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Dish created",
