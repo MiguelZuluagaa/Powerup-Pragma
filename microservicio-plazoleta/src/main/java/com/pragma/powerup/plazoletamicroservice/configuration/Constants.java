@@ -30,7 +30,7 @@ public class Constants {
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
-    public static final String ORDER_CREATED_MESSAGE = "Dish created successfully";
+    public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
     public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
     public static final String USER_DELETED_MESSAGE = "User deleted successfully";

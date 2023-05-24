@@ -32,8 +32,6 @@ public class OrderUseCase implements IOrderServicePort {
     @Autowired
     private IRestaurantPersistencePort restaurantPersistencePort;
 
-    private OrderStatusEntity statusInProgress = new OrderStatusEntity(STATUS_ORDER_IN_PROGRESS_ID,null,null);
-
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
     }
@@ -56,7 +54,7 @@ public class OrderUseCase implements IOrderServicePort {
         order.setIdUser(idUserAuthenticated);
         order.setIdChef(idChef);
         order.setDate(new Date());
-        order.setIdStatus(statusInProgress);
+        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PROGRESS_ID,null,null));
         order.setIdRestaurant(restaurant);
 
         return order;
@@ -74,6 +72,7 @@ public class OrderUseCase implements IOrderServicePort {
             DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
             dishesToSave.add( new OrderDishEntity(null, order, dishEntity, dish.getQuantity()) );
         }
+        return dishesToSave;
     }
 
     public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
@@ -93,14 +92,4 @@ public class OrderUseCase implements IOrderServicePort {
         orderPersistencePort.deleteOrderById(idOrder);
     }
 
-
-
-    private ArrayList<Optional<Dish>> getDataDishes(ArrayList<OrderDishEntity> dishes){
-        ArrayList<Optional<Dish>> dishesToReturn = new ArrayList<>();
-        for (OrderDishEntity dish : dishes) {
-            Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getId(), restaurantDto.getId(),);
-            dishesToReturn.add(dishFound);
-        }
-        return dishesToReturn;
-    }
 }
