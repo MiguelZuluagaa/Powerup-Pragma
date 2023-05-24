@@ -26,4 +26,7 @@ public class RestaurantEntity {
     @JoinColumn(name = "id_user_owner")
     private Long idUserOwner;
 
+    public RestaurantEntity(Long idRestaurant) {
+        this.id = idRestaurant;
+    }
 }

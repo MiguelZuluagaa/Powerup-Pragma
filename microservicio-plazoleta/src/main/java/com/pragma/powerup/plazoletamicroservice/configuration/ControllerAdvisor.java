@@ -2,8 +2,7 @@ package com.pragma.powerup.plazoletamicroservice.configuration;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.AuthenticationException;
@@ -132,5 +131,52 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CATEGORY_NOT_FOUND));
     }
-
+    @ExceptionHandler(DishIsAlreadyActiveException.class)
+    public ResponseEntity<Map<String, String>> handlerDishIsAlreadyActiveException(
+            DishIsAlreadyActiveException dishIsAlreadyActiveException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_IS_ALREADY_ACTIVE));
+    }
+    @ExceptionHandler(DishIsAlreadyDisableException.class)
+    public ResponseEntity<Map<String, String>> handlerDishIsAlreadyDisableException(
+            DishIsAlreadyDisableException dishIsAlreadyDisableException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_IS_ALREADY_DISABLE));
+    }
+    @ExceptionHandler(PageAndOffsetMustBePositive.class)
+    public ResponseEntity<Map<String, String>> handlerPageAndOffsetMustBePositive(
+            PageAndOffsetMustBePositive pageAndOffsetMustBePositive) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PAGE_AND_OFFSET_MUST_BE_POSITIVE));
+    }
+    @ExceptionHandler(SomeDishesAreNotFromRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handlerSomeDishesAreNotFromRestaurantException(
+            SomeDishesAreNotFromRestaurantException someDishesAreNotFromRestaurantException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, SOME_DISHES_ARE_NOT_FROM_RESTAURANT));
+    }
+    @ExceptionHandler(UserWithOrderInProgressException.class)
+    public ResponseEntity<Map<String, String>> handlerUserWithOrderInProgressException(
+            UserWithOrderInProgressException userWithOrderInProgressException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_WITH_ORDER_IN_PROGRESS));
+    }
+    @ExceptionHandler(ParametersNegativesException.class)
+    public ResponseEntity<Map<String, String>> handlerParametersNegativesException(
+            ParametersNegativesException parametersNegativesException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PARAMETER_NEGATIVES));
+    }
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlerOrderNotFoundException(
+            OrderNotFoundException orderNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_FOUND));
+    }
+    @ExceptionHandler(OrderIsAlreadyTakenException.class)
+    public ResponseEntity<Map<String, String>> handlerOrderIsAlreadyTakenException(
+            OrderIsAlreadyTakenException orderIsAlreadyTakenException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IS_ALREADY_TAKEN));
+    }
 }

@@ -43,6 +43,21 @@ public class DishRestController {
         return ResponseEntity.ok(dishHandler.getAllDishes());
     }
 
+    @Operation(summary = "Get dishes by category",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Dishes returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = DishResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/getDishesByCategory/{idCategory}/{pageSize}/{offset}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<List<DishResponseDto>> getDishesByCategory(@PathVariable Long idCategory,
+                                                                     @PathVariable Long pageSize,
+                                                                     @PathVariable Long offset) {
+        return ResponseEntity.ok(dishHandler.getDishesByCategory(idCategory, pageSize, offset));
+    }
+
     @Operation(summary = "Add a new dish",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Dish created",
@@ -57,11 +72,11 @@ public class DishRestController {
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_CREATED_MESSAGE));
     }
 
-    @Operation(summary = "Update a new dish",
+    @Operation(summary = "Update a dish",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Dish created",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
-                    @ApiResponse(responseCode = "409", description = "Dish already exists",
+                    @ApiResponse(responseCode = "409", description = "Dish not exists",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping("/updateDish/")
     @SecurityRequirement(name = "jwt")
@@ -70,5 +85,34 @@ public class DishRestController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
+
+    @Operation(summary = "Active dish",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "The Dish was activated",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Dish not exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PutMapping("/activeDish/{idDish}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> activeDish(@PathVariable Long idDish) {
+        dishHandler.activeDish(idDish);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
+    }
+
+    @Operation(summary = "Disable dish",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "The Dish was disabled",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Dish not exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PutMapping("/disableDish/{idDish}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> disableDish(@PathVariable Long idDish) {
+        dishHandler.disableDish(idDish);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
+    }
+
 
 }

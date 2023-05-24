@@ -1,24 +1,12 @@
 package com.pragma.powerup.plazoletamicroservice.configuration;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.CategoryMysqlAdapter;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.ICategoryEntityMapper;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.ICategoryRepository;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter.*;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.*;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
-import com.pragma.powerup.plazoletamicroservice.domain.api.ICategoryServicePort;
-import com.pragma.powerup.plazoletamicroservice.domain.api.IDishServicePort;
-import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
-import com.pragma.powerup.plazoletamicroservice.domain.spi.ICategoryPersistencePort;
-import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
-import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
-import com.pragma.powerup.plazoletamicroservice.domain.usecase.CategoryUseCase;
-import com.pragma.powerup.plazoletamicroservice.domain.usecase.DishUseCase;
-import com.pragma.powerup.plazoletamicroservice.domain.usecase.RestaurantUseCase;
+import com.pragma.powerup.plazoletamicroservice.domain.api.*;
+import com.pragma.powerup.plazoletamicroservice.domain.spi.*;
+import com.pragma.powerup.plazoletamicroservice.domain.usecase.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +24,12 @@ public class BeanConfiguration {
 
     private final ICategoryRepository categoryRepository;
     private final ICategoryEntityMapper categoryEntityMapper;
+
+    private final IOrderRepository orderRepository;
+    private final IOrderEntityMapper orderEntityMapper;
+
+    private final IOrderDishRepository orderDishRepository;
+    private final IOrderDishEntityMapper orderDishEntityMapper;
 
     private final IUserFeignClient userFeignClient;
 
@@ -67,5 +61,25 @@ public class BeanConfiguration {
     @Bean
     public ICategoryPersistencePort categoryPersistencePort() {
         return new CategoryMysqlAdapter(categoryRepository, categoryEntityMapper);
+    }
+
+    @Bean
+    public IOrderServicePort orderServicePort() {
+        return new OrderUseCase(orderPersistencePort());
+    }
+
+    @Bean
+    public IOrderPersistencePort orderPersistencePort() {
+        return new OrderMysqlAdapter(orderRepository, orderEntityMapper);
+    }
+
+    @Bean
+    public IOrderDishServicePort orderDishServicePort() {
+        return new OrderDishUseCase(orderDishPersistencePort());
+    }
+
+    @Bean
+    public IOrderDishPersistencePort orderDishPersistencePort() {
+        return new OrderDishMysqlAdapter(orderDishRepository, orderDishEntityMapper);
     }
 }

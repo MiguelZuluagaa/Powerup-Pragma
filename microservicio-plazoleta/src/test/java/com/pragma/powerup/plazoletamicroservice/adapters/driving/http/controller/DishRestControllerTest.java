@@ -31,7 +31,8 @@ class DishRestControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private String token = null;
+    private String tokenOwner = null;
+    private String tokenCustomer = null;
 
     private CategoryEntity category = null;
     private RestaurantEntity restaurant = null;
@@ -39,7 +40,6 @@ class DishRestControllerTest {
 
     @BeforeEach
     void setUp() {
-
         category = new CategoryEntity(1L,null,null);
         restaurant = new RestaurantEntity(11L,null,null,null,null,null,null);
 
@@ -56,7 +56,7 @@ class DishRestControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
-        headers.set("Authorization","Bearer "+ token);
+        headers.set("Authorization","Bearer "+ tokenOwner);
 
         HttpEntity<Map<String, Object>> request  = new HttpEntity<>(user, headers);
         ResponseEntity<String> response = restTemplate.exchange(
@@ -65,7 +65,28 @@ class DishRestControllerTest {
                 request,
                 String.class);
 
-        token = response.getBody().replace("{\"token\":\"","").replace("\"}","");
+        tokenOwner = response.getBody().replace("{\"token\":\"","").replace("\"}","");
+
+        email = "customer@gmail.com";
+        password = "444";
+
+        user = new HashMap<>();
+        user.put("email", email);
+        user.put("password", password);
+
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ tokenCustomer);
+
+        request  = new HttpEntity<>(user, headers);
+        response = restTemplate.exchange(
+                "http://localhost:8090/auth/login",
+                HttpMethod.POST,
+                request,
+                String.class);
+
+        tokenCustomer = response.getBody().replace("{\"token\":\"","").replace("\"}","");
     }
 
     @Test
@@ -73,7 +94,7 @@ class DishRestControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
-        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+        headers.set("Authorization","Bearer "+ tokenOwner);// You need put a token here.
 
         HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
 
@@ -87,11 +108,29 @@ class DishRestControllerTest {
     }
 
     @Test
+    void getDishesByCategory() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ tokenCustomer);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/dish/getDishesByCategory/1/2/2",
+                HttpMethod.GET,
+                request,
+                String.class);
+
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+    }
+
+    @Test
     void saveDish() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
-        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+        headers.set("Authorization","Bearer "+ tokenOwner);// You need put a token here.
 
         HttpEntity<Dish> request  = new HttpEntity<>(dish, headers);
 
@@ -114,7 +153,7 @@ class DishRestControllerTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("charset", "utf-8");
-        headers.set("Authorization","Bearer "+ token);// You need put a token here.
+        headers.set("Authorization","Bearer "+ tokenOwner);// You need put a token here.
 
         HttpEntity<Dish> request  = new HttpEntity<>(dish, headers);
 
@@ -125,5 +164,41 @@ class DishRestControllerTest {
                 String.class);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    }
+
+    @Test
+    void activeDish(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ tokenOwner);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/dish/activeDish/1",
+                HttpMethod.PUT,
+                request,
+                String.class);
+
+        Assertions.assertThat(response.getBody()).contains("Dish updated successfully");
+    }
+
+    @Test
+    void disableDish(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("charset", "utf-8");
+        headers.set("Authorization","Bearer "+ tokenOwner);// You need put a token here.
+
+        HttpEntity<Restaurant> request  = new HttpEntity<>(headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                "http://localhost:" + port + "/dish/disableDish/1",
+                HttpMethod.PUT,
+                request,
+                String.class);
+
+        Assertions.assertThat(response.getBody()).contains("Dish updated successfully");
     }
 }

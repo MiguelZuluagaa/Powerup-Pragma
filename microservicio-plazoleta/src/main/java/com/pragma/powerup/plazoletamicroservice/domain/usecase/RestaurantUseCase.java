@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.MicroserviceUserNotWorking;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserItsNotOwner;
@@ -8,10 +9,12 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.cl
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dto.UserFeignDto;
 import com.pragma.powerup.plazoletamicroservice.configuration.security.jwt.JwtTokenFilter;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.PageAndOffsetMustBePositive;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
@@ -34,6 +37,14 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     @Override
     public List<Restaurant> getAllRestaurants() {
         return restaurantPersistencePort.getAllRestaurants();
+    }
+
+    @Override
+    public List<Restaurant> getRestaurantsWithPagination(Long pageSize, Long offset) {
+        if(pageSize < 0 || offset < 0){
+            throw new PageAndOffsetMustBePositive();
+        }
+        return restaurantPersistencePort.getRestaurantsWithPagination(pageSize,offset);
     }
 
     @Override

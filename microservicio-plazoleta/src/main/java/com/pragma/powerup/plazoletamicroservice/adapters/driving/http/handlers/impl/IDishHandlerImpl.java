@@ -25,6 +25,11 @@ public class IDishHandlerImpl implements IDishHandler {
     }
 
     @Override
+    public List<DishResponseDto> getDishesByCategory(Long idCategory, Long pageSize, Long offset) {
+        return dishResponseMapper.toDishResponseList(dishServicePort.getDishesByCategory(idCategory, pageSize, offset));
+    }
+
+    @Override
     public void saveDish(DishRequestDto dish) {
         dishServicePort.saveDish(dishResponseMapper.toDish(dish));
     }
@@ -32,5 +37,15 @@ public class IDishHandlerImpl implements IDishHandler {
     @Override
     public void updateDish(UpdateDishRequestDto dish) {
         dishServicePort.updateDish(dishResponseMapper.toDish(dish));
+    }
+
+    @Override
+    public void activeDish(Long idDish) {
+        dishServicePort.activeDish(idDish);
+    }
+
+    @Override
+    public void disableDish(Long idDish) {
+        dishServicePort.disableDish(idDish);
     }
 }
