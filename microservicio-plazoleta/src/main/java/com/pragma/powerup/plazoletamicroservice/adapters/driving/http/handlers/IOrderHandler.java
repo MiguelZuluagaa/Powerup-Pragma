@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IOrderHandler {
     void createOrder(CreateOrderRequestDto createOrderRequestDto);
-    List<OrderResponseDto> getOrdersByStatus(OrderRequestDto orderRequestDto);
+    List<OrderResponseDto> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
 }

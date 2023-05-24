@@ -2,15 +2,15 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapt
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderStatusEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserWithOrderInProgressException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
-import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +45,15 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     }
 
     @Override
-    public List<Order> getOrdersByStatus(OrderRequestDto orderRequestDto) {
-        Optional<List<OrderEntity>> ordersFound = orderRepository.findAllByIdStatusAndIdRestaurant(orderRequestDto.getIdStatus(), orderRequestDto.getIdRestaurant());
+    public List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
+        RestaurantEntity restaurant = new RestaurantEntity(idRestaurant);
+        OrderStatusEntity status = new OrderStatusEntity(idStatus);
+
+        Optional<List<OrderEntity>> ordersFound = orderRepository.findAllByIdRestaurantAndIdStatus(
+                restaurant,
+                status,
+                (PageRequest.of(Math.toIntExact(offset), Math.toIntExact(pageSize))));
+
         if(!ordersFound.isPresent()){
             throw new RuntimeException();
         }
