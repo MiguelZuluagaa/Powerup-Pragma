@@ -38,10 +38,13 @@ public class OrderRestController {
                                     array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @PostMapping("/getOrdersByStatus/")
+    @GetMapping("/getOrdersByStatus/{idRestaurant}/{idStatus}/{pageSize}/{offset}")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<List<OrderResponseDto>> getOrdersByStatus(@Valid @RequestBody OrderRequestDto orderRequestDto) {
-        return ResponseEntity.ok(orderHandler.getOrdersByStatus(orderRequestDto));
+    public ResponseEntity<List<OrderResponseDto>> getOrdersByStatus(@PathVariable Long idRestaurant,
+                                                                    @PathVariable Long idStatus,
+                                                                    @PathVariable Long offset,
+                                                                    @PathVariable Long pageSize) {
+        return ResponseEntity.ok(orderHandler.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
     }
 
     @Operation(summary = "Create a new order",

@@ -52,6 +52,7 @@ public class Constants {
     public static final String PAGE_AND_OFFSET_MUST_BE_POSITIVE = "The parameters page and offset must be positive";
     public static final String SOME_DISHES_ARE_NOT_FROM_RESTAURANT = "Some dishes are not from the restaurant";
     public static final String USER_WITH_ORDER_IN_PROGRESS = "The user has an order in progress";
+    public static final String PARAMETER_NEGATIVES = "Parameters cannot be negative";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

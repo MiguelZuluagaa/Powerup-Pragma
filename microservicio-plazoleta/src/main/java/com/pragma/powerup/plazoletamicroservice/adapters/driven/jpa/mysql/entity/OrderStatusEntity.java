@@ -19,4 +19,8 @@ public class OrderStatusEntity {
     private Long id;
     private String name;
     private String description;
+
+    public OrderStatusEntity(Long idStatus) {
+        this.id = idStatus;
+    }
 }

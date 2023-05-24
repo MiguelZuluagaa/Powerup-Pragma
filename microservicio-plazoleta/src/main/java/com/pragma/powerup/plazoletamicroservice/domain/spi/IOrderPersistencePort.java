@@ -11,5 +11,5 @@ public interface IOrderPersistencePort {
     void createOrder(OrderEntity orderEntity);
     Boolean userCanCreateNewOrder(Long idUser);
     void deleteOrderById(Long idOrder);
-    List<Order> getOrdersByStatus(OrderRequestDto orderRequestDto);
+    List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
 }

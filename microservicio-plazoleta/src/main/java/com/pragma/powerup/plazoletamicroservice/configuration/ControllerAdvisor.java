@@ -161,6 +161,14 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_WITH_ORDER_IN_PROGRESS));
     }
+    @ExceptionHandler(ParametersNegativesException.class)
+    public ResponseEntity<Map<String, String>> handlerParametersNegativesException(
+            ParametersNegativesException parametersNegativesException) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PARAMETER_NEGATIVES));
+    }
+
+
 
 
 }

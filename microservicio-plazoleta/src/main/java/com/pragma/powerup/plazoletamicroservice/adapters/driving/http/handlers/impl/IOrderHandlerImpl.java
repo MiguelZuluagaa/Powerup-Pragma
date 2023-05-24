@@ -24,7 +24,7 @@ public class IOrderHandlerImpl implements IOrderHandler {
     }
 
     @Override
-    public List<OrderResponseDto> getOrdersByStatus(OrderRequestDto orderRequestDto) {
-        return orderResponseMapper.toResponseDto(orderServicePort.getOrdersByStatus(orderRequestDto));
+    public List<OrderResponseDto> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
+        return orderResponseMapper.toResponseDto(orderServicePort.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
     }
 }

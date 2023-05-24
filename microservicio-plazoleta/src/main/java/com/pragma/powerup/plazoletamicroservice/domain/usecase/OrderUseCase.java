@@ -6,6 +6,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.reques
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,8 +99,11 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public List<Order> getOrdersByStatus(OrderRequestDto orderRequestDto) {
-        return orderPersistencePort.getOrdersByStatus(orderRequestDto);
+    public List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
+        if (idRestaurant < 0 || idStatus < 0 || offset < 0 || pageSize < 0) {
+            throw new ParametersNegativesException();
+        }
+        return orderPersistencePort.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize);
     }
 
 }
