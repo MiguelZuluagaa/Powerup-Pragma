@@ -13,9 +13,6 @@ import java.util.ArrayList;
 @Getter
 public class CreateOrderRequestDto {
 
-    @NotNull(message = "The idChef cannot be empty")
-    private Long idChef;
-
     @NotNull(message = "The idRestaurant cannot be empty")
     private RestaurantEntity idRestaurant;
 

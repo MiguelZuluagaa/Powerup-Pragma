@@ -47,7 +47,7 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated);
     }
 
-    private OrderEntity initializeOrder(Long idChef, RestaurantEntity restaurant){
+    private OrderEntity initializeOrder(/*Long idChef, */RestaurantEntity restaurant){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
@@ -80,11 +80,11 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
-        Long idChefDto = createOrderRequestDto.getIdChef();
+        /*Long idChefDto = createOrderRequestDto.getIdChef();*/
         RestaurantEntity restaurantDto = createOrderRequestDto.getIdRestaurant();
         if(userCanCreateNewOrder()) {
 
-            OrderEntity order = initializeOrder(idChefDto, restaurantDto);
+            OrderEntity order = initializeOrder(/*idChefDto, */restaurantDto);
             orderPersistencePort.createOrder(order);
 
             ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);

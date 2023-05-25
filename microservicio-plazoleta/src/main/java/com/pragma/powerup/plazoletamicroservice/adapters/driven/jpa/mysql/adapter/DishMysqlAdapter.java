@@ -7,6 +7,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.except
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,14 @@ public class DishMysqlAdapter implements IDishPersistencePort {
     public List<Dish> getDishesByCategory(Long idCategory, Long pageSize, Long offset) {
         CategoryEntity category = new CategoryEntity(idCategory);
 
+        if(pageSize < 1 || offset < 0 || idCategory < 0){
+            throw new ParametersNegativesException();
+        }
+
         Optional<List<DishEntity>> dishesFound = dishRepository.findAllByIdCategory(
                 category,
                 (PageRequest.of(Math.toIntExact(offset), Math.toIntExact(pageSize))));
-
-        if (dishesFound.isEmpty()) {
+        if (dishesFound.get().size() < 1) {
             throw new NoDataFoundException();
         }
         return dishEntityMapper.toDishList(dishesFound.get());

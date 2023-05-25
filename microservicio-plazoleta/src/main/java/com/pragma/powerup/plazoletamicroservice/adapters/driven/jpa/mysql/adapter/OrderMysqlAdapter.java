@@ -50,6 +50,9 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
 
     @Override
     public List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
+        if(pageSize < 1){
+            throw new NoDataFoundException();
+        }
         RestaurantEntity restaurant = new RestaurantEntity(idRestaurant);
         OrderStatusEntity status = new OrderStatusEntity(idStatus);
 
@@ -57,8 +60,7 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
                 restaurant,
                 status,
                 (PageRequest.of(Math.toIntExact(offset), Math.toIntExact(pageSize))));
-
-        if(!ordersFound.isPresent()){
+        if(ordersFound.get().size() < 1 || pageSize < 1){
             throw new NoDataFoundException();
         }
         return orderEntityMapper.toOrderList(ordersFound.get());
