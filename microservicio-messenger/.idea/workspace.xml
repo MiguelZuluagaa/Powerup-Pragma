@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="61212af8-a387-4e05-85f6-bf0d1f6f5214" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driven/twilio/adapter/MessengerTwilioAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driven/twilio/adapter/MessengerTwilioAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driving/http/controller/MessengerRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driving/http/controller/MessengerRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driving/http/handlers/IMessengerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driving/http/handlers/IMessengerHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driving/http/handlers/impl/IMessengerHandlerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/adapters/driving/http/handlers/impl/IMessengerHandlerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/configuration/BeanConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/configuration/BeanConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/domain/api/IMessengerServicePort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/domain/api/IMessengerServicePort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/domain/spi/IMessengerPersistencePort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/domain/spi/IMessengerPersistencePort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/domain/usecase/MessengerUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pragma/powerup/messengermicroservice/domain/usecase/MessengerUseCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/adapters/driven/jpa/mysql/adapter/CategoryMysqlAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/adapters/driven/jpa/mysql/adapter/CategoryMysqlAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/adapters/driving/http/handlers/IOrderHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/adapters/driving/http/handlers/IOrderHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/adapters/driving/http/handlers/impl/IOrderHandlerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/adapters/driving/http/handlers/impl/IOrderHandlerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/configuration/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/configuration/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/domain/api/IOrderServicePort.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/domain/api/IOrderServicePort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/domain/usecase/OrderUseCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/../microservicio-plazoleta/src/main/java/com/pragma/powerup/plazoletamicroservice/domain/usecase/OrderUseCase.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="0" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="plazoletamicroservice" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2PGBQoVRdXXv2i6W4O7Bm6hqLmP" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
+    <property name="jdk.selected.JAVA_MODULE" value="17" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/com/pragma/powerup/plazoletamicroservice/domain/model" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Desktop\Pragma\POWER-UP PRAGMA\microservicio-messenger\src\main\java\com\pragma\powerup\plazoletamicroservice\domain\model" />
+      <recent name="C:\Users\USER\Desktop\Pragma\POWER-UP PRAGMA\microservicio-messenger\src\main\java\com\pragma\powerup\plazoletamicroservice\adapters\driven\microservices" />
+      <recent name="C:\Users\USER\Desktop\Pragma\POWER-UP PRAGMA\microservicio-messenger\src\main\java\com\pragma\powerup\plazoletamicroservice\adapters\driven\jpa\mysql" />
+      <recent name="C:\Users\USER\Desktop\Pragma\POWER-UP PRAGMA\microservicio-plazoleta\src\main\java\com\pragma\powerup\plazoletamicroservice\configuration" />
+      <recent name="C:\Users\USER\Desktop\Pragma\microservicio-plazoleta\src\main\java\com\pragma\powerup\plazoletamicroservice\configuration\security\jwt" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller" />
+      <recent name="com.pragma.powerup.plazoletamicroservice.domain.usecase" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.pragma.powerup.messengermicroservice.adapters.driving.http.controller" />
+      <recent name="com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions" />
+      <recent name="com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity" />
+      <recent name="com.pragma.powerup.plazoletamicroservice.configuration" />
+      <recent name="com.pragma.powerup.plazoletamicroservice.configuration.security" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.MessengerMicroserviceApplication">
+    <configuration name="DishRestControllerTest.getAllDishes" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.DishRestControllerTest.getAllDishes&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="DishRestControllerTest.getDishesByCategory" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.DishRestControllerTest.getDishesByCategory&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="OrderRestControllerTest.getOrdersByStatus" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.OrderRestControllerTest.getOrdersByStatus&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="OrderRestControllerTest.takeOrder" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.OrderRestControllerTest.takeOrder&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="microservicio-plazoleta" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="microservicio-plazoleta" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="demo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.demo.DemoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MessengerMicroserviceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="messengermicroservice.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.pragma.powerup.messengermicroservice.MessengerMicroserviceApplication" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <envs>
+        <env name="AUTH_SID" value="ACdcad5eaf479cd8ecd6f0aa9973b6cbf5" />
+        <env name="AUTH_TOKEN" value="14ccad75b5763a4ad12a397df55d5554" />
+        <env name="TWILIO_PHONE_NUMBER" value="+13612645316" />
+      </envs>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PlazoletaMicroserviceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="plazoletamicroservice.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.pragma.powerup.plazoletamicroservice.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.pragma.powerup.plazoletamicroservice.PlazoletaMicroserviceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserMicroserviceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="plazoletamicroservice.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.pragma.powerup.plazoletamicroservice.UserMicroserviceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserMicroserviceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="usermicroservice.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.pragma.powerup.plazoletamicroservice.UserMicroserviceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.PlazoletaMicroserviceApplication" />
+        <item itemvalue="Gradle.DishRestControllerTest.getAllDishes" />
+        <item itemvalue="Gradle.DishRestControllerTest.getDishesByCategory" />
+        <item itemvalue="Gradle.OrderRestControllerTest.takeOrder" />
+        <item itemvalue="Gradle.OrderRestControllerTest.getOrdersByStatus" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="61212af8-a387-4e05-85f6-bf0d1f6f5214" name="Changes" comment="" />
+      <created>1683073525813</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1683073525813</updated>
+      <workItem from="1683073528524" duration="76000" />
+      <workItem from="1683073656257" duration="6791000" />
+      <workItem from="1683130152919" duration="1791000" />
+      <workItem from="1683205431076" duration="3682000" />
+      <workItem from="1683212532397" duration="4547000" />
+      <workItem from="1683219540082" duration="118000" />
+      <workItem from="1683219701586" duration="398000" />
+      <workItem from="1683220147762" duration="13841000" />
+      <workItem from="1683494369149" duration="11599000" />
+      <workItem from="1683589526066" duration="9187000" />
+      <workItem from="1683640686196" duration="12016000" />
+      <workItem from="1683730214670" duration="15983000" />
+      <workItem from="1683818190377" duration="4633000" />
+      <workItem from="1683917676637" duration="4338000" />
+      <workItem from="1684169091550" duration="1187000" />
+      <workItem from="1684256211601" duration="22568000" />
+      <workItem from="1684362664415" duration="2719000" />
+      <workItem from="1684427128830" duration="16090000" />
+      <workItem from="1684511017910" duration="15780000" />
+      <workItem from="1684705710944" duration="8813000" />
+      <workItem from="1684771217818" duration="15699000" />
+      <workItem from="1684864964653" duration="21857000" />
+      <workItem from="1684940139476" duration="19706000" />
+      <workItem from="1685028167115" duration="4131000" />
+      <workItem from="1685385550729" duration="4623000" />
+      <workItem from="1685408271007" duration="2883000" />
+      <workItem from="1685411271726" duration="2469000" />
+      <workItem from="1685471513097" duration="8402000" />
+      <workItem from="1685480249724" duration="1629000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="io.jsonwebtoken.io.DecodingException" package="io.jsonwebtoken.io" />
+          <option name="timeStamp" value="20" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dto.UserResponseDto" memberName="idRole" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$RestaurantRestControllerTest_getAllRestaurants.ic" NAME="RestaurantRestControllerTest.getAllRestaurants Coverage Results" MODIFIED="1684716301490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$DishRestControllerTest_updateDish.ic" NAME="DishRestControllerTest.updateDish Coverage Results" MODIFIED="1684716176873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$OrderRestControllerTest_createOrder.ic" NAME="OrderRestControllerTest.createOrder Coverage Results" MODIFIED="1684942619297" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$DishRestControllerTest_disableDish.ic" NAME="DishRestControllerTest.disableDish Coverage Results" MODIFIED="1684775160101" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$OrderRestControllerTest_takeOrder.ic" NAME="OrderRestControllerTest.takeOrder Coverage Results" MODIFIED="1684969609144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$OrderRestControllerTest_getOrdersByStatus.ic" NAME="OrderRestControllerTest.getOrdersByStatus Coverage Results" MODIFIED="1684963566970" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$DishRestControllerTest_saveDish.ic" NAME="DishRestControllerTest.saveDish Coverage Results" MODIFIED="1684716134017" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$RestaurantRestControllerTest_saveRestaurant.ic" NAME="RestaurantRestControllerTest.saveRestaurant Coverage Results" MODIFIED="1684716275083" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$CategoryUseCaseTest.ic" NAME="CategoryUseCaseTest Coverage Results" MODIFIED="1684712019252" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$RestaurantUseCaseTest_getAllRestaurants.ic" NAME="RestaurantUseCaseTest.getAllRestaurants Coverage Results" MODIFIED="1684711631757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$DishRestControllerTest_getDishesByCategory.ic" NAME="DishRestControllerTest.getDishesByCategory Coverage Results" MODIFIED="1684972178054" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$CategoryRestControllerTest_getAllCategories.ic" NAME="CategoryRestControllerTest.getAllCategories Coverage Results" MODIFIED="1684716325551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$CategoryRestControllerTest_saveCategory.ic" NAME="CategoryRestControllerTest.saveCategory Coverage Results" MODIFIED="1684716356865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$RestaurantRestControllerTest_getRestaurantsWithPagination.ic" NAME="RestaurantRestControllerTest.getRestaurantsWithPagination Coverage Results" MODIFIED="1684780018632" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$DishRestControllerTest_activeDish.ic" NAME="DishRestControllerTest.activeDish Coverage Results" MODIFIED="1684775141021" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/plazoletamicroservice$DishRestControllerTest_getAllDishes.ic" NAME="DishRestControllerTest.getAllDishes Coverage Results" MODIFIED="1685390374320" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
