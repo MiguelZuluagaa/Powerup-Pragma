@@ -96,7 +96,6 @@ class OrderRestControllerTest {
         RestaurantEntity restaurant = new RestaurantEntity(16L,null,null,null,null,null,null);
 
         CreateOrderRequestDto order = new CreateOrderRequestDto(
-                1L,
                 restaurant,
                 dishes
         );

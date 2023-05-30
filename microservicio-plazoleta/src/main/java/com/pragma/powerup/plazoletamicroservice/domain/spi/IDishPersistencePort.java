@@ -12,4 +12,5 @@ public interface IDishPersistencePort {
     void saveDish(Dish dish);
     void updateDish(Dish dish);
     Optional<Dish> findDishById(Long id);
+    Boolean existDishById(Long id);
 }

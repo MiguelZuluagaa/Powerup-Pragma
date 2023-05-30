@@ -2,6 +2,7 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
@@ -64,24 +65,28 @@ public class OrderUseCase implements IOrderServicePort {
         return order;
     }
 
-    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<OrderDishEntity> dishesRequestDto, Long idRestaurant, OrderEntity order){
+    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<DishAsset> dishesRequestDto, Long idRestaurant, OrderEntity order){
         ArrayList<OrderDishEntity> dishesToSave = new ArrayList<>();
 
-        for(OrderDishEntity dish : dishesRequestDto){
-            Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish().getId());
-            if (dishFound.get().getIdRestaurant().getId() != idRestaurant) {
+        for(DishAsset dish : dishesRequestDto){
+            Boolean dishExist = dishPersistencePort.existDishById(dish.getIdDish());
+            if(dishExist) {
+                Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish());
+                DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
+                dishesToSave.add(new OrderDishEntity(null, order, dishEntity, dish.getQuantity()));
+            }else{
                 deleteOrderById(order.getId());
                 throw new SomeDishesAreNotFromRestaurantException();
             }
-            DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
-            dishesToSave.add( new OrderDishEntity(null, order, dishEntity, dish.getQuantity()) );
         }
         return dishesToSave;
     }
 
     public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
         /*Long idChefDto = createOrderRequestDto.getIdChef();*/
-        RestaurantEntity restaurantDto = createOrderRequestDto.getIdRestaurant();
+
+
+        RestaurantEntity restaurantDto = new RestaurantEntity(createOrderRequestDto.getIdRestaurant());
         if(userCanCreateNewOrder()) {
 
             OrderEntity order = initializeOrder(/*idChefDto, */restaurantDto);

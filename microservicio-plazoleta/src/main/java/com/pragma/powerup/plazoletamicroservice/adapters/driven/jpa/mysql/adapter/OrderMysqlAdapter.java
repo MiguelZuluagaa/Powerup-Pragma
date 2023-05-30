@@ -44,8 +44,9 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     public void deleteOrderById(Long idOrder) {
         Optional<OrderEntity> orderFound = orderRepository.findById(idOrder);
         if(!orderFound.isPresent()){
-            orderRepository.deleteById(idOrder);
+           throw new OrderNotFoundException();
         }
+        orderRepository.deleteById(idOrder);
     }
 
     @Override
