@@ -1,8 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +13,9 @@ import java.util.ArrayList;
 public class CreateOrderRequestDto {
 
     @NotNull(message = "The idRestaurant cannot be empty")
-    private RestaurantEntity idRestaurant;
+    private Long idRestaurant;
 
     @NotNull(message = "The dishes cannot be empty")
-    ArrayList<OrderDishEntity> dishes;
+    ArrayList<DishAsset> dishes;
+
 }

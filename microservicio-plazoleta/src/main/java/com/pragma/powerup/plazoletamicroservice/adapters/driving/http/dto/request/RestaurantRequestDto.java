@@ -21,7 +21,7 @@ public class RestaurantRequestDto {
     private String direction;
 
     @NotEmpty(message = "The phone cannot be empty")
-    @Digits(integer=13, fraction=0, message="The nit must be an integer and may contain the + symbol")
+    @Digits(integer=13, fraction=0, message="The nit must be an integer and may contain 13 digits and the + symbol")
     private String phone;
 
     @NotEmpty(message = "The urlLogo cannot be empty")

@@ -33,6 +33,5 @@ public class OpenApiConfiguration {
                         .components(new Components()
                         .addSchemas("Map", mapSchema)
                         .addSchemas("Error", errorSchema));
-
     }
 }
