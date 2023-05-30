@@ -30,4 +30,9 @@ public class IOrderHandlerImpl implements IOrderHandler {
     public void takeOrder(Long idOrder) {
         orderServicePort.takeOrder(idOrder);
     }
+
+    @Override
+    public String getOrderStatusById(Long idOrder) {
+        return orderServicePort.getOrderStatusById(idOrder);
+    }
 }
