@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RestController()
@@ -24,18 +23,15 @@ public class MessengerRestController {
 
     private final IMessengerHandler messengerHandler;
 
-    @Operation(summary = "Send Message when a order change his status",
+    @Operation(summary = "Send Message",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Category created",
-                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
-                    @ApiResponse(responseCode = "409", description = "Category already exists",
-                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @PostMapping("/sendMessage/")
+                    @ApiResponse(responseCode = "201", description = "Message sent",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map")))})
+    @PostMapping("/sendMessage/{statusOrder}/{phoneNumber}")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<Map<String, String>> saveCategory(Long idOrder) {
-        messengerHandler.sendMessage(idOrder);
+    public ResponseEntity<Map<String, String>> sendMessage(@PathVariable String statusOrder, @PathVariable String phoneNumber) {
+        messengerHandler.sendMessage(statusOrder, phoneNumber);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.MESSAGE_SENT));
     }
-
 }

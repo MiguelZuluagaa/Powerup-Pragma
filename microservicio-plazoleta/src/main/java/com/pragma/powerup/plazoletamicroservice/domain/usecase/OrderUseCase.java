@@ -2,6 +2,7 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IMessengerFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
@@ -36,9 +37,15 @@ public class OrderUseCase implements IOrderServicePort {
     private IDishEntityMapper dishEntityMapper;
     @Autowired
     private IRestaurantPersistencePort restaurantPersistencePort;
+    @Autowired
+    private IMessengerFeignClient messengerFeignClient;
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
+    }
+
+    private void sendNotificationToUser(String statusOrder, String phoneNumber){
+        messengerFeignClient.sendMessage(statusOrder, phoneNumber);
     }
 
     private Boolean userCanCreateNewOrder(){
@@ -83,17 +90,15 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
-        /*Long idChefDto = createOrderRequestDto.getIdChef();*/
-
-
         RestaurantEntity restaurantDto = new RestaurantEntity(createOrderRequestDto.getIdRestaurant());
         if(userCanCreateNewOrder()) {
 
-            OrderEntity order = initializeOrder(/*idChefDto, */restaurantDto);
+            OrderEntity order = initializeOrder(restaurantDto);
             orderPersistencePort.createOrder(order);
 
             ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
             orderDishPersistencePort.saveOrderDishes(dishesToSave);
+            sendNotificationToUser("Order #"+order.getId()+" created successfully", "+573004469428");
         }
     }
 
@@ -120,6 +125,12 @@ public class OrderUseCase implements IOrderServicePort {
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
 
         orderPersistencePort.takeOrder(idOrder,idUserAuthenticated);
+        sendNotificationToUser("Order #"+idOrder+" is in preparation", "+573004469428");
+    }
+
+    @Override
+    public String getOrderStatusById(Long idOrder) {
+        return orderPersistencePort.findOrderById(idOrder).get().getIdStatus().getName();
     }
 
 }

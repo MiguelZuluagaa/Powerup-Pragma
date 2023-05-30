@@ -14,7 +14,7 @@ public class IMessengerHandlerImpl implements IMessengerHandler {
     private final IMessengerServicePort messengerServicePort;
 
     @Override
-    public void sendMessage(Long idOrder) {
-        messengerServicePort.sendMessage(idOrder);
+    public void sendMessage(String statusOrder, String phoneNumber) {
+        messengerServicePort.sendMessage(statusOrder,phoneNumber);
     }
 }

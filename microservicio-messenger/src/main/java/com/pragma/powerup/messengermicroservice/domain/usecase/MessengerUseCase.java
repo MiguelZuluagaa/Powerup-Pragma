@@ -11,7 +11,7 @@ public class MessengerUseCase implements IMessengerServicePort {
     }
 
     @Override
-    public void sendMessage(Long idOrder) {
-        messengerPersistencePort.sendMessage(idOrder);
+    public void sendMessage(String statusOrder, String phoneNumber) {
+        messengerPersistencePort.sendMessage(statusOrder, phoneNumber);
     }
 }

@@ -9,4 +9,5 @@ public interface IOrderServicePort {
     void createOrder(CreateOrderRequestDto createOrderRequestDto);
     List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
     void takeOrder(Long idOrder);
+    String getOrderStatusById(Long idOrder);
 }

@@ -25,6 +25,8 @@ public class Constants {
     public static final Long STATUS_ORDER_IN_READY_ID = 4L;
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
+    public static final String RUTE_MICROSERVICE_MESSENGER = "http://localhost:8094";
+    public static final String NAME_MICROSERVICE_MESSENGER = "messenger-service";
     public static final int MAX_PAGE_SIZE = 2;
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";

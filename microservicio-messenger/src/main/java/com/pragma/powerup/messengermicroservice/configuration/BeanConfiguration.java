@@ -1,6 +1,5 @@
 package com.pragma.powerup.messengermicroservice.configuration;
 
-import com.pragma.powerup.messengermicroservice.adapters.driven.microservices.client.IUserFeignClient;
 import com.pragma.powerup.messengermicroservice.adapters.driven.twilio.adapter.MessengerTwilioAdapter;
 import com.pragma.powerup.messengermicroservice.domain.api.IMessengerServicePort;
 import com.pragma.powerup.messengermicroservice.domain.spi.IMessengerPersistencePort;
@@ -14,11 +13,6 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @EnableFeignClients
 public class BeanConfiguration {
-
-    private final IUserFeignClient userFeignClient;
-
-    //private final IMessengerRepository messengerRepository;
-    //private final IMessengerEntityMapper messengerEntityMapper;
 
     @Bean
     public IMessengerServicePort messengerServicePort() {
