@@ -20,8 +20,7 @@ public class TrackingCollection {
     private Long idOrder;
     private Long idCustomer;
     private Long idEmployee;
-    private String emailCustomer;
-    private String emailEmployee;
+    private Long idRestaurant;
     private Date date;
     private String previousStatus;
     private String currentStatus;

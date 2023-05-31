@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-31T15:29:25-0500",
+    date = "2023-05-31T16:04:53-0500",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.jar, environment: Java 17.0.4 (Oracle Corporation)"
 )
 @Component
@@ -25,8 +25,7 @@ public class ITrackingEntityMapperImpl implements ITrackingEntityMapper {
         Long idOrder = null;
         Long idCustomer = null;
         Long idEmployee = null;
-        String emailCustomer = null;
-        String emailEmployee = null;
+        Long idRestaurant = null;
         Date date = null;
         String previousStatus = null;
         String currentStatus = null;
@@ -35,13 +34,12 @@ public class ITrackingEntityMapperImpl implements ITrackingEntityMapper {
         idOrder = tracking.getIdOrder();
         idCustomer = tracking.getIdCustomer();
         idEmployee = tracking.getIdEmployee();
-        emailCustomer = tracking.getEmailCustomer();
-        emailEmployee = tracking.getEmailEmployee();
+        idRestaurant = tracking.getIdRestaurant();
         date = tracking.getDate();
         previousStatus = tracking.getPreviousStatus();
         currentStatus = tracking.getCurrentStatus();
 
-        TrackingCollection trackingCollection = new TrackingCollection( id, idOrder, idCustomer, idEmployee, emailCustomer, emailEmployee, date, previousStatus, currentStatus );
+        TrackingCollection trackingCollection = new TrackingCollection( id, idOrder, idCustomer, idEmployee, idRestaurant, date, previousStatus, currentStatus );
 
         return trackingCollection;
     }
@@ -56,8 +54,7 @@ public class ITrackingEntityMapperImpl implements ITrackingEntityMapper {
         Long idOrder = null;
         Long idCustomer = null;
         Long idEmployee = null;
-        String emailCustomer = null;
-        String emailEmployee = null;
+        Long idRestaurant = null;
         Date date = null;
         String previousStatus = null;
         String currentStatus = null;
@@ -66,13 +63,12 @@ public class ITrackingEntityMapperImpl implements ITrackingEntityMapper {
         idOrder = trackingCollection.getIdOrder();
         idCustomer = trackingCollection.getIdCustomer();
         idEmployee = trackingCollection.getIdEmployee();
-        emailCustomer = trackingCollection.getEmailCustomer();
-        emailEmployee = trackingCollection.getEmailEmployee();
+        idRestaurant = trackingCollection.getIdRestaurant();
         date = trackingCollection.getDate();
         previousStatus = trackingCollection.getPreviousStatus();
         currentStatus = trackingCollection.getCurrentStatus();
 
-        Tracking tracking = new Tracking( id, idOrder, idCustomer, idEmployee, emailCustomer, emailEmployee, date, previousStatus, currentStatus );
+        Tracking tracking = new Tracking( id, idOrder, idCustomer, idEmployee, idRestaurant, date, previousStatus, currentStatus );
 
         return tracking;
     }

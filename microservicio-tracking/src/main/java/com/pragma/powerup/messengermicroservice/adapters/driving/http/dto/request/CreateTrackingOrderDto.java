@@ -16,16 +16,13 @@ public class CreateTrackingOrderDto {
     @NotNull(message = "The idCustomer cannot be empty")
     private Long idCustomer;
 
-    @NotNull(message = "The idEmployee cannot be empty")
+
     private Long idEmployee;
 
-    @NotEmpty(message = "The emailCustomer cannot be empty")
-    private String emailCustomer;
+    @NotNull(message = "The idEmployee cannot be empty")
+    private Long idRestaurant;
 
-    @NotEmpty(message = "The emailEmployee cannot be empty")
-    private String emailEmployee;
 
-    @NotEmpty(message = "The previousStatus cannot be empty")
     private String previousStatus;
 
     @NotEmpty(message = "The currentStatus cannot be empty")
