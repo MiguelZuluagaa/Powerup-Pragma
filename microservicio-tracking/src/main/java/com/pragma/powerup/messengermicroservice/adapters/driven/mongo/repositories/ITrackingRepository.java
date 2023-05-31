@@ -3,5 +3,5 @@ package com.pragma.powerup.messengermicroservice.adapters.driven.mongo.repositor
 import com.pragma.powerup.messengermicroservice.adapters.driven.mongo.collections.TrackingCollection;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface IMongoRepository extends MongoRepository<TrackingCollection, Long> {
+public interface ITrackingRepository extends MongoRepository<TrackingCollection, Long> {
 }

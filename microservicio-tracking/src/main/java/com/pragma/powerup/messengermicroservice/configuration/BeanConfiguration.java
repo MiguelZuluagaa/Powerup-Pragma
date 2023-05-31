@@ -1,6 +1,8 @@
 package com.pragma.powerup.messengermicroservice.configuration;
 
 import com.pragma.powerup.messengermicroservice.adapters.driven.mongo.adapter.TrackingMongoAdapter;
+import com.pragma.powerup.messengermicroservice.adapters.driven.mongo.mappers.ITrackingEntityMapper;
+import com.pragma.powerup.messengermicroservice.adapters.driven.mongo.repositories.ITrackingRepository;
 import com.pragma.powerup.messengermicroservice.domain.api.ITrackingServicePort;
 import com.pragma.powerup.messengermicroservice.domain.spi.ITrackingPersistencePort;
 import com.pragma.powerup.messengermicroservice.domain.usecase.TrackingUseCase;
@@ -14,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableFeignClients
 public class BeanConfiguration {
 
+    private final ITrackingRepository trackingRepository;
+    private final ITrackingEntityMapper trackingEntityMapper;
+
     @Bean
     public ITrackingServicePort messengerServicePort() {
         return new TrackingUseCase(messengerPersistencePort());
@@ -21,7 +26,7 @@ public class BeanConfiguration {
 
     @Bean
     public ITrackingPersistencePort messengerPersistencePort() {
-        return new TrackingMongoAdapter();
+        return new TrackingMongoAdapter(trackingRepository,trackingEntityMapper);
     }
 
 }

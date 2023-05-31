@@ -3,19 +3,20 @@ package com.pragma.powerup.messengermicroservice.adapters.driven.mongo.collectio
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection = "tracking")
+@Document(collection = "Tracking")
 @Getter
 @Setter
 @AllArgsConstructor
 public class TrackingCollection {
 
     @Id
-    private Long id;
+    private ObjectId id;
     private Long idOrder;
     private Long idCustomer;
     private Long idEmployee;

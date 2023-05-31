@@ -1,10 +1,12 @@
 package com.pragma.powerup.messengermicroservice.domain.model;
 
+import org.bson.types.ObjectId;
+
 import java.util.Date;
 
 public class Tracking {
 
-    private Long id;
+    private ObjectId id;
     private Long idOrder;
     private Long idCustomer;
     private Long idEmployee;
@@ -14,7 +16,8 @@ public class Tracking {
     private String previousStatus;
     private String currentStatus;
 
-    public Tracking(Long id, Long idOrder, Long idCustomer, Long idEmployee, String emailCustomer, String emailEmployee, Date date, String previousStatus, String currentStatus) {
+
+    public Tracking(ObjectId id, Long idOrder, Long idCustomer, Long idEmployee, String emailCustomer, String emailEmployee, Date date, String previousStatus, String currentStatus) {
         this.id = id;
         this.idOrder = idOrder;
         this.idCustomer = idCustomer;
@@ -26,11 +29,11 @@ public class Tracking {
         this.currentStatus = currentStatus;
     }
 
-    public Long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
