@@ -33,7 +33,9 @@ public class Constants {
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
     public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
-    public static final String ORDER_TOOK_MESSAGE = "The order was taken correctly";
+    public static final String ORDER_TOOK_MESSAGE = "Order took successfully";
+    public static final String ORDER_CLOSED_MESSAGE = "The order was closed correctly";
+    public static final String ORDER_READY_MESSAGE = "The order was mark as ready correctly";
     public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String USER_CREATED_MESSAGE = "User created successfully";
     public static final String USER_DELETED_MESSAGE = "User deleted successfully";
@@ -58,6 +60,8 @@ public class Constants {
     public static final String PARAMETER_NEGATIVES = "Parameters cannot be negative";
     public static final String ORDER_NOT_FOUND = "The order with the id provided does not exist";
     public static final String ORDER_IS_ALREADY_TAKEN = "The order is already taken";
+    public static final String USER_CANT_MARK_READY_ORDER = "Sorry, you can't mark the order as ready";
+    public static final String CANT_MARK_READY_ORDER = "Sorry, you can't mark the order as ready";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

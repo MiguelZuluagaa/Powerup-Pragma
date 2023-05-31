@@ -6,8 +6,10 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.cl
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.CantMarkOrderReadyException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserCantMarkOrderReadyException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PROGRESS_ID;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_READY_ID;
 
 public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
@@ -126,6 +129,29 @@ public class OrderUseCase implements IOrderServicePort {
 
         orderPersistencePort.takeOrder(idOrder,idUserAuthenticated);
         sendNotificationToUser("Order #"+idOrder+" is in preparation", "+573004469428");
+    }
+
+    @Override
+    public void finishOrder(Long idOrder) {
+        if (idOrder < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+
+        if(orderFound.get().getIdStatus().getName().contains("IN PREPARATION")) {
+            if (orderFound.get().getIdChef() != idUserAuthenticated) {
+                throw new UserCantMarkOrderReadyException();
+            }
+            orderPersistencePort.markOrderReady(orderFound.get());
+            sendNotificationToUser("Order #" + idOrder + " is ready to receive", "+573004469428");
+        }else{
+            throw new CantMarkOrderReadyException();
+        }
     }
 
     @Override
