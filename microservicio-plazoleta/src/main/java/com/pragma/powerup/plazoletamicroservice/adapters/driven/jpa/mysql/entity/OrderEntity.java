@@ -26,6 +26,8 @@ public class OrderEntity {
 
     private Date date;
 
+    private String pinOrder;
+
     @ManyToOne
     @JoinColumn(name ="id_status")
     private OrderStatusEntity idStatus;
@@ -36,4 +38,5 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name ="id_restaurant")
     private RestaurantEntity idRestaurant;
+
 }

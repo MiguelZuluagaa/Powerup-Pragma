@@ -13,4 +13,7 @@ public interface IOrderPersistencePort {
     List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
     void takeOrder(Long idOrder, Long idUser);
     Optional<OrderEntity> findOrderById(Long idOrder);
+    void markOrderReady(OrderEntity order);
+    void cancelOrder(OrderEntity order);
+    void markOrderFinished(OrderEntity order);
 }

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - DishRestControllerTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>DishRestControllerTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.html">com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller</a> &gt; DishRestControllerTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.925s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+<li>
+<a href="#tab2">Standard error</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">getDishesByCategory()</td>
+<td class="success">0.925s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>18:49:40.939 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Neither @ContextConfiguration nor @ContextHierarchy found for test class [DishRestControllerTest]: using SpringBootContextLoader
+18:49:40.949 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader - Could not detect default resource locations for test class [com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.DishRestControllerTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+18:49:40.950 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.DishRestControllerTest]: DishRestControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:49:40.992 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using ContextCustomizers for test class [DishRestControllerTest]: [DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer]
+18:49:41.217 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider - Identified candidate component class: file [C:\Users\USER\Desktop\Pragma\POWER-UP PRAGMA\microservicio-plazoleta\build\classes\java\main\com\pragma\powerup\plazoletamicroservice\PlazoletaMicroserviceApplication.class]
+18:49:41.220 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.pragma.powerup.plazoletamicroservice.PlazoletaMicroserviceApplication for test class com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.DishRestControllerTest
+18:49:41.430 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper - Using TestExecutionListeners for test class [DishRestControllerTest]: [ServletTestExecutionListener, DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, TransactionalTestExecutionListener, SqlScriptsTestExecutionListener, WithSecurityContextTestExecutionListener, EventPublishingTestExecutionListener, ReactorContextTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener, ResetMocksTestExecutionListener]
+18:49:41.432 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener - Before test class: class [DishRestControllerTest], class annotated with @DirtiesContext [false] with mode [null]
+18:49:41.451 [Test worker] DEBUG org.springframework.test.context.support.DependencyInjectionTestExecutionListener - Performing dependency injection for test class com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller.DishRestControllerTest
+
+,------.                                         ,------.                                ,--. ,--.
+|  .--. ',--.--.,--,--. ,---. ,--,--,--. ,--,--. |  .--. ',---. ,--.   ,--.,---. ,--.--. |  | |  | ,---.
+|  '--' ||  .--' ,-.  || .-. ||        |' ,-.  | |  '--' | .-. ||  |.'.|  | .-. :|  .--' |  | |  || .-. |
+|  | --' |  |  \ '-'  |' '-' '|  |  |  |\ '-'  | |  | --'' '-' '|   .'.   \   --.|  |    '  '-'  '| '-' '
+`--'     `--'   `--`--'.`-  / `--`--`--' `--`--' `--'     `---' '--'   '--'`----'`--'     `-----' |  |-'
+                       `---'                                                                      `--'
+ 
+Powered by Spring Boot 3.0.4
+
+2023-05-24T18:49:43.325-05:00  INFO 26968 --- [    Test worker] c.c.c.ConfigServicePropertySourceLocator : Fetching config from server at : http://localhost:9000
+2023-05-24T18:49:44.301-05:00  INFO 26968 --- [    Test worker] c.c.c.ConfigServicePropertySourceLocator : Located environment: name=plazoleta-service, profiles=[default], label=null, version=d7d6a10cb80ec1875ec43c28feae858c354e5173, state=null
+2023-05-24T18:49:44.303-05:00  INFO 26968 --- [    Test worker] b.c.PropertySourceBootstrapConfiguration : Located property source: [BootstrapPropertySource {name='bootstrapProperties-configClient'}, BootstrapPropertySource {name='bootstrapProperties-file://C:/Users/USER/Desktop/Pragma/config-data/plazoleta-service.yml'}]
+2023-05-24T18:49:44.323-05:00  INFO 26968 --- [    Test worker] c.p.p.p.a.d.h.c.DishRestControllerTest   : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2023-05-24T18:49:45.254-05:00  INFO 26968 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-05-24T18:49:45.498-05:00  INFO 26968 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 233 ms. Found 6 JPA repository interfaces.
+2023-05-24T18:49:45.869-05:00  INFO 26968 --- [    Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=648aaf83-7593-34cd-8743-b79092ea27ec
+2023-05-24T18:49:45.977-05:00  INFO 26968 --- [    Test worker] trationDelegate$BeanPostProcessorChecker : Bean 'com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient' of type [org.springframework.cloud.openfeign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2023-05-24T18:49:46.488-05:00  INFO 26968 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8091 (http)
+2023-05-24T18:49:46.508-05:00  INFO 26968 --- [    Test worker] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-05-24T18:49:46.508-05:00  INFO 26968 --- [    Test worker] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.5]
+2023-05-24T18:49:46.652-05:00  INFO 26968 --- [    Test worker] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-05-24T18:49:46.654-05:00  INFO 26968 --- [    Test worker] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2322 ms
+2023-05-24T18:49:46.803-05:00  WARN 26968 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-05-24T18:49:46.955-05:00  INFO 26968 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-05-24T18:49:47.048-05:00  INFO 26968 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.1.7.Final
+2023-05-24T18:49:47.604-05:00  INFO 26968 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-05-24T18:49:48.090-05:00  INFO 26968 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7c3223aa
+2023-05-24T18:49:48.093-05:00  INFO 26968 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-05-24T18:49:48.233-05:00  INFO 26968 --- [    Test worker] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2023-05-24T18:49:49.523-05:00  INFO 26968 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-05-24T18:49:49.536-05:00  INFO 26968 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-05-24T18:49:52.272-05:00  INFO 26968 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@ab98032, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78fd9a11, org.springframework.security.web.context.SecurityContextHolderFilter@10ba757f, org.springframework.security.web.header.HeaderWriterFilter@7b159d1b, org.springframework.web.filter.CorsFilter@d0993f0, org.springframework.security.web.authentication.logout.LogoutFilter@50626d22, com.pragma.powerup.plazoletamicroservice.configuration.security.jwt.JwtTokenFilter@237bdd46, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1cb3de26, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7307e418, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@8a607a9, org.springframework.security.web.session.SessionManagementFilter@43b45e77, org.springframework.security.web.access.ExceptionTranslationFilter@21c8dd3e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@36f807f5]
+2023-05-24T18:49:52.881-05:00  INFO 26968 --- [    Test worker] DiscoveryClientOptionalArgsConfiguration : Eureka HTTP Client uses RestTemplate.
+2023-05-24T18:49:53.011-05:00  WARN 26968 --- [    Test worker] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2023-05-24T18:49:53.212-05:00  INFO 26968 --- [    Test worker] o.s.c.n.eureka.InstanceInfoFactory       : Setting initial instance status as: STARTING
+2023-05-24T18:49:53.360-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Initializing Eureka in region us-east-1
+2023-05-24T18:49:53.369-05:00  INFO 26968 --- [    Test worker] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Disable delta property : false
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Single vip registry refresh property : null
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Force full registry fetch : false
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Application is null : false
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Registered Applications size is zero : true
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Application version is -1: true
+2023-05-24T18:49:53.418-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Getting all instance registry info from the eureka server
+2023-05-24T18:49:53.603-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : The response status is 200
+2023-05-24T18:49:53.606-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Starting heartbeat executor: renew interval is: 30
+2023-05-24T18:49:53.609-05:00  INFO 26968 --- [    Test worker] c.n.discovery.InstanceInfoReplicator     : InstanceInfoReplicator onDemand update allowed rate per min is 4
+2023-05-24T18:49:53.614-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Discovery Client initialized at timestamp 1684972193613 with initial instances count: 1
+2023-05-24T18:49:53.617-05:00  INFO 26968 --- [    Test worker] o.s.c.n.e.s.EurekaServiceRegistry        : Registering application PLAZOLETA-SERVICE with eureka with status UP
+2023-05-24T18:49:53.618-05:00  INFO 26968 --- [    Test worker] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1684972193618, current=UP, previous=STARTING]
+2023-05-24T18:49:53.620-05:00  INFO 26968 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_PLAZOLETA-SERVICE/DESKTOP-224Q4TK:plazoleta-service:8091: registering service...
+2023-05-24T18:49:53.647-05:00  INFO 26968 --- [    Test worker] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8091 (http) with context path ''
+2023-05-24T18:49:53.648-05:00  INFO 26968 --- [    Test worker] .s.c.n.e.s.EurekaAutoServiceRegistration : Updating port to 8091
+2023-05-24T18:49:53.672-05:00  INFO 26968 --- [nfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_PLAZOLETA-SERVICE/DESKTOP-224Q4TK:plazoleta-service:8091 - registration status: 204
+2023-05-24T18:49:53.715-05:00  INFO 26968 --- [    Test worker] c.p.p.p.a.d.h.c.DishRestControllerTest   : Started DishRestControllerTest in 12.182 seconds (process running for 14.367)
+2023-05-24T18:49:54.220-05:00  INFO 26968 --- [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-05-24T18:49:54.221-05:00  INFO 26968 --- [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-05-24T18:49:54.222-05:00  INFO 26968 --- [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+</pre>
+</span>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>[2023.05.24 18:49:41] (Coverage): Error during class instrumentation: org.springframework.boot.logging.log4j2.Log4J2LoggingSystem: java.lang.RuntimeException: java.io.IOException: Class org/apache/logging/log4j/core/config/composite/CompositeConfiguration not found
+[2023.05.24 18:49:44] (Coverage): Error during class instrumentation: org.springframework.mail.javamail.JavaMailSenderImpl: java.lang.RuntimeException: java.io.IOException: Class jakarta/mail/internet/MimeMessage not found
+[2023.05.24 18:49:44] (Coverage): Error during class instrumentation: org.springframework.cache.caffeine.CaffeineCacheManager: java.lang.RuntimeException: java.io.IOException: Class com/github/benmanes/caffeine/cache/LoadingCache not found
+[2023.05.24 18:49:49] (Coverage): Error during class instrumentation: org.springframework.cloud.openfeign.loadbalancer.RetryableFeignBlockingLoadBalancerClient: java.lang.RuntimeException: java.io.IOException: Class org/springframework/retry/policy/NeverRetryPolicy not found
+[2023.05.24 18:49:50] (Coverage): Error during class instrumentation: org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer: java.lang.RuntimeException: java.io.IOException: Class org/springframework/security/ldap/authentication/PasswordComparisonAuthenticator not found
+[2023.05.24 18:49:50] (Coverage): Error during class instrumentation: org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer: java.lang.RuntimeException: java.io.IOException: Class org/springframework/security/oauth2/client/endpoint/DefaultAuthorizationCodeTokenResponseClient not found
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 7.6</a> at 24/05/2023, 6:49:57 p. m.</p>
+</div>
+</div>
+</body>
+</html>

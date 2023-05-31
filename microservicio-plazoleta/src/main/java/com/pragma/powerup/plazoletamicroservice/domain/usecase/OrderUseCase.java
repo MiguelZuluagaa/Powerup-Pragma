@@ -2,11 +2,12 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IMessengerFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
@@ -23,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PROGRESS_ID;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
 
 public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
@@ -36,9 +37,15 @@ public class OrderUseCase implements IOrderServicePort {
     private IDishEntityMapper dishEntityMapper;
     @Autowired
     private IRestaurantPersistencePort restaurantPersistencePort;
+    @Autowired
+    private IMessengerFeignClient messengerFeignClient;
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
+    }
+
+    private void sendNotificationToUser(String statusOrder, String phoneNumber){
+        messengerFeignClient.sendMessage(statusOrder, phoneNumber);
     }
 
     private Boolean userCanCreateNewOrder(){
@@ -48,7 +55,7 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated);
     }
 
-    private OrderEntity initializeOrder(/*Long idChef, */RestaurantEntity restaurant){
+    private OrderEntity initializeOrder(RestaurantEntity restaurant){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
@@ -59,7 +66,7 @@ public class OrderUseCase implements IOrderServicePort {
         order.setIdUser(idUserAuthenticated);
         //order.setIdChef(idChef);
         order.setDate(new Date());
-        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PROGRESS_ID,null,null));
+        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PENDING_ID,null,null));
         order.setIdRestaurant(restaurant);
 
         return order;
@@ -83,17 +90,15 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
-        /*Long idChefDto = createOrderRequestDto.getIdChef();*/
-
-
         RestaurantEntity restaurantDto = new RestaurantEntity(createOrderRequestDto.getIdRestaurant());
         if(userCanCreateNewOrder()) {
 
-            OrderEntity order = initializeOrder(/*idChefDto, */restaurantDto);
+            OrderEntity order = initializeOrder(restaurantDto);
             orderPersistencePort.createOrder(order);
 
             ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
             orderDishPersistencePort.saveOrderDishes(dishesToSave);
+            sendNotificationToUser("Order #"+order.getId()+" created successfully", "+573004469428");
         }
     }
 
@@ -120,6 +125,86 @@ public class OrderUseCase implements IOrderServicePort {
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
 
         orderPersistencePort.takeOrder(idOrder,idUserAuthenticated);
+        sendNotificationToUser("Order #"+idOrder+" is in preparation", "+573004469428");
+    }
+
+    @Override
+    public void markAsReady(Long idOrder) {
+        if (idOrder < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+
+        if(orderFound.get().getIdStatus().getName().contains("IN PREPARATION")) {
+            if (orderFound.get().getIdChef() != idUserAuthenticated) {
+                throw new UserCantMarkOrderReadyException();
+            }
+            orderPersistencePort.markOrderReady(orderFound.get());
+            sendNotificationToUser("Order #" + idOrder + " is ready to receive", "+573004469428");
+        }else{
+            throw new CantMarkOrderReadyException();
+        }
+    }
+
+    @Override
+    public void cancelOrder(Long idOrder) {
+        if (idOrder < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+
+        if(orderFound.get().getIdStatus().getName().contains("PENDING")) {
+            if (!orderFound.get().getIdUser().equals(idUserAuthenticated)) {
+                throw new UserItsNotOfTheOrderException();
+            }
+            orderPersistencePort.cancelOrder(orderFound.get());
+            sendNotificationToUser("Order #" + idOrder + " was cancelled correctly", "+573004469428");
+        }else{
+            throw new UserCantCancelOrderException();
+        }
+    }
+
+    @Override
+    public void finishOrder(FinishOrderDto finishOrderDto) {
+        if (finishOrderDto.getIdOrder() < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(finishOrderDto.getIdOrder());
+
+        if(orderFound.get().getIdStatus().getName().contains("READY")) {
+            if (orderFound.get().getIdChef() != idUserAuthenticated) {
+                throw new UserCantFinishedOrderException();
+            }
+
+            if(!orderFound.get().getPinOrder().equals(finishOrderDto.getPinOrder())){
+                throw new PinWrongException();
+            }
+
+            orderPersistencePort.markOrderFinished(orderFound.get());
+            sendNotificationToUser("Order #" + finishOrderDto.getIdOrder() + " finished correctly", "+573004469428");
+        }else{
+            throw new CantMarkOrderFinishedException();
+        }
+    }
+
+    @Override
+    public String getOrderStatusById(Long idOrder) {
+        return orderPersistencePort.findOrderById(idOrder).get().getIdStatus().getName();
     }
 
 }

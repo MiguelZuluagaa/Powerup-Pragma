@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazoletamicroservice.configuration.Constants;
@@ -53,13 +54,13 @@ public class OrderRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> createOrder(@Valid @RequestBody CreateOrderRequestDto createOrderRequestDto) {
         orderHandler.createOrder(createOrderRequestDto);
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
     }
 
     @Operation(summary = "Take a new order",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Order took",
+                    @ApiResponse(responseCode = "200", description = "Order took",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
                     @ApiResponse(responseCode = "409", description = "error creating order",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
@@ -67,10 +68,50 @@ public class OrderRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> takeOrder(@PathVariable Long idOrder) {
         orderHandler.takeOrder(idOrder);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_TOOK_MESSAGE));
     }
 
+    @Operation(summary = "Mark order as ready",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order ready",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error marking order as ready",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/markAsReady/{idOrder}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> markAsReady(@PathVariable Long idOrder) {
+        orderHandler.markAsReady(idOrder);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_READY_MESSAGE));
+    }
 
+    @Operation(summary = "Mark order as finished",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order finished",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error marking order as finished",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/markAsFinished/")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> markAsFinished(@Valid @RequestBody FinishOrderDto finishOrderDto) {
+        orderHandler.finishOrder(finishOrderDto);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_FINISHED_MESSAGE));
+    }
+
+    @Operation(summary = "Cancel order",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order cancelled",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error marking order as finished",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/cancelOrder/{idOrder}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long idOrder) {
+        orderHandler.cancelOrder(idOrder);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CANCELLED_MESSAGE));
+    }
 
 }
