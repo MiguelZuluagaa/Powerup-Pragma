@@ -32,6 +32,11 @@ public class IOrderHandlerImpl implements IOrderHandler {
     }
 
     @Override
+    public void finishOrder(Long idOrder) {
+        orderServicePort.finishOrder(idOrder);
+    }
+
+    @Override
     public String getOrderStatusById(Long idOrder) {
         return orderServicePort.getOrderStatusById(idOrder);
     }

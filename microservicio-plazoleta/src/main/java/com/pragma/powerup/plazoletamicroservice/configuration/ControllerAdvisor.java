@@ -179,4 +179,16 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IS_ALREADY_TAKEN));
     }
+    @ExceptionHandler(UserCantMarkOrderReadyException.class)
+    public ResponseEntity<Map<String, String>> handlerUserCantMarkOrderReadyException(
+            UserCantMarkOrderReadyException userCantMarkOrderReadyException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_CANT_MARK_READY_ORDER));
+    }
+    @ExceptionHandler(CantMarkOrderReadyException.class)
+    public ResponseEntity<Map<String, String>> handlerCantMarkOrderReadyException(
+            CantMarkOrderReadyException cantMarkOrderReadyException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CANT_MARK_READY_ORDER));
+    }
 }

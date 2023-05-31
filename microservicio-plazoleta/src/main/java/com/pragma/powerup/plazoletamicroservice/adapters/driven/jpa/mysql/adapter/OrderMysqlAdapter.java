@@ -18,8 +18,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PREPARATION_ID;
-import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PROGRESS_ID;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
 
 @RequiredArgsConstructor
 public class OrderMysqlAdapter implements IOrderPersistencePort {
@@ -85,5 +84,11 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
             throw new OrderNotFoundException();
         }
         return orderFound;
+    }
+
+    @Override
+    public void markOrderReady(OrderEntity order) {
+        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_READY_ID));
+        orderRepository.save(order);
     }
 }
