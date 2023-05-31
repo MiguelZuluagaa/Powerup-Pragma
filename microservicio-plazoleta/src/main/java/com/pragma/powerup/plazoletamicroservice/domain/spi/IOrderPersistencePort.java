@@ -14,4 +14,5 @@ public interface IOrderPersistencePort {
     void takeOrder(Long idOrder, Long idUser);
     Optional<OrderEntity> findOrderById(Long idOrder);
     void markOrderReady(OrderEntity order);
+    void markOrderFinished(OrderEntity order);
 }

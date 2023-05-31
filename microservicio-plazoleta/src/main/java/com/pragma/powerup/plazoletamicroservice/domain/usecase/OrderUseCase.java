@@ -5,11 +5,9 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mapper
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IMessengerFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.CantMarkOrderReadyException;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.ParametersNegativesException;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.SomeDishesAreNotFromRestaurantException;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserCantMarkOrderReadyException;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
@@ -132,7 +130,7 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public void finishOrder(Long idOrder) {
+    public void markAsReady(Long idOrder) {
         if (idOrder < 0) {
             throw new ParametersNegativesException();
         }
@@ -151,6 +149,34 @@ public class OrderUseCase implements IOrderServicePort {
             sendNotificationToUser("Order #" + idOrder + " is ready to receive", "+573004469428");
         }else{
             throw new CantMarkOrderReadyException();
+        }
+    }
+
+    @Override
+    public void finishOrder(FinishOrderDto finishOrderDto) {
+        if (finishOrderDto.getIdOrder() < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(finishOrderDto.getIdOrder());
+
+        if(orderFound.get().getIdStatus().getName().contains("READY")) {
+            if (orderFound.get().getIdChef() != idUserAuthenticated) {
+                throw new UserCantFinishedOrderException();
+            }
+
+            if(!orderFound.get().getPinOrder().equals(finishOrderDto.getPinOrder())){
+                throw new PinWrongException();
+            }
+
+            orderPersistencePort.markOrderFinished(orderFound.get());
+            sendNotificationToUser("Order #" + finishOrderDto.getIdOrder() + " finished correctly", "+573004469428");
+        }else{
+            throw new CantMarkOrderFinishedException();
         }
     }
 

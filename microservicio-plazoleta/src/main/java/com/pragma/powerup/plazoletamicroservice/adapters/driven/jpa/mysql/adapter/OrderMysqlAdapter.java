@@ -91,4 +91,11 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_READY_ID));
         orderRepository.save(order);
     }
+
+    @Override
+    public void markOrderFinished(OrderEntity order) {
+        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_FINISHED));
+        orderRepository.save(order);
+    }
+
 }

@@ -23,6 +23,7 @@ public class Constants {
     public static final Long STATUS_ORDER_IN_PREPARATION_ID = 2L;
     public static final Long STATUS_ORDER_IN_PENDING_ID = 3L;
     public static final Long STATUS_ORDER_IN_READY_ID = 4L;
+    public static final Long STATUS_ORDER_FINISHED = 5L;
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
     public static final String RUTE_MICROSERVICE_MESSENGER = "http://localhost:8094";
@@ -61,7 +62,10 @@ public class Constants {
     public static final String ORDER_NOT_FOUND = "The order with the id provided does not exist";
     public static final String ORDER_IS_ALREADY_TAKEN = "The order is already taken";
     public static final String USER_CANT_MARK_READY_ORDER = "Sorry, you can't mark the order as ready";
+    public static final String USER_CANT_MARK_FINISHED_ORDER = "Sorry, you can't mark the order as finished";
+    public static final String PIN_WRONG = "The pin provided is wrong";
     public static final String CANT_MARK_READY_ORDER = "Sorry, you can't mark the order as ready";
+    public static final String CANT_MARK_FINISHED_ORDER = "Sorry, you can't mark the order as finished";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

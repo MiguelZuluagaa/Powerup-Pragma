@@ -191,4 +191,22 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CANT_MARK_READY_ORDER));
     }
+    @ExceptionHandler(UserCantFinishedOrderException.class)
+    public ResponseEntity<Map<String, String>> handlerUserCantFinishedOrderException(
+            UserCantFinishedOrderException userCantFinishedOrderException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_CANT_MARK_FINISHED_ORDER));
+    }
+    @ExceptionHandler(PinWrongException.class)
+    public ResponseEntity<Map<String, String>> handlerPinWrongException(
+            PinWrongException pinWrongException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, PIN_WRONG));
+    }
+    @ExceptionHandler(CantMarkOrderFinishedException.class)
+    public ResponseEntity<Map<String, String>> handlerCantMarkOrderFinishedException(
+            CantMarkOrderFinishedException cantMarkOrderFinishedException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CANT_MARK_FINISHED_ORDER));
+    }
 }

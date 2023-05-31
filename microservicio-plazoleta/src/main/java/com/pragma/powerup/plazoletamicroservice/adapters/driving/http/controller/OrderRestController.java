@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazoletamicroservice.configuration.Constants;
@@ -80,7 +81,21 @@ public class OrderRestController {
     @PostMapping("/markAsReady/{idOrder}")
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> markAsReady(@PathVariable Long idOrder) {
-        orderHandler.finishOrder(idOrder);
+        orderHandler.markAsReady(idOrder);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_READY_MESSAGE));
+    }
+
+    @Operation(summary = "Mark order as finished",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order finished",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error marking order as finished",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/markAsFinished/")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> markAsFinished(@Valid @RequestBody FinishOrderDto finishOrderDto) {
+        orderHandler.finishOrder(finishOrderDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_READY_MESSAGE));
     }

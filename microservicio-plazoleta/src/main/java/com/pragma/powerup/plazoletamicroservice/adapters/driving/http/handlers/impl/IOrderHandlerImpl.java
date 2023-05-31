@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IOrderResponseMapper;
@@ -32,8 +33,13 @@ public class IOrderHandlerImpl implements IOrderHandler {
     }
 
     @Override
-    public void finishOrder(Long idOrder) {
-        orderServicePort.finishOrder(idOrder);
+    public void markAsReady(Long idOrder) {
+        orderServicePort.markAsReady(idOrder);
+    }
+
+    @Override
+    public void finishOrder(FinishOrderDto finishOrderDto) {
+        orderServicePort.finishOrder(finishOrderDto);
     }
 
     @Override
