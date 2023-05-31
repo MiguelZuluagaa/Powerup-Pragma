@@ -24,8 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PROGRESS_ID;
-import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_READY_ID;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
 
 public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
@@ -56,7 +55,7 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated);
     }
 
-    private OrderEntity initializeOrder(/*Long idChef, */RestaurantEntity restaurant){
+    private OrderEntity initializeOrder(RestaurantEntity restaurant){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
@@ -67,7 +66,7 @@ public class OrderUseCase implements IOrderServicePort {
         order.setIdUser(idUserAuthenticated);
         //order.setIdChef(idChef);
         order.setDate(new Date());
-        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PROGRESS_ID,null,null));
+        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PENDING_ID,null,null));
         order.setIdRestaurant(restaurant);
 
         return order;
@@ -149,6 +148,29 @@ public class OrderUseCase implements IOrderServicePort {
             sendNotificationToUser("Order #" + idOrder + " is ready to receive", "+573004469428");
         }else{
             throw new CantMarkOrderReadyException();
+        }
+    }
+
+    @Override
+    public void cancelOrder(Long idOrder) {
+        if (idOrder < 0) {
+            throw new ParametersNegativesException();
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+
+        if(orderFound.get().getIdStatus().getName().contains("PENDING")) {
+            if (!orderFound.get().getIdUser().equals(idUserAuthenticated)) {
+                throw new UserItsNotOfTheOrderException();
+            }
+            orderPersistencePort.cancelOrder(orderFound.get());
+            sendNotificationToUser("Order #" + idOrder + " was cancelled correctly", "+573004469428");
+        }else{
+            throw new UserCantCancelOrderException();
         }
     }
 

@@ -38,6 +38,11 @@ public class IOrderHandlerImpl implements IOrderHandler {
     }
 
     @Override
+    public void cancelOrder(Long idOrder) {
+        orderServicePort.cancelOrder(idOrder);
+    }
+
+    @Override
     public void finishOrder(FinishOrderDto finishOrderDto) {
         orderServicePort.finishOrder(finishOrderDto);
     }

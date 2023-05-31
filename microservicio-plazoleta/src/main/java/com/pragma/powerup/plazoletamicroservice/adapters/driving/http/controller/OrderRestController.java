@@ -97,9 +97,21 @@ public class OrderRestController {
     public ResponseEntity<Map<String, String>> markAsFinished(@Valid @RequestBody FinishOrderDto finishOrderDto) {
         orderHandler.finishOrder(finishOrderDto);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_READY_MESSAGE));
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_FINISHED_MESSAGE));
     }
 
-
+    @Operation(summary = "Cancel order",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order cancelled",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error marking order as finished",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping("/cancelOrder/{idOrder}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable Long idOrder) {
+        orderHandler.cancelOrder(idOrder);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CANCELLED_MESSAGE));
+    }
 
 }

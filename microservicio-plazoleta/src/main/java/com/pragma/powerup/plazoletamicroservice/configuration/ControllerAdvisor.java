@@ -209,4 +209,16 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, CANT_MARK_FINISHED_ORDER));
     }
+    @ExceptionHandler(UserCantCancelOrderException.class)
+    public ResponseEntity<Map<String, String>> handlerUserCantCancelOrderException(
+            UserCantCancelOrderException userCantCancelOrderException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_CANT_CANCEL_ORDER));
+    }
+    @ExceptionHandler(UserItsNotOfTheOrderException.class)
+    public ResponseEntity<Map<String, String>> handlerUserItsNotOfTheOrderException(
+            UserItsNotOfTheOrderException userItsNotOfTheOrderException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OF_THE_ORDER));
+    }
 }

@@ -11,6 +11,7 @@ public interface IOrderHandler {
     List<OrderResponseDto> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
     void takeOrder(Long idOrder);
     void markAsReady(Long idOrder);
+    void cancelOrder(Long idOrder);
     void finishOrder(FinishOrderDto finishOrderDto);
     String getOrderStatusById(Long idOrder);
 }
