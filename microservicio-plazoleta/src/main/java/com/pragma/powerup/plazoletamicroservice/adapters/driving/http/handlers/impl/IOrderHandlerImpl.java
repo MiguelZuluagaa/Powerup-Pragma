@@ -3,6 +3,7 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrdersCompletedResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IOrderResponseMapper;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
@@ -25,6 +26,16 @@ public class IOrderHandlerImpl implements IOrderHandler {
     @Override
     public List<OrderResponseDto> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
         return orderResponseMapper.toResponseDto(orderServicePort.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
+    }
+
+    @Override
+    public List<OrdersCompletedResponseDto> getReportOfOrdersCompleted(Long idRestaurant) {
+        return orderResponseMapper.toOrdersCompletedResponseDto(orderServicePort.getReportOfOrdersCompleted(idRestaurant));
+    }
+
+    @Override
+    public List<OrdersCompletedResponseDto> getReportOfOrdersCompletedByEmployee(Long idRestaurant) {
+        return orderResponseMapper.toOrdersCompletedResponseDto(orderServicePort.getReportOfOrdersCompletedByEmployee(idRestaurant));
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.util.List;
 public interface IOrderServicePort {
     void createOrder(CreateOrderRequestDto createOrderRequestDto);
     List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
+    List<Order> getReportOfOrdersCompleted(Long idRestaurant);
+    List<Order> getReportOfOrdersCompletedByEmployee(Long idRestaurant);
     void takeOrder(Long idOrder);
     void markAsReady(Long idOrder);
     void cancelOrder(Long idOrder);

@@ -17,10 +17,15 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistence
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.lang.reflect.Array;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -139,6 +144,21 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
+    public List<Order> getReportOfOrdersCompleted(Long idRestaurant) {
+        return orderPersistencePort.findAllByIdRestaurantAndIdStatus(idRestaurant,STATUS_ORDER_FINISHED);
+    }
+
+    @Override
+    public List<Order> getReportOfOrdersCompletedByEmployee(Long idRestaurant) {
+        
+
+
+
+
+        return null;
+    }
+
+    @Override
     public void takeOrder(Long idOrder) {
         if (idOrder < 0) {
             throw new ParametersNegativesException();
@@ -167,16 +187,21 @@ public class OrderUseCase implements IOrderServicePort {
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
 
-        if(orderFound.get().getIdStatus().getName().contains("IN PREPARATION")) {
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_IN_PREPARATION)) {
             if (orderFound.get().getIdChef() != idUserAuthenticated) {
                 throw new UserCantMarkOrderReadyException();
             }
+            orderFound.get().setPinOrder(generatePin());
             orderPersistencePort.markOrderReady(orderFound.get());
             sendNotificationToUser("Order #" + idOrder + " is ready to receive", "+573004469428");
             createLoggOrder(orderFound.get(), STATUS_ORDER_IN_PREPARATION,STATUS_ORDER_READY);
         }else{
             throw new CantMarkOrderReadyException();
         }
+    }
+
+    private String generatePin(){
+        return "1234";
     }
 
     @Override
@@ -191,7 +216,7 @@ public class OrderUseCase implements IOrderServicePort {
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
 
-        if(orderFound.get().getIdStatus().getName().contains("PENDING")) {
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_PENDING)) {
             if (!orderFound.get().getIdUser().equals(idUserAuthenticated)) {
                 throw new UserItsNotOfTheOrderException();
             }
@@ -201,6 +226,17 @@ public class OrderUseCase implements IOrderServicePort {
         }else{
             throw new UserCantCancelOrderException();
         }
+    }
+
+    private Double calcCompletionTimeOfTheOrder(Date dateCreated){
+        LocalDateTime dateNow = LocalDateTime.now();
+
+        Temporal temporal = LocalDateTime.from(dateCreated.toInstant().atZone(ZoneId.systemDefault()));
+
+        Duration duration = Duration.between(temporal, dateNow);
+        long minutes = duration.toMinutes();
+
+        return (double) minutes;
     }
 
     @Override
@@ -215,7 +251,7 @@ public class OrderUseCase implements IOrderServicePort {
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(finishOrderDto.getIdOrder());
 
-        if(orderFound.get().getIdStatus().getName().contains("READY")) {
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_READY)) {
             if (orderFound.get().getIdChef() != idUserAuthenticated) {
                 throw new UserCantFinishedOrderException();
             }
@@ -224,6 +260,7 @@ public class OrderUseCase implements IOrderServicePort {
                 throw new PinWrongException();
             }
 
+            orderFound.get().setCompletionTimeMinutes(calcCompletionTimeOfTheOrder(orderFound.get().getDate()));
             orderPersistencePort.markOrderFinished(orderFound.get());
             sendNotificationToUser("Order #" + finishOrderDto.getIdOrder() + " finished correctly", "+573004469428");
             createLoggOrder(orderFound.get(), STATUS_ORDER_READY,STATUS_ORDER_FINISHED_NAME);

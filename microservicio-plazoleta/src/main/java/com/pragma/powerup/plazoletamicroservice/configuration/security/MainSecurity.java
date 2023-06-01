@@ -48,9 +48,9 @@ public class MainSecurity {
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
                         // Private endpoints
                         .requestMatchers("/order/getOrdersByStatus/**","/order/takeOrder/**","/order/markAsReady/**","/order/markAsFinished/").hasAnyRole(ROLE_EMPLOYEE)
-                        .requestMatchers("/order/","/order/**","/restaurant/getRestaurantsWithPagination/**","/dish/getDishesByCategory/**").hasAnyRole(ROLE_CUSTOMER)
+                        .requestMatchers("/order/","/restaurant/getRestaurantsWithPagination/**","/dish/getDishesByCategory/**").hasAnyRole(ROLE_CUSTOMER)
                         .requestMatchers("/restaurant/","/restaurant/**","/category/**","/category/").hasAnyRole(ROLE_ADMIN)
-                        .requestMatchers("/dish/","/dish/**").hasAnyRole(ROLE_OWNER)
+                        .requestMatchers("/dish/","/dish/**","/order/getReportOfOrdersCompleted/**","/order/getReportOfOrdersCompletedByEmployee/**").hasAnyRole(ROLE_OWNER)
                         //OTHERS ENDPOINTS NEED AUTHENTICATION
                         .anyRequest().authenticated()
                 )

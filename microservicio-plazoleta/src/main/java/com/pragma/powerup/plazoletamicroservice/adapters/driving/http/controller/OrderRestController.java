@@ -3,6 +3,7 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controlle
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrdersCompletedResponseDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazoletamicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +43,32 @@ public class OrderRestController {
                                                                     @PathVariable Long offset,
                                                                     @PathVariable Long pageSize) {
         return ResponseEntity.ok(orderHandler.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
+    }
+
+    @Operation(summary = "Get reported of the orders completed",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Reported returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/getReportOfOrdersCompleted/{idRestaurant}/")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<List<OrdersCompletedResponseDto>> getReportOfOrdersCompleted(@PathVariable Long idRestaurant) {
+        return ResponseEntity.ok(orderHandler.getReportOfOrdersCompleted(idRestaurant));
+    }
+
+    @Operation(summary = "Get reported of the orders completed by Employee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Reported returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/getReportOfOrdersCompletedByEmployee/{idRestaurant}/")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<List<OrdersCompletedResponseDto>> getReportOfOrdersCompletedByEmployee(@PathVariable Long idRestaurant) {
+        return ResponseEntity.ok(orderHandler.getReportOfOrdersCompletedByEmployee(idRestaurant));
     }
 
     @Operation(summary = "Create a new order",

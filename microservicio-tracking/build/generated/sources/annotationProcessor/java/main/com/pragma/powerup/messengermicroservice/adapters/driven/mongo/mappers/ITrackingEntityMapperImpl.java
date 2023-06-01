@@ -2,14 +2,16 @@ package com.pragma.powerup.messengermicroservice.adapters.driven.mongo.mappers;
 
 import com.pragma.powerup.messengermicroservice.adapters.driven.mongo.collections.TrackingCollection;
 import com.pragma.powerup.messengermicroservice.domain.model.Tracking;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-31T16:04:53-0500",
+    date = "2023-06-01T12:09:24-0500",
     comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.jar, environment: Java 17.0.4 (Oracle Corporation)"
 )
 @Component
@@ -71,5 +73,19 @@ public class ITrackingEntityMapperImpl implements ITrackingEntityMapper {
         Tracking tracking = new Tracking( id, idOrder, idCustomer, idEmployee, idRestaurant, date, previousStatus, currentStatus );
 
         return tracking;
+    }
+
+    @Override
+    public List<Tracking> ofTrackingCollectionToTracking(List<TrackingCollection> trackingCollection) {
+        if ( trackingCollection == null ) {
+            return null;
+        }
+
+        List<Tracking> list = new ArrayList<Tracking>( trackingCollection.size() );
+        for ( TrackingCollection trackingCollection1 : trackingCollection ) {
+            list.add( ofTrackingCollectionToTracking( trackingCollection1 ) );
+        }
+
+        return list;
     }
 }
