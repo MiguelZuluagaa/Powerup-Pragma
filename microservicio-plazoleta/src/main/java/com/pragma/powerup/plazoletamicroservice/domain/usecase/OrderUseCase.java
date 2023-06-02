@@ -3,6 +3,7 @@ package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IMessengerFeignClient;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.ITrackingFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
@@ -10,19 +11,24 @@ import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Tracking;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.ObjectError;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.Temporal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
 
@@ -39,6 +45,8 @@ public class OrderUseCase implements IOrderServicePort {
     private IRestaurantPersistencePort restaurantPersistencePort;
     @Autowired
     private IMessengerFeignClient messengerFeignClient;
+    @Autowired
+    private ITrackingFeignClient trackingFeignClient;
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
@@ -46,6 +54,25 @@ public class OrderUseCase implements IOrderServicePort {
 
     private void sendNotificationToUser(String statusOrder, String phoneNumber){
         messengerFeignClient.sendMessage(statusOrder, phoneNumber);
+    }
+
+    private void createLoggOrder(OrderEntity order, String previousStatus, String currentStatus){
+        Tracking tracking = initializeTracking(order, previousStatus, currentStatus);
+        trackingFeignClient.trackingOrder(tracking);
+    }
+
+    private Tracking initializeTracking(OrderEntity order, String previousStatus, String currentStatus){
+
+        //TODO: Validar el idChef, para cuando se cree la orden este le asigne vacio en vez de null
+
+        Tracking tracking = new Tracking();
+        tracking.setIdOrder(order.getId());
+        tracking.setIdEmployee(order.getIdChef());
+        tracking.setIdCustomer(order.getIdUser());
+        tracking.setIdRestaurant(order.getIdRestaurant().getId());
+        tracking.setPreviousStatus(previousStatus);
+        tracking.setCurrentStatus(currentStatus);
+        return tracking;
     }
 
     private Boolean userCanCreateNewOrder(){
@@ -99,6 +126,7 @@ public class OrderUseCase implements IOrderServicePort {
             ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
             orderDishPersistencePort.saveOrderDishes(dishesToSave);
             sendNotificationToUser("Order #"+order.getId()+" created successfully", "+573004469428");
+            createLoggOrder(order, "",STATUS_ORDER_PENDING);
         }
     }
 
@@ -115,6 +143,56 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
+    public List<Order> getReportOfOrdersCompleted(Long idRestaurant) {
+        return orderPersistencePort.findAllByIdRestaurantAndIdStatus(idRestaurant,STATUS_ORDER_FINISHED);
+    }
+
+    @Override
+    public Map<Long, Double> getReportOfOrdersCompletedByEmployee(Long idRestaurant) {
+        Map<Long,Double> data = new HashMap<>();
+        List<Order> orders = orderPersistencePort.findAllByIdRestaurantAndIdStatus(idRestaurant,STATUS_ORDER_FINISHED);
+
+        int cont = 0;
+        int contSize = 0;
+        Long idUserPrevious = 0L;
+        for(Order order : orders) {
+            contSize++;
+            if(data.get(order.getIdChef()) != null){
+                Double newValue = data.get(order.getIdChef()) + order.getCompletionTimeMinutes();
+                data.put(order.getIdChef(), newValue);
+            }else{
+                if(data.isEmpty()){
+                    data.put(order.getIdChef(), order.getCompletionTimeMinutes());
+                }else{
+                    data.put(idUserPrevious, data.get(idUserPrevious)/cont);
+
+                    cont = 0;
+                    data.put(order.getIdChef(), order.getCompletionTimeMinutes());
+                }
+            }
+
+            cont++;
+
+            if(contSize == orders.size()){
+                data.put(order.getIdChef(), data.get(order.getIdChef())/cont);
+            }else{
+                idUserPrevious = order.getIdChef();
+            }
+        }
+
+        Map<Long, Double> sortedData = data.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+
+        //Optional<List<Object>> test = orderPersistencePort.testMethod();
+
+
+        return sortedData;
+    }
+
+    @Override
     public void takeOrder(Long idOrder) {
         if (idOrder < 0) {
             throw new ParametersNegativesException();
@@ -126,6 +204,9 @@ public class OrderUseCase implements IOrderServicePort {
 
         orderPersistencePort.takeOrder(idOrder,idUserAuthenticated);
         sendNotificationToUser("Order #"+idOrder+" is in preparation", "+573004469428");
+
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+        createLoggOrder(orderFound.get(), STATUS_ORDER_PENDING,STATUS_ORDER_IN_PREPARATION);
     }
 
     @Override
@@ -140,15 +221,21 @@ public class OrderUseCase implements IOrderServicePort {
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
 
-        if(orderFound.get().getIdStatus().getName().contains("IN PREPARATION")) {
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_IN_PREPARATION)) {
             if (orderFound.get().getIdChef() != idUserAuthenticated) {
                 throw new UserCantMarkOrderReadyException();
             }
+            orderFound.get().setPinOrder(generatePin());
             orderPersistencePort.markOrderReady(orderFound.get());
             sendNotificationToUser("Order #" + idOrder + " is ready to receive", "+573004469428");
+            createLoggOrder(orderFound.get(), STATUS_ORDER_IN_PREPARATION,STATUS_ORDER_READY);
         }else{
             throw new CantMarkOrderReadyException();
         }
+    }
+
+    private String generatePin(){
+        return "1234";
     }
 
     @Override
@@ -163,15 +250,27 @@ public class OrderUseCase implements IOrderServicePort {
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
 
-        if(orderFound.get().getIdStatus().getName().contains("PENDING")) {
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_PENDING)) {
             if (!orderFound.get().getIdUser().equals(idUserAuthenticated)) {
                 throw new UserItsNotOfTheOrderException();
             }
             orderPersistencePort.cancelOrder(orderFound.get());
             sendNotificationToUser("Order #" + idOrder + " was cancelled correctly", "+573004469428");
+            createLoggOrder(orderFound.get(), STATUS_ORDER_PENDING,STATUS_ORDER_CANCELLED);
         }else{
             throw new UserCantCancelOrderException();
         }
+    }
+
+    private Double calcCompletionTimeOfTheOrder(Date dateCreated){
+        LocalDateTime dateNow = LocalDateTime.now();
+
+        Temporal temporal = LocalDateTime.from(dateCreated.toInstant().atZone(ZoneId.systemDefault()));
+
+        Duration duration = Duration.between(temporal, dateNow);
+        long minutes = duration.toMinutes();
+
+        return (double) minutes;
     }
 
     @Override
@@ -186,7 +285,7 @@ public class OrderUseCase implements IOrderServicePort {
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(finishOrderDto.getIdOrder());
 
-        if(orderFound.get().getIdStatus().getName().contains("READY")) {
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_READY)) {
             if (orderFound.get().getIdChef() != idUserAuthenticated) {
                 throw new UserCantFinishedOrderException();
             }
@@ -195,8 +294,10 @@ public class OrderUseCase implements IOrderServicePort {
                 throw new PinWrongException();
             }
 
+            orderFound.get().setCompletionTimeMinutes(calcCompletionTimeOfTheOrder(orderFound.get().getDate()));
             orderPersistencePort.markOrderFinished(orderFound.get());
             sendNotificationToUser("Order #" + finishOrderDto.getIdOrder() + " finished correctly", "+573004469428");
+            createLoggOrder(orderFound.get(), STATUS_ORDER_READY,STATUS_ORDER_FINISHED_NAME);
         }else{
             throw new CantMarkOrderFinishedException();
         }

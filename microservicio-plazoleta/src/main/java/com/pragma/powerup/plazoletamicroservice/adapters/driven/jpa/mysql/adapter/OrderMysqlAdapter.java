@@ -104,4 +104,22 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         orderRepository.save(order);
     }
 
+    @Override
+    public List<Order> findAllByIdRestaurantAndIdStatus(Long idRestaurant, Long idStatus) {
+        Optional<List<OrderEntity>> listFound = orderRepository.findAllByIdRestaurantAndIdStatus(
+                new RestaurantEntity(idRestaurant),
+                new OrderStatusEntity(idStatus)
+        );
+        if(listFound.get().size() < 1){
+            throw new NoDataFoundException();
+        }
+
+        return orderEntityMapper.toOrderList(listFound.get());
+    }
+
+    @Override
+    public Optional<List<Object>> testMethod() {
+        return orderRepository.testMethod();
+    }
+
 }

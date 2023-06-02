@@ -26,6 +26,9 @@ public class OrderEntity {
 
     private Date date;
 
+    @JoinColumn(name ="completion_time_minutes")
+    private Double completionTimeMinutes;
+
     private String pinOrder;
 
     @ManyToOne

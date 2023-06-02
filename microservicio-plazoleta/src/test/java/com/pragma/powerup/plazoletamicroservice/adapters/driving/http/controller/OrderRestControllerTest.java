@@ -3,6 +3,7 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controlle
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
@@ -80,23 +81,17 @@ class OrderRestControllerTest {
 
     @Test
     void createOrder() {
-        ArrayList<OrderDishEntity> dishes = new ArrayList<>();
-        dishes.add(new OrderDishEntity(
-                    null,
-                    null,
-                    new DishEntity(1L,null,null,null,null,null,null,null),
+        ArrayList<DishAsset> dishes = new ArrayList<>();
+        dishes.add(new DishAsset(
+                    1L,
                     2L));
 
-        dishes.add(new OrderDishEntity(
-                null,
-                null,
-                new DishEntity(2L,null,null,null,null,null,null,null),
+        dishes.add(new DishAsset(
+                2L,
                 2L));
 
-        RestaurantEntity restaurant = new RestaurantEntity(16L,null,null,null,null,null,null);
-
         CreateOrderRequestDto order = new CreateOrderRequestDto(
-                restaurant,
+                16L,
                 dishes
         );
 
