@@ -20,16 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.ObjectError;
 
 import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
 
@@ -149,13 +148,48 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
-    public List<Order> getReportOfOrdersCompletedByEmployee(Long idRestaurant) {
-        
+    public Map<Long, Double> getReportOfOrdersCompletedByEmployee(Long idRestaurant) {
+        Map<Long,Double> data = new HashMap<>();
+        List<Order> orders = orderPersistencePort.findAllByIdRestaurantAndIdStatus(idRestaurant,STATUS_ORDER_FINISHED);
+
+        int cont = 0;
+        int contSize = 0;
+        Long idUserPrevious = 0L;
+        for(Order order : orders) {
+            contSize++;
+            if(data.get(order.getIdChef()) != null){
+                Double newValue = data.get(order.getIdChef()) + order.getCompletionTimeMinutes();
+                data.put(order.getIdChef(), newValue);
+            }else{
+                if(data.isEmpty()){
+                    data.put(order.getIdChef(), order.getCompletionTimeMinutes());
+                }else{
+                    data.put(idUserPrevious, data.get(idUserPrevious)/cont);
+
+                    cont = 0;
+                    data.put(order.getIdChef(), order.getCompletionTimeMinutes());
+                }
+            }
+
+            cont++;
+
+            if(contSize == orders.size()){
+                data.put(order.getIdChef(), data.get(order.getIdChef())/cont);
+            }else{
+                idUserPrevious = order.getIdChef();
+            }
+        }
+
+        Map<Long, Double> sortedData = data.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
 
+        //Optional<List<Object>> test = orderPersistencePort.testMethod();
 
 
-        return null;
+        return sortedData;
     }
 
     @Override

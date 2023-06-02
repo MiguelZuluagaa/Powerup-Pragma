@@ -67,7 +67,7 @@ public class OrderRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("/getReportOfOrdersCompletedByEmployee/{idRestaurant}/")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<List<OrdersCompletedResponseDto>> getReportOfOrdersCompletedByEmployee(@PathVariable Long idRestaurant) {
+    public ResponseEntity<Map<Long, Double>> getReportOfOrdersCompletedByEmployee(@PathVariable Long idRestaurant) {
         return ResponseEntity.ok(orderHandler.getReportOfOrdersCompletedByEmployee(idRestaurant));
     }
 

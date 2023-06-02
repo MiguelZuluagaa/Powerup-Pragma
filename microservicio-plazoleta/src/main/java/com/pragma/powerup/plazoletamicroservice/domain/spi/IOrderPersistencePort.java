@@ -17,4 +17,5 @@ public interface IOrderPersistencePort {
     void cancelOrder(OrderEntity order);
     void markOrderFinished(OrderEntity order);
     List<Order> findAllByIdRestaurantAndIdStatus(Long idRestaurant,Long idStatus);
+    Optional<List<Object>> testMethod();
 }

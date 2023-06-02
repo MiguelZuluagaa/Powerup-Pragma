@@ -117,4 +117,9 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         return orderEntityMapper.toOrderList(listFound.get());
     }
 
+    @Override
+    public Optional<List<Object>> testMethod() {
+        return orderRepository.testMethod();
+    }
+
 }
