@@ -221,4 +221,24 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ITS_NOT_OF_THE_ORDER));
     }
+    @ExceptionHandler(QuantityDishInvalidException.class)
+    public ResponseEntity<Map<String, String>> handlerQuantityDishInvalidException(
+            QuantityDishInvalidException quantityDishInvalidException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, QUANTITY_DISH_INVALID));
+    }
+    @ExceptionHandler(OrderCannotBeTakenException.class)
+    public ResponseEntity<Map<String, String>> handlerOrderCannotBeTakenException(
+            OrderCannotBeTakenException orderCannotBeTakenException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_CANNOT_BE_TAKE));
+    }
+    @ExceptionHandler(UserItsNotOwnerOrderException.class)
+    public ResponseEntity<Map<String, String>> handlerUserItsNotOwnerOrderException(
+            UserItsNotOwnerOrderException userItsNotOwnerOrderException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_CANNOT_CANCEL_ORDER_ITS_NOT_OWNER));
+    }
+
+
 }

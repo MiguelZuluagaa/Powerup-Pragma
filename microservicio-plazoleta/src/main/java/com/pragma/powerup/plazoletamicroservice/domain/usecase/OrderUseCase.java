@@ -62,9 +62,6 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     private Tracking initializeTracking(OrderEntity order, String previousStatus, String currentStatus){
-
-        //TODO: Validar el idChef, para cuando se cree la orden este le asigne vacio en vez de null
-
         Tracking tracking = new Tracking();
         tracking.setIdOrder(order.getId());
         tracking.setIdEmployee(order.getIdChef());
@@ -107,6 +104,12 @@ public class OrderUseCase implements IOrderServicePort {
             if(dishExist) {
                 Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish());
                 DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
+
+                if (dish.getQuantity() <= 0) {
+                    deleteOrderById(order.getId());
+                    throw new QuantityDishInvalidException();
+                }
+
                 dishesToSave.add(new OrderDishEntity(null, order, dishEntity, dish.getQuantity()));
             }else{
                 deleteOrderById(order.getId());
@@ -249,6 +252,10 @@ public class OrderUseCase implements IOrderServicePort {
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
 
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+
+        if(orderFound.get().getIdUser() != idUserAuthenticated){
+            throw new UserItsNotOwnerOrderException();
+        }
 
         if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_PENDING)) {
             if (!orderFound.get().getIdUser().equals(idUserAuthenticated)) {

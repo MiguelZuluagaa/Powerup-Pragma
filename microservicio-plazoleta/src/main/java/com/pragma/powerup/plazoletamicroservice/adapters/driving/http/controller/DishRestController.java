@@ -50,12 +50,12 @@ public class DishRestController {
                                     array = @ArraySchema(schema = @Schema(implementation = DishResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @GetMapping("/getDishesByCategory/{idCategory}/{pageSize}/{offset}")
+    @GetMapping("/getDishesByCategory/{idCategory}/{pageSize}/{page}")
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<List<DishResponseDto>> getDishesByCategory(@PathVariable Long idCategory,
                                                                      @PathVariable Long pageSize,
-                                                                     @PathVariable Long offset) {
-        return ResponseEntity.ok(dishHandler.getDishesByCategory(idCategory, pageSize, offset));
+                                                                     @PathVariable Long page) {
+        return ResponseEntity.ok(dishHandler.getDishesByCategory(idCategory, pageSize, page));
     }
 
     @Operation(summary = "Add a new dish",
