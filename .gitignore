@@ -1,0 +1,11 @@
+
+microservicio-messenger/.idea/
+microservicio-messenger/.gradle/
+microservicio-tracking/.idea/
+microservicio-tracking/.gradle/
+microservicio-usuarios/.idea/
+microservicio-usuarios/.gradle/
+microservicio-plazoleta/.idea/
+microservicio-plazoleta/.gradle/
+registry-service/.idea/
+registry-service/.gradle/
