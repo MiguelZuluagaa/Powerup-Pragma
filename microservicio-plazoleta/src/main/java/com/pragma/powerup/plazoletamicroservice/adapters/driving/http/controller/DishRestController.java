@@ -50,12 +50,12 @@ public class DishRestController {
                                     array = @ArraySchema(schema = @Schema(implementation = DishResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @GetMapping("/getDishesByCategory/{idCategory}/{pageSize}/{offset}")
+    @GetMapping("/getDishesByCategory/{idCategory}/{pageSize}/{page}")
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<List<DishResponseDto>> getDishesByCategory(@PathVariable Long idCategory,
                                                                      @PathVariable Long pageSize,
-                                                                     @PathVariable Long offset) {
-        return ResponseEntity.ok(dishHandler.getDishesByCategory(idCategory, pageSize, offset));
+                                                                     @PathVariable Long page) {
+        return ResponseEntity.ok(dishHandler.getDishesByCategory(idCategory, pageSize, page));
     }
 
     @Operation(summary = "Add a new dish",
@@ -82,7 +82,7 @@ public class DishRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> updateDish(@Valid @RequestBody UpdateDishRequestDto updateDishRequestDto) {
         dishHandler.updateDish(updateDishRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 
@@ -96,7 +96,7 @@ public class DishRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> activeDish(@PathVariable Long idDish) {
         dishHandler.activeDish(idDish);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 
@@ -110,7 +110,7 @@ public class DishRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> disableDish(@PathVariable Long idDish) {
         dishHandler.disableDish(idDish);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 

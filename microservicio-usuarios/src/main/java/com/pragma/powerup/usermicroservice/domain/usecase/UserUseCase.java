@@ -34,6 +34,21 @@ public class UserUseCase implements IUserServicePort {
         }
     }
 
+    @Override
+    public User findUserByDni(String dni){
+        return userPersistencePort.findUserByDni(dni);
+    }
+
+    @Override
+    public User findUserById(Long id){
+        return userPersistencePort.findUserById(id);
+    }
+
+    @Override
+    public User findUserByEmail(String email){
+        return userPersistencePort.findUserByEmail(email);
+    }
+
     private Long getRoleNewUser(Authentication authentication){
         Map<String, Long> roles = new HashMap<>();
         roles.put("ROLE_"+ROLE_ADMIN, ROLE_OWNER_ID);
@@ -56,20 +71,5 @@ public class UserUseCase implements IUserServicePort {
             throw new SomethingWrongWithTheDate();
         }
         return true;
-    }
-
-    @Override
-    public User findUserByDni(String dni){
-        return userPersistencePort.findUserByDni(dni);
-    }
-
-    @Override
-    public User findUserById(Long id){
-        return userPersistencePort.findUserById(id);
-    }
-
-    @Override
-    public User findUserByEmail(String email){
-        return userPersistencePort.findUserByEmail(email);
     }
 }

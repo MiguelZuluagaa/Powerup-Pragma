@@ -3,7 +3,6 @@ package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapt
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.CategoryDontExistException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.ICategoryEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.ICategoryRepository;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Category;
@@ -41,6 +40,7 @@ public class CategoryMysqlAdapter implements ICategoryPersistencePort {
         }
         return categoryEntityMapper.toCategory(categoryEntity.get());
     }
+
     @Override
     public Boolean existCategoryById(Long id) {
         Optional<CategoryEntity> categoryEntity = categoryRepository.findById(id);

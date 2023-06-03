@@ -65,10 +65,10 @@ public class RestaurantRestController {
                                     array = @ArraySchema(schema = @Schema(implementation = RestaurantResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @GetMapping("/getRestaurantsWithPagination/{pageSize}/{offset}")
+    @GetMapping("/getRestaurantsWithPagination/{pageSize}/{page}")
     @SecurityRequirement(name = "jwt")
-    public ResponseEntity<List<RestaurantForCustomersResponseDto>> getRestaurantsWithPagination(@PathVariable Long pageSize, @PathVariable Long offset) {
-        return ResponseEntity.ok(restaurantHandler.getRestaurantsWithPagination(pageSize,offset));
+    public ResponseEntity<List<RestaurantForCustomersResponseDto>> getRestaurantsWithPagination(@PathVariable Long pageSize, @PathVariable Long page) {
+        return ResponseEntity.ok(restaurantHandler.getRestaurantsWithPagination(pageSize,page));
     }
 
 }

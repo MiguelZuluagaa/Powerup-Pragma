@@ -78,6 +78,9 @@ public class Constants {
     public static final String CANT_MARK_FINISHED_ORDER = "Sorry, you can't mark the order as finished";
     public static final String USER_CANT_CANCEL_ORDER = "Sorry, you can't cancel the order, your order is already in progress";
     public static final String USER_ITS_NOT_OF_THE_ORDER = "Sorry, you can't cancel the order, you are not the owner of the order";
+    public static final String QUANTITY_DISH_INVALID = "Sorry, the quantity of the dish is invalid, must be greater than 0";
+    public static final String ORDER_CANNOT_BE_TAKE = "Sorry, the order cannot be taken";
+    public static final String USER_CANNOT_CANCEL_ORDER_ITS_NOT_OWNER = "Sorry, you can't cancel the order, you are not the owner of the order";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

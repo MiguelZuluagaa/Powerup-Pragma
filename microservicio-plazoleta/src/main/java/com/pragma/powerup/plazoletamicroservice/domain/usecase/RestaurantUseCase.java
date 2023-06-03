@@ -41,9 +41,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     @Override
     public List<Restaurant> getRestaurantsWithPagination(Long pageSize, Long offset) {
-        if(pageSize < 0 || offset < 0){
+        if(pageSize <= 0 || offset < 0){
             throw new PageAndOffsetMustBePositive();
         }
+
         return restaurantPersistencePort.getRestaurantsWithPagination(pageSize,offset);
     }
 

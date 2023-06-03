@@ -36,13 +36,13 @@ public class OrderRestController {
                                     array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @GetMapping("/getOrdersByStatus/{idRestaurant}/{idStatus}/{pageSize}/{offset}")
+    @GetMapping("/getOrdersByStatus/{idRestaurant}/{idStatus}/{pageSize}/{page}")
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<List<OrderResponseDto>> getOrdersByStatus(@PathVariable Long idRestaurant,
                                                                     @PathVariable Long idStatus,
-                                                                    @PathVariable Long offset,
-                                                                    @PathVariable Long pageSize) {
-        return ResponseEntity.ok(orderHandler.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
+                                                                    @PathVariable Long pageSize,
+                                                                    @PathVariable Long page) {
+        return ResponseEntity.ok(orderHandler.getOrdersByStatus(idRestaurant,idStatus,page,pageSize));
     }
 
     @Operation(summary = "Get reported of the orders completed",

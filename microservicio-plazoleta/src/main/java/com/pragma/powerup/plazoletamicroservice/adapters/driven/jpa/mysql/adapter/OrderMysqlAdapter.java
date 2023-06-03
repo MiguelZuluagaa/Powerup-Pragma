@@ -8,6 +8,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.except
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserWithOrderInProgressException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
+import com.pragma.powerup.plazoletamicroservice.domain.exceptions.OrderCannotBeTakenException;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.OrderIsAlreadyTakenException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
@@ -72,6 +73,10 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         if(orderFound.get().getIdStatus().getId() == STATUS_ORDER_IN_PREPARATION_ID){
             throw new OrderIsAlreadyTakenException();
         }
+        if((Object) orderFound.get().getIdChef() != null){
+            throw new OrderCannotBeTakenException();
+        }
+
         orderFound.get().setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PREPARATION_ID));
         orderFound.get().setIdChef(idUser);
         orderRepository.save(orderFound.get());
