@@ -86,7 +86,9 @@ To get a local copy up and running follow these steps.
   6.1 Run ConfigServiceApplication </br>
   6.2 Run RegistryServiceApplication </br>
   6.3 Run UserMicroserviceApplication </br>
-  6.4 Run PlazoletaMicroserviceApplication
+  6.4 Run PlazoletaMicroserviceApplication </br>
+  6.5 Run TrackingMicroserviceApplication </br>
+  6.6 Run MessengerMicroserviceApplication
 6. Open Swagger UI and search the /user/ POST endpoint and create the user
 
 <!-- USAGE -->
