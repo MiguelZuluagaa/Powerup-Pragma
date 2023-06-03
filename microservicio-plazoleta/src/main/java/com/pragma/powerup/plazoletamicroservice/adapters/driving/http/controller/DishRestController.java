@@ -82,7 +82,7 @@ public class DishRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> updateDish(@Valid @RequestBody UpdateDishRequestDto updateDishRequestDto) {
         dishHandler.updateDish(updateDishRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 
@@ -96,7 +96,7 @@ public class DishRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> activeDish(@PathVariable Long idDish) {
         dishHandler.activeDish(idDish);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 
@@ -110,7 +110,7 @@ public class DishRestController {
     @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> disableDish(@PathVariable Long idDish) {
         dishHandler.disableDish(idDish);
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }
 

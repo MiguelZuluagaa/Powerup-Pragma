@@ -17,12 +17,9 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistence
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.ObjectError;
 
-import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -50,91 +47,6 @@ public class OrderUseCase implements IOrderServicePort {
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
-    }
-
-    private void sendNotificationToUser(String statusOrder, String phoneNumber){
-        messengerFeignClient.sendMessage(statusOrder, phoneNumber);
-    }
-
-    private void createLoggOrder(OrderEntity order, String previousStatus, String currentStatus){
-        Tracking tracking = initializeTracking(order, previousStatus, currentStatus);
-        trackingFeignClient.trackingOrder(tracking);
-    }
-
-    private Tracking initializeTracking(OrderEntity order, String previousStatus, String currentStatus){
-        Tracking tracking = new Tracking();
-        tracking.setIdOrder(order.getId());
-        tracking.setIdEmployee(order.getIdChef());
-        tracking.setIdCustomer(order.getIdUser());
-        tracking.setIdRestaurant(order.getIdRestaurant().getId());
-        tracking.setPreviousStatus(previousStatus);
-        tracking.setCurrentStatus(currentStatus);
-        return tracking;
-    }
-
-    private Boolean userCanCreateNewOrder(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
-        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
-        return orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated);
-    }
-
-    private OrderEntity initializeOrder(RestaurantEntity restaurant){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
-        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
-
-        restaurantPersistencePort.findRestaurantById(restaurant.getId());
-
-        OrderEntity order = new OrderEntity();
-        order.setIdUser(idUserAuthenticated);
-        //order.setIdChef(idChef);
-        order.setDate(new Date());
-        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PENDING_ID,null,null));
-        order.setIdRestaurant(restaurant);
-
-        return order;
-    }
-
-    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<DishAsset> dishesRequestDto, Long idRestaurant, OrderEntity order){
-        ArrayList<OrderDishEntity> dishesToSave = new ArrayList<>();
-
-        for(DishAsset dish : dishesRequestDto){
-            Boolean dishExist = dishPersistencePort.existDishById(dish.getIdDish());
-            if(dishExist) {
-                Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish());
-                DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
-
-                if (dish.getQuantity() <= 0) {
-                    deleteOrderById(order.getId());
-                    throw new QuantityDishInvalidException();
-                }
-
-                dishesToSave.add(new OrderDishEntity(null, order, dishEntity, dish.getQuantity()));
-            }else{
-                deleteOrderById(order.getId());
-                throw new SomeDishesAreNotFromRestaurantException();
-            }
-        }
-        return dishesToSave;
-    }
-
-    public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
-        RestaurantEntity restaurantDto = new RestaurantEntity(createOrderRequestDto.getIdRestaurant());
-        if(userCanCreateNewOrder()) {
-
-            OrderEntity order = initializeOrder(restaurantDto);
-            orderPersistencePort.createOrder(order);
-
-            ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
-            orderDishPersistencePort.saveOrderDishes(dishesToSave);
-            sendNotificationToUser("Order #"+order.getId()+" created successfully", "+573004469428");
-            createLoggOrder(order, "",STATUS_ORDER_PENDING);
-        }
-    }
-
-    private void deleteOrderById(Long idOrder){
-        orderPersistencePort.deleteOrderById(idOrder);
     }
 
     @Override
@@ -237,10 +149,6 @@ public class OrderUseCase implements IOrderServicePort {
         }
     }
 
-    private String generatePin(){
-        return "1234";
-    }
-
     @Override
     public void cancelOrder(Long idOrder) {
         if (idOrder < 0) {
@@ -313,6 +221,95 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public String getOrderStatusById(Long idOrder) {
         return orderPersistencePort.findOrderById(idOrder).get().getIdStatus().getName();
+    }
+
+    private String generatePin(){
+        return "1234";
+    }
+
+    private void sendNotificationToUser(String statusOrder, String phoneNumber){
+        messengerFeignClient.sendMessage(statusOrder, phoneNumber);
+    }
+
+    private void createLoggOrder(OrderEntity order, String previousStatus, String currentStatus){
+        Tracking tracking = initializeTracking(order, previousStatus, currentStatus);
+        trackingFeignClient.trackingOrder(tracking);
+    }
+
+    private Tracking initializeTracking(OrderEntity order, String previousStatus, String currentStatus){
+        Tracking tracking = new Tracking();
+        tracking.setIdOrder(order.getId());
+        tracking.setIdEmployee(order.getIdChef());
+        tracking.setIdCustomer(order.getIdUser());
+        tracking.setIdRestaurant(order.getIdRestaurant().getId());
+        tracking.setPreviousStatus(previousStatus);
+        tracking.setCurrentStatus(currentStatus);
+        return tracking;
+    }
+
+    private Boolean userCanCreateNewOrder(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+        return orderPersistencePort.userCanCreateNewOrder(idUserAuthenticated);
+    }
+
+    private OrderEntity initializeOrder(RestaurantEntity restaurant){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        restaurantPersistencePort.findRestaurantById(restaurant.getId());
+
+        OrderEntity order = new OrderEntity();
+        order.setIdUser(idUserAuthenticated);
+        //order.setIdChef(idChef);
+        order.setDate(new Date());
+        order.setIdStatus(new OrderStatusEntity(STATUS_ORDER_IN_PENDING_ID,null,null));
+        order.setIdRestaurant(restaurant);
+
+        return order;
+    }
+
+    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<DishAsset> dishesRequestDto, Long idRestaurant, OrderEntity order){
+        ArrayList<OrderDishEntity> dishesToSave = new ArrayList<>();
+
+        for(DishAsset dish : dishesRequestDto){
+            Boolean dishExist = dishPersistencePort.existDishById(dish.getIdDish());
+            if(dishExist) {
+                Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getIdDish());
+                DishEntity dishEntity = dishEntityMapper.toDishEntity(dishFound.get());
+
+                if (dish.getQuantity() <= 0) {
+                    deleteOrderById(order.getId());
+                    throw new QuantityDishInvalidException();
+                }
+
+                dishesToSave.add(new OrderDishEntity(null, order, dishEntity, dish.getQuantity()));
+            }else{
+                deleteOrderById(order.getId());
+                throw new SomeDishesAreNotFromRestaurantException();
+            }
+        }
+        return dishesToSave;
+    }
+
+    public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
+        RestaurantEntity restaurantDto = new RestaurantEntity(createOrderRequestDto.getIdRestaurant());
+        if(userCanCreateNewOrder()) {
+
+            OrderEntity order = initializeOrder(restaurantDto);
+            orderPersistencePort.createOrder(order);
+
+            ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
+            orderDishPersistencePort.saveOrderDishes(dishesToSave);
+            sendNotificationToUser("Order #"+order.getId()+" created successfully", "+573004469428");
+            createLoggOrder(order, "",STATUS_ORDER_PENDING);
+        }
+    }
+
+    private void deleteOrderById(Long idOrder){
+        orderPersistencePort.deleteOrderById(idOrder);
     }
 
 }

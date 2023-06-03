@@ -58,26 +58,6 @@ public class DishUseCase implements IDishServicePort {
         }
     }
 
-    private Boolean itsOwner(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
-        String roleToValidate = authentication.getAuthorities().toArray()[0].toString(); // Get the role of the user authenticated
-        if(!roleToValidate.contains(ROLE_OWNER)){
-            throw new UserItsNotOwner();
-        }
-        return true;
-    }
-
-    private Boolean userAuthenticatedItsOwnerOfTheRestaurant(Long idRestaurant){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
-        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
-        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
-        Optional<Restaurant> restaurant = restaurantPersistencePort.findRestaurantById(idRestaurant);
-        if(restaurant.get().getIdUserOwner() != idUserAuthenticated){
-            throw new UserItsNotOwnerOfTheRestaurant();
-        }
-        return true;
-    }
-
     @Override
     public void updateDish(Dish dish) {
         Optional<Dish> dishFound = dishPersistencePort.findDishById(dish.getId());
@@ -128,5 +108,25 @@ public class DishUseCase implements IDishServicePort {
             dishFound.get().setActive(false);
             dishPersistencePort.updateDish(dishFound.get());
         }
+    }
+
+    private Boolean itsOwner(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        String roleToValidate = authentication.getAuthorities().toArray()[0].toString(); // Get the role of the user authenticated
+        if(!roleToValidate.contains(ROLE_OWNER)){
+            throw new UserItsNotOwner();
+        }
+        return true;
+    }
+
+    private Boolean userAuthenticatedItsOwnerOfTheRestaurant(Long idRestaurant){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+        Optional<Restaurant> restaurant = restaurantPersistencePort.findRestaurantById(idRestaurant);
+        if(restaurant.get().getIdUserOwner() != idUserAuthenticated){
+            throw new UserItsNotOwnerOfTheRestaurant();
+        }
+        return true;
     }
 }
