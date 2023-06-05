@@ -46,7 +46,7 @@ To get a local copy up and running follow these steps.
   ```yml
   # MICROSERVICE:CONFIG-SERVICE --> resources/application.properties
     server.port= 9000
-    spring.cloud.config.server.git.uri= file://<<YOUR RUTE IN THE SAME FORMAT WITH "/" >>
+    spring.cloud.config.server.git.uri= file://<<YOUR RUTE IN THE SAME FORMAT WITH "\" >>
     spring.security.user.name=root
     spring.security.user.password=root
   ```
@@ -57,9 +57,9 @@ To get a local copy up and running follow these steps.
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:mysql://localhost:<<YOUR_MYSQL_PORT>>/plazoleta
-    username: <<YOUR_USERNAME>>
-    password: <<YOUR_PASSWORD>>
+    url: jdbc:mysql://localhost:${MYSQL_PORT:3307}/plazoleta
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:1234}
   ```
 5. After the tables are created execute the next content to populate the database
 ```sql
