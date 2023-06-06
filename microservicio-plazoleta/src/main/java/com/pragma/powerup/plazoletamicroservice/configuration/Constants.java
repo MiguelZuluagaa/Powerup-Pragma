@@ -30,6 +30,7 @@ public class Constants {
     public static final String STATUS_ORDER_FINISHED_NAME = "FINISHED";
     public static final Long STATUS_ORDER_CANCELLED_ID = 6L;
     public static final String STATUS_ORDER_CANCELLED = "CANCELLED";
+    public static final String STATUS_ORDER_CANCELLED_BY_SYSTEM = "CANCELLED BY SYSTEM";
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
     public static final String RUTE_MICROSERVICE_MESSENGER = "http://localhost:8094";

@@ -17,6 +17,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistence
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -99,10 +100,6 @@ public class OrderUseCase implements IOrderServicePort {
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
-
-        //Optional<List<Object>> test = orderPersistencePort.testMethod();
-
 
         return sortedData;
     }
@@ -311,5 +308,26 @@ public class OrderUseCase implements IOrderServicePort {
     private void deleteOrderById(Long idOrder){
         orderPersistencePort.deleteOrderById(idOrder);
     }
+
+    @Scheduled(cron = "0 * * * * ?") // Check every minute
+    public void validateOrdersExpired(){
+        Optional<List<Long>> ordersFound = orderPersistencePort.getAllOrdersWithMaxProcessingTime();
+        System.out.println("Executing validateOrdersExpire!!");
+        if(ordersFound.get().size() >= 1){
+            ordersFound.get().stream().forEach(order ->{
+                closeOrderExpired(order);
+            });
+        }
+    }
+
+    private void closeOrderExpired(Long idOrder){
+        Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);
+        if(orderFound.get().getIdStatus().getName().contains(STATUS_ORDER_PENDING)){
+            orderPersistencePort.cancelOrder(orderFound.get());
+            sendNotificationToUser("Order #"+orderFound.get().getId()+" expired", "+573004469428");
+            createLoggOrder(orderFound.get(), STATUS_ORDER_PENDING,STATUS_ORDER_CANCELLED_BY_SYSTEM);
+        }
+    }
+
 
 }

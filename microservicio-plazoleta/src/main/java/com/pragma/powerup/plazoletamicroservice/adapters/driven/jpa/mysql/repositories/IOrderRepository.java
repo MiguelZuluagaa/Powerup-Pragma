@@ -11,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PENDING_ID;
+import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_PENDING;
+
 public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
     Optional<OrderEntity> findFirstByIdUserAndIdStatus(Long idUser, OrderStatusEntity status);
     Optional<List<OrderEntity>> findAllByIdRestaurantAndIdStatus(RestaurantEntity restaurant, OrderStatusEntity status, PageRequest pageRequest);
@@ -22,6 +25,13 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
             "GROUP BY id_chef\n" +
             "ORDER BY prom;", nativeQuery = true)
     Optional<List<Object>> testMethod();
+
+    @Query(value = "SELECT order_head.id\n" +
+            "FROM plazoleta.order_head order_head\n" +
+            "INNER JOIN plazoleta.restaurant restaurant ON order_head.id_restaurant = restaurant.id\n" +
+            "WHERE order_head.id_status = 3 \n" +
+            "AND timestampdiff(MINUTE, order_head.date, now()) > restaurant.max_processing_time_order;", nativeQuery = true)
+    Optional<List<Long>> getAllOrdersWithMaxProcessingTime();
 
     //jpql
     //Criteria Hibernate

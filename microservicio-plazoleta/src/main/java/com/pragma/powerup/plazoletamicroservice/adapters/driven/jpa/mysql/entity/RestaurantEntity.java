@@ -25,6 +25,8 @@ public class RestaurantEntity {
     private String urlLogo;
     @JoinColumn(name = "id_user_owner")
     private Long idUserOwner;
+    @JoinColumn(name = "max_processing_time_order")
+    private Long maxProcessingTimeOrder;
 
     public RestaurantEntity(Long idRestaurant) {
         this.id = idRestaurant;

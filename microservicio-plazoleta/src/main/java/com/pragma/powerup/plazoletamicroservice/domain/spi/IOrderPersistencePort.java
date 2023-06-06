@@ -18,4 +18,5 @@ public interface IOrderPersistencePort {
     void markOrderFinished(OrderEntity order);
     List<Order> findAllByIdRestaurantAndIdStatus(Long idRestaurant,Long idStatus);
     Optional<List<Object>> testMethod();
+    Optional<List<Long>> getAllOrdersWithMaxProcessingTime();
 }

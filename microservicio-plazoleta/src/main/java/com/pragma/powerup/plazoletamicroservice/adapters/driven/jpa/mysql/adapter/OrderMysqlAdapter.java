@@ -127,4 +127,8 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
         return orderRepository.testMethod();
     }
 
+    @Override
+    public Optional<List<Long>> getAllOrdersWithMaxProcessingTime(){
+        return orderRepository.getAllOrdersWithMaxProcessingTime();
+    }
 }

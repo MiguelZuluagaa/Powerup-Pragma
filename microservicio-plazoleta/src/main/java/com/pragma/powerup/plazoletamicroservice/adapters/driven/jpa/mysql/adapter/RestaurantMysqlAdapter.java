@@ -61,4 +61,5 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         }
         return Optional.of(restaurantEntityMapper.toRestaurant(restaurantEntity.get()));
     }
+
 }
