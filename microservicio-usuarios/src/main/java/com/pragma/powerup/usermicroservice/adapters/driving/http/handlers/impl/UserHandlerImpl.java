@@ -22,6 +22,11 @@ public class UserHandlerImpl implements IUserHandler {
     }
 
     @Override
+    public void deleteById(Long id) {
+        usuarioServicePort.deleteUserById(id);
+    }
+
+    @Override
     public UserResponseDto findUserByDni(String dni){
         return  usuarioResponseMapper.toResponse(usuarioServicePort.findUserByDni(dni));
     }

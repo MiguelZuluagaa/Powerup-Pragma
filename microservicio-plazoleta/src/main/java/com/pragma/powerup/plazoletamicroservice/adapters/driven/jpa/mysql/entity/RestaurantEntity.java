@@ -27,6 +27,9 @@ public class RestaurantEntity {
     private Long idUserOwner;
     @JoinColumn(name = "max_processing_time_order")
     private Long maxProcessingTimeOrder;
+    @JoinColumn(name = "id_restaurant_status")
+    @ManyToOne
+    private RestaurantStatusEntity idRestaurantStatus;
 
     public RestaurantEntity(Long idRestaurant) {
         this.id = idRestaurant;

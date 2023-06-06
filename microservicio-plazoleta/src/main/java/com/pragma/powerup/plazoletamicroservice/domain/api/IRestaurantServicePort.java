@@ -10,4 +10,5 @@ public interface IRestaurantServicePort {
     List<Restaurant> getAllRestaurants();
     void saveRestaurant(Restaurant restaurant);
     List<Restaurant> getRestaurantsWithPagination(Long pageSize, Long offset);
+    void deleteRestaurant(Long idRestaurant);
 }

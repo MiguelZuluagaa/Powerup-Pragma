@@ -71,4 +71,18 @@ public class RestaurantRestController {
         return ResponseEntity.ok(restaurantHandler.getRestaurantsWithPagination(pageSize,page));
     }
 
+    @Operation(summary = "Delete restaurant",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Restaurant deleted",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Restaurant not exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @DeleteMapping("/delete/{idRestaurant}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> deleteRestaurant(@PathVariable Long idRestaurant) {
+        restaurantHandler.deleteRestaurant(idRestaurant);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_DELETED_MESSAGE));
+    }
+
 }

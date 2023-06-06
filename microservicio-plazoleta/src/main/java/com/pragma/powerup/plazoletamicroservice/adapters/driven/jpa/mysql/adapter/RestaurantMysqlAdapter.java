@@ -1,5 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderStatusEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
@@ -7,6 +9,7 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.except
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotExist;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +45,16 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
 
     @Override
     public void saveRestaurant(Restaurant restaurant){
-        if(restaurantRepository.findByNit(restaurant.getNit()).isPresent()){
-            throw new RestaurantAlreadyExistException();
-        }
         restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant));
+    }
+    @Override
+    public Optional<RestaurantEntity> findByNit(String nit){
+        return restaurantRepository.findByNit(nit);
+    }
+
+    @Override
+    public void deleteById(Long idRestaurant) {
+        restaurantRepository.deleteById(idRestaurant);
     }
 
     @Override
@@ -61,5 +70,8 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         }
         return Optional.of(restaurantEntityMapper.toRestaurant(restaurantEntity.get()));
     }
+
+
+
 
 }

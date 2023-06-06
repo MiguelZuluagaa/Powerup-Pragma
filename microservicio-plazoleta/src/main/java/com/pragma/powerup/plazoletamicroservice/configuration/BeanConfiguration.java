@@ -33,11 +33,9 @@ public class BeanConfiguration {
     private final IOrderDishRepository orderDishRepository;
     private final IOrderDishEntityMapper orderDishEntityMapper;
 
-    private final IUserFeignClient userFeignClient;
-
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(restaurantPersistencePort(), userFeignClient);
+        return new RestaurantUseCase(restaurantPersistencePort());
     }
 
     @Bean

@@ -1,52 +1,31 @@
-package com.pragma.powerup.plazoletamicroservice.domain.model;
+package com.pragma.powerup.messengermicroservice.domain.model;
+
+import org.bson.types.ObjectId;
 
 import java.util.Date;
 
-public class Tracking {
+public class TrackingRestaurant {
 
-    private Long idOrder;
-    private Long idCustomer;
-    private Long idEmployee;
+    private ObjectId id;
     private Long idRestaurant;
     private Date date;
     private String previousStatus;
     private String currentStatus;
 
-    public Tracking(Long idOrder, Long idCustomer, Long idEmployee, Long idRestaurant, Date date, String previousStatus, String currentStatus) {
-        this.idOrder = idOrder;
-        this.idCustomer = idCustomer;
-        this.idEmployee = idEmployee;
+    public TrackingRestaurant(ObjectId id, Long idRestaurant, Date date, String previousStatus, String currentStatus) {
+        this.id = id;
         this.idRestaurant = idRestaurant;
         this.date = date;
         this.previousStatus = previousStatus;
         this.currentStatus = currentStatus;
     }
 
-    public Tracking() {
+    public ObjectId getId() {
+        return id;
     }
 
-    public Long getIdOrder() {
-        return idOrder;
-    }
-
-    public void setIdOrder(Long idOrder) {
-        this.idOrder = idOrder;
-    }
-
-    public Long getIdCustomer() {
-        return idCustomer;
-    }
-
-    public void setIdCustomer(Long idCustomer) {
-        this.idCustomer = idCustomer;
-    }
-
-    public Long getIdEmployee() {
-        return idEmployee;
-    }
-
-    public void setIdEmployee(Long idEmployee) {
-        this.idEmployee = idEmployee;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public Long getIdRestaurant() {

@@ -1,7 +1,7 @@
 package com.pragma.powerup.messengermicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.messengermicroservice.adapters.driving.http.dto.request.CreateTrackingOrderDto;
-import com.pragma.powerup.messengermicroservice.domain.model.Tracking;
+import com.pragma.powerup.messengermicroservice.domain.model.TrackingOrder;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -9,5 +9,5 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface ITrackingResponseMapper {
-    Tracking toTracking(CreateTrackingOrderDto createTrackingOrderDto);
+    TrackingOrder toTrackingOrder(CreateTrackingOrderDto createTrackingOrderDto);
 }

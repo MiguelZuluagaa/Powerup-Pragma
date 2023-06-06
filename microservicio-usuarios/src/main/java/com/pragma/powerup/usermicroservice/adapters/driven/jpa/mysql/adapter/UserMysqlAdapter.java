@@ -57,4 +57,9 @@ public class UserMysqlAdapter implements IUserPersistencePort {
         }
         throw new UserNotFoundException();
     }
+
+    @Override
+    public void deleteUserById(Long id){
+        userRepository.deleteById(id);
+    }
 }

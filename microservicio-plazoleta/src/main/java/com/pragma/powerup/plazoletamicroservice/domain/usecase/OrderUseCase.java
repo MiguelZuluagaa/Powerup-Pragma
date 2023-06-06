@@ -4,14 +4,14 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IMessengerFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.ITrackingFeignClient;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
+import com.pragma.powerup.plazoletamicroservice.configuration.security.jwt.JwtTokenFilter;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.*;
-import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
-import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
-import com.pragma.powerup.plazoletamicroservice.domain.model.Tracking;
+import com.pragma.powerup.plazoletamicroservice.domain.model.*;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -34,6 +35,8 @@ public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
 
     @Autowired
+    private JwtTokenFilter jwtTokenFilter;
+    @Autowired
     private IOrderDishPersistencePort orderDishPersistencePort;
     @Autowired
     private IDishPersistencePort dishPersistencePort;
@@ -45,6 +48,8 @@ public class OrderUseCase implements IOrderServicePort {
     private IMessengerFeignClient messengerFeignClient;
     @Autowired
     private ITrackingFeignClient trackingFeignClient;
+    @Autowired
+    private IUserFeignClient userFeignClient;
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
@@ -169,6 +174,9 @@ public class OrderUseCase implements IOrderServicePort {
             orderPersistencePort.cancelOrder(orderFound.get());
             sendNotificationToUser("Order #" + idOrder + " was cancelled correctly", "+573004469428");
             createLoggOrder(orderFound.get(), STATUS_ORDER_PENDING,STATUS_ORDER_CANCELLED);
+            if(!restaurantItsAvailable(orderFound.get().getIdRestaurant().getId())){
+                deleteRestaurant(orderFound.get().getIdRestaurant().getId());
+            }
         }else{
             throw new UserCantCancelOrderException();
         }
@@ -229,19 +237,19 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     private void createLoggOrder(OrderEntity order, String previousStatus, String currentStatus){
-        Tracking tracking = initializeTracking(order, previousStatus, currentStatus);
-        trackingFeignClient.trackingOrder(tracking);
+        TrackingOrder trackingOrder = initializeTracking(order, previousStatus, currentStatus);
+        trackingFeignClient.trackingOrder(trackingOrder);
     }
 
-    private Tracking initializeTracking(OrderEntity order, String previousStatus, String currentStatus){
-        Tracking tracking = new Tracking();
-        tracking.setIdOrder(order.getId());
-        tracking.setIdEmployee(order.getIdChef());
-        tracking.setIdCustomer(order.getIdUser());
-        tracking.setIdRestaurant(order.getIdRestaurant().getId());
-        tracking.setPreviousStatus(previousStatus);
-        tracking.setCurrentStatus(currentStatus);
-        return tracking;
+    private TrackingOrder initializeTracking(OrderEntity order, String previousStatus, String currentStatus){
+        TrackingOrder trackingOrder = new TrackingOrder();
+        trackingOrder.setIdOrder(order.getId());
+        trackingOrder.setIdEmployee(order.getIdChef());
+        trackingOrder.setIdCustomer(order.getIdUser());
+        trackingOrder.setIdRestaurant(order.getIdRestaurant().getId());
+        trackingOrder.setPreviousStatus(previousStatus);
+        trackingOrder.setCurrentStatus(currentStatus);
+        return trackingOrder;
     }
 
     private Boolean userCanCreateNewOrder(){
@@ -256,7 +264,10 @@ public class OrderUseCase implements IOrderServicePort {
         PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
         Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
 
-        restaurantPersistencePort.findRestaurantById(restaurant.getId());
+        Optional<Restaurant> restaurantFound = restaurantPersistencePort.findRestaurantById(restaurant.getId());
+        if(!restaurantFound.get().getIdRestaurantStatus().getName().contains(RESTAURANT_STATUS_ACTIVE_NAME)){
+            throw new RestaurantNotAvailableException();
+        }
 
         OrderEntity order = new OrderEntity();
         order.setIdUser(idUserAuthenticated);
@@ -293,6 +304,11 @@ public class OrderUseCase implements IOrderServicePort {
 
     public void createOrder(CreateOrderRequestDto createOrderRequestDto) {
         RestaurantEntity restaurantDto = new RestaurantEntity(createOrderRequestDto.getIdRestaurant());
+
+        if(!restaurantItsAvailable(createOrderRequestDto.getIdRestaurant())){
+            throw new RestaurantNotAvailableException();
+        }
+
         if(userCanCreateNewOrder()) {
 
             OrderEntity order = initializeOrder(restaurantDto);
@@ -329,5 +345,30 @@ public class OrderUseCase implements IOrderServicePort {
         }
     }
 
+    private Boolean restaurantItsAvailable(Long idRestaurant){
+        Restaurant restaurantFound = restaurantPersistencePort.findRestaurantById(idRestaurant).get();
+        if(restaurantFound.getIdRestaurantStatus().getName().contains(RESTAURANT_STATUS_PENDING_DELETED_NAME)){
+            return false;
+        }
+        return true;
+    }
 
+    @Transactional
+    public void deleteRestaurant(Long idRestaurant){
+        Optional<Restaurant> restaurantFound = restaurantPersistencePort.findRestaurantById(idRestaurant);
+        if(!canDeleteRestaurant(idRestaurant)){
+            if (!restaurantFound.get().getIdRestaurantStatus().getName().contains(RESTAURANT_STATUS_PENDING_DELETED_NAME)){
+                restaurantFound.get().setIdRestaurantStatus(new RestaurantStatus(RESTAURANT_STATUS_PENDING_DELETED_ID,null,null));
+                restaurantPersistencePort.saveRestaurant(restaurantFound.get());
+                trackingFeignClient.trackingRestaurant(new TrackingRestaurant(idRestaurant,new Date(),RESTAURANT_STATUS_ACTIVE_NAME,RESTAURANT_STATUS_PENDING_DELETED_NAME));
+            }
+        }else{
+            restaurantFound.get().setIdRestaurantStatus(new RestaurantStatus(RESTAURANT_STATUS_DELETED_ID,null,null));
+            restaurantPersistencePort.saveRestaurant(restaurantFound.get());
+        }
+    }
+
+    private Boolean canDeleteRestaurant(Long idRestaurant){
+        return !orderPersistencePort.existsOrdersInCurseByIdRestaurant(idRestaurant);
+    }
 }

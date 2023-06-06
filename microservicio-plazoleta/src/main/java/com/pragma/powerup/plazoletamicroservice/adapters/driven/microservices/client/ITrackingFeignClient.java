@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client;
 
-import com.pragma.powerup.plazoletamicroservice.domain.model.Tracking;
+import com.pragma.powerup.plazoletamicroservice.domain.model.TrackingOrder;
+import com.pragma.powerup.plazoletamicroservice.domain.model.TrackingRestaurant;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.R
 
 @FeignClient(name = NAME_MICROSERVICE_TRACKING, url = RUTE_MICROSERVICE_TRACKING)
 public interface ITrackingFeignClient {
-    @PostMapping("/tracking/create/")
-    ResponseEntity<Map<String, String>> trackingOrder(@RequestBody Tracking tracking);
+    @PostMapping("/trackingOrder/create/")
+    ResponseEntity<Map<String, String>> trackingOrder(@RequestBody TrackingOrder trackingOrder);
+    @PostMapping("/trackingRestaurant/create/")
+    ResponseEntity<Map<String, String>> trackingRestaurant(@RequestBody TrackingRestaurant trackingRestaurant);
 }

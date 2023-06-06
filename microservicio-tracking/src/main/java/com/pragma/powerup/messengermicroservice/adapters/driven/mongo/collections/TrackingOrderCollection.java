@@ -9,11 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@Document(collection = "Tracking")
+@Document(collection = "TrackingOrders")
 @Getter
 @Setter
 @AllArgsConstructor
-public class TrackingCollection {
+public class TrackingOrderCollection {
 
     @Id
     private ObjectId id;

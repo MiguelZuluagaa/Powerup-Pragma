@@ -7,6 +7,7 @@ import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.Us
 
 public interface IUserHandler {
     void saveUser(UserRequestDto userRequestDto);
+    void deleteById(Long id);
     UserResponseDto findUserByDni(String dni);
     UserResponseDto findUserById(Long id);
     UserResponseDto findUserByEmail(String email);

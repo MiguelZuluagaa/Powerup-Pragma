@@ -239,6 +239,17 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_CANNOT_CANCEL_ORDER_ITS_NOT_OWNER));
     }
-
+    @ExceptionHandler(UserCantDeleteRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handlerUserCantDeleteRestaurantException(
+            UserCantDeleteRestaurantException userCantDeleteRestaurantException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_CANNOT_DELETE_RESTAURANT));
+    }
+    @ExceptionHandler(RestaurantNotAvailableException.class)
+    public ResponseEntity<Map<String, String>> handlerRestaurantNotAvailableException(
+            RestaurantNotAvailableException restaurantNotAvailableException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_NOT_AVAILABLE));
+    }
 
 }

@@ -68,6 +68,12 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     }
 
     @Override
+    public List<Order> getOrdersByIdRestaurant(Long idRestaurant) {
+        Optional<List<OrderEntity>> ordersFound = orderRepository.findAllByIdRestaurant(new RestaurantEntity(idRestaurant));
+        return orderEntityMapper.toOrderList(ordersFound.get());
+    }
+
+    @Override
     public void takeOrder(Long idOrder, Long idUser) {
         Optional<OrderEntity> orderFound = findOrderById(idOrder);
         if(orderFound.get().getIdStatus().getId() == STATUS_ORDER_IN_PREPARATION_ID){
@@ -123,6 +129,11 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     }
 
     @Override
+    public void deleteByIdRestaurant(Long idRestaurant) {
+        orderRepository.deleteByIdRestaurant(new RestaurantEntity(idRestaurant));
+    }
+
+    @Override
     public Optional<List<Object>> testMethod() {
         return orderRepository.testMethod();
     }
@@ -130,5 +141,14 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     @Override
     public Optional<List<Long>> getAllOrdersWithMaxProcessingTime(){
         return orderRepository.getAllOrdersWithMaxProcessingTime();
+    }
+
+    @Override
+    public Boolean existsOrdersInCurseByIdRestaurant(Long idRestaurant) {
+        Optional<List<OrderEntity>> orderEntityList = orderRepository.getOrdersInCurseByIdRestaurant(idRestaurant);
+        if(orderEntityList.get().size() > 0) {
+            return true;
+        }
+        return false;
     }
 }

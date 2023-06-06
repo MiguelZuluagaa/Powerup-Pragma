@@ -2,7 +2,7 @@ package com.pragma.powerup.messengermicroservice.adapters.driving.http.controlle
 
 
 import com.pragma.powerup.messengermicroservice.adapters.driving.http.dto.request.CreateTrackingOrderDto;
-import com.pragma.powerup.messengermicroservice.adapters.driving.http.handlers.ITrackingHandler;
+import com.pragma.powerup.messengermicroservice.adapters.driving.http.handlers.ITrackingOrderHandler;
 import com.pragma.powerup.messengermicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,13 +19,13 @@ import java.util.Collections;
 import java.util.Map;
 
 @RestController()
-@RequestMapping("/tracking")
+@RequestMapping("/trackingOrder")
 @RequiredArgsConstructor
-public class TrackingRestController {
+public class TrackingOrderRestController {
 
-    private final ITrackingHandler trackingHandler;
+    private final ITrackingOrderHandler trackingHandler;
 
-    @Operation(summary = "Tracking order",
+    @Operation(summary = "Create order tracking",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Tracking created",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map")))})

@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IOrderDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.repositories.IOrderDishRepository;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistencePort;
@@ -16,5 +17,10 @@ public class OrderDishMysqlAdapter implements IOrderDishPersistencePort {
     @Override
     public void saveOrderDishes(ArrayList<OrderDishEntity> orderDishEntities) {
         orderDishRepository.saveAll(orderDishEntities);
+    }
+
+    @Override
+    public void deleteOrderByOrderId(Long idOrder) {
+        orderDishRepository.deleteByIdOrder(new OrderEntity(idOrder));
     }
 }

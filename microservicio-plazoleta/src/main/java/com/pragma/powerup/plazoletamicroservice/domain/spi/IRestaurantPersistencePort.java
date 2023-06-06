@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.domain.spi;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import org.springframework.data.domain.Page;
 
@@ -11,6 +12,9 @@ public interface IRestaurantPersistencePort {
     List<Restaurant> getAllRestaurants();
     List<Restaurant> getRestaurantsWithPagination(Long pageSize, Long offset);
     void saveRestaurant(Restaurant restaurant);
+    void deleteById(Long idRestaurant);
+    Optional<RestaurantEntity> findByNit(String nit);
     Boolean existsByIdUserOwner(Long idUserOwner);
     Optional<Restaurant> findRestaurantById(Long id);
+
 }

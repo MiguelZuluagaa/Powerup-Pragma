@@ -9,8 +9,9 @@ public class Restaurant {
     private String phone;
     private String urlLogo;
     private Long idUserOwner;
+    private RestaurantStatus idRestaurantStatus;
 
-    public Restaurant(Long id, String name, String nit, String direction, String phone, String urlLogo, Long idUserOwner) {
+    public Restaurant(Long id, String name, String nit, String direction, String phone, String urlLogo, Long idUserOwner, RestaurantStatus idRestaurantStatus) {
         this.id = id;
         this.name = name;
         this.nit = nit;
@@ -18,6 +19,7 @@ public class Restaurant {
         this.phone = phone;
         this.urlLogo = urlLogo;
         this.idUserOwner = idUserOwner;
+        this.idRestaurantStatus = idRestaurantStatus;
     }
 
     public Long getId() {
@@ -74,5 +76,13 @@ public class Restaurant {
 
     public void setIdUserOwner(Long idUserOwner) {
         this.idUserOwner = idUserOwner;
+    }
+
+    public RestaurantStatus getIdRestaurantStatus() {
+        return idRestaurantStatus;
+    }
+
+    public void setIdRestaurantStatus(RestaurantStatus idRestaurantStatus) {
+        this.idRestaurantStatus = idRestaurantStatus;
     }
 }

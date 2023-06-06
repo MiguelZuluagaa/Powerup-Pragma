@@ -31,6 +31,12 @@ public class Constants {
     public static final Long STATUS_ORDER_CANCELLED_ID = 6L;
     public static final String STATUS_ORDER_CANCELLED = "CANCELLED";
     public static final String STATUS_ORDER_CANCELLED_BY_SYSTEM = "CANCELLED BY SYSTEM";
+    public static final Long RESTAURANT_STATUS_ACTIVE_ID = 1L;
+    public static final Long RESTAURANT_STATUS_PENDING_DELETED_ID = 2L;
+    public static final Long RESTAURANT_STATUS_DELETED_ID = 3L;
+    public static final String RESTAURANT_STATUS_ACTIVE_NAME = "ACTIVE";
+    public static final String RESTAURANT_STATUS_PENDING_DELETED_NAME = "PENDING_DELETED";
+    public static final String RESTAURANT_STATUS_DELETED_NAME = "DELETED";
     public static final String RUTE_MICROSERVICE_USER = "http://localhost:8090";
     public static final String NAME_MICROSERVICE_USER = "user-service";
     public static final String RUTE_MICROSERVICE_MESSENGER = "http://localhost:8094";
@@ -41,6 +47,7 @@ public class Constants {
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String PERSON_CREATED_MESSAGE = "Person created successfully";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
+    public static final String RESTAURANT_DELETED_MESSAGE = "Restaurant deleted successfully";
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
     public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
     public static final String ORDER_TOOK_MESSAGE = "Order took successfully";
@@ -82,6 +89,8 @@ public class Constants {
     public static final String QUANTITY_DISH_INVALID = "Sorry, the quantity of the dish is invalid, must be greater than 0";
     public static final String ORDER_CANNOT_BE_TAKE = "Sorry, the order cannot be taken";
     public static final String USER_CANNOT_CANCEL_ORDER_ITS_NOT_OWNER = "Sorry, you can't cancel the order, you are not the owner of the order";
+    public static final String USER_CANNOT_DELETE_RESTAURANT = "Sorry, you can't delete the restaurant, you are not the owner of the restaurant";
+    public static final String RESTAURANT_NOT_AVAILABLE = "Sorry, the restaurant is not available";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

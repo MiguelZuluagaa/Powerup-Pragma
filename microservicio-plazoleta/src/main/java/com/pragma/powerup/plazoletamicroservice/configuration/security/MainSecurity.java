@@ -49,7 +49,7 @@ public class MainSecurity {
                         // Private endpoints
                         .requestMatchers("/order/getOrdersByStatus/**","/order/takeOrder/**","/order/markAsReady/**","/order/markAsFinished/").hasAnyRole(ROLE_EMPLOYEE)
                         .requestMatchers("/order/","/restaurant/getRestaurantsWithPagination/**","/dish/getDishesByCategory/**").hasAnyRole(ROLE_CUSTOMER)
-                        .requestMatchers("/restaurant/","/restaurant/**","/category/**","/category/").hasAnyRole(ROLE_ADMIN)
+                        .requestMatchers("/restaurant/","/restaurant/**","/category/**","/category/","/restaurant/delete/**").hasAnyRole(ROLE_ADMIN)
                         .requestMatchers("/dish/","/dish/**","/order/getReportOfOrdersCompleted/**","/order/getReportOfOrdersCompletedByEmployee/**").hasAnyRole(ROLE_OWNER)
                         //OTHERS ENDPOINTS NEED AUTHENTICATION
                         .anyRequest().authenticated()

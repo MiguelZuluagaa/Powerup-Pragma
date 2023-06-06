@@ -49,6 +49,11 @@ public class UserUseCase implements IUserServicePort {
         return userPersistencePort.findUserByEmail(email);
     }
 
+    @Override
+    public void deleteUserById(Long id){
+        userPersistencePort.deleteUserById(id);
+    }
+
     private Long getRoleNewUser(Authentication authentication){
         Map<String, Long> roles = new HashMap<>();
         roles.put("ROLE_"+ROLE_ADMIN, ROLE_OWNER_ID);

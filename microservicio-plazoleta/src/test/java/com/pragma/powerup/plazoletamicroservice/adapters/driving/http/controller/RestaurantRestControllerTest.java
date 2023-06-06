@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
+import com.pragma.powerup.plazoletamicroservice.domain.model.RestaurantStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,7 +116,7 @@ class RestaurantRestControllerTest {
         // The microservice User must be running.
         Restaurant restaurant =
                 new Restaurant(10L,"TEST NAME","123123123123","TEST DIRECTION",
-                                "123456778", "https://www.testlogo.com/",8L);
+                                "123456778", "https://www.testlogo.com/",8L, null);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

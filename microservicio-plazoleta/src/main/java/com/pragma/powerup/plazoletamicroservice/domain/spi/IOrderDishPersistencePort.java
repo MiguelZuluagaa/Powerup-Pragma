@@ -7,4 +7,5 @@ import java.util.ArrayList;
 public interface IOrderDishPersistencePort {
     //void createOrderDish(ArrayList<OrderDishEntity> orderDishEntities);
     void saveOrderDishes(ArrayList<OrderDishEntity> orderDishEntities);
+    void deleteOrderByOrderId(Long idOrder);
 }

@@ -1,12 +1,9 @@
-package com.pragma.powerup.messengermicroservice.domain.model;
-
-import org.bson.types.ObjectId;
+package com.pragma.powerup.plazoletamicroservice.domain.model;
 
 import java.util.Date;
 
-public class Tracking {
+public class TrackingOrder {
 
-    private ObjectId id;
     private Long idOrder;
     private Long idCustomer;
     private Long idEmployee;
@@ -15,8 +12,7 @@ public class Tracking {
     private String previousStatus;
     private String currentStatus;
 
-    public Tracking(ObjectId id, Long idOrder, Long idCustomer, Long idEmployee, Long idRestaurant, Date date, String previousStatus, String currentStatus) {
-        this.id = id;
+    public TrackingOrder(Long idOrder, Long idCustomer, Long idEmployee, Long idRestaurant, Date date, String previousStatus, String currentStatus) {
         this.idOrder = idOrder;
         this.idCustomer = idCustomer;
         this.idEmployee = idEmployee;
@@ -26,12 +22,7 @@ public class Tracking {
         this.currentStatus = currentStatus;
     }
 
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
+    public TrackingOrder() {
     }
 
     public Long getIdOrder() {

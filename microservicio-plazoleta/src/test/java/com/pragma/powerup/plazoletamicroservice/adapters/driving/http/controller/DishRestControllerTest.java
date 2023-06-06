@@ -41,7 +41,7 @@ class DishRestControllerTest {
     @BeforeEach
     void setUp() {
         category = new CategoryEntity(1L,null,null);
-        restaurant = new RestaurantEntity(11L,null,null,null,null,null,null);
+        restaurant = new RestaurantEntity(11L);
 
         dish = new Dish(null,"TEST DISH","TEST DISH",200.0,
                         "http://www.test.com.co/",null,category,restaurant);

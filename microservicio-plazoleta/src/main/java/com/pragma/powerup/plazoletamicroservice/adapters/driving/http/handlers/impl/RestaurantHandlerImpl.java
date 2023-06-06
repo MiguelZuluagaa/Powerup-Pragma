@@ -30,6 +30,11 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     }
 
     @Override
+    public void deleteRestaurant(Long id) {
+        restaurantServicePort.deleteRestaurant(id);
+    }
+
+    @Override
     public List<RestaurantForCustomersResponseDto> getRestaurantsWithPagination(Long pageSize, Long offset){
         return restaurantResponseMapper.toResponseListForCustomers(restaurantServicePort.getRestaurantsWithPagination(pageSize, offset));
     }

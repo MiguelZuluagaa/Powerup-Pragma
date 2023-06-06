@@ -76,4 +76,18 @@ public class UserRestController {
     public ResponseEntity<UserResponseDto> getUserByEmail(@PathVariable String email){
         return ResponseEntity.ok(userHandler.findUserByEmail(email));
     }
+
+    @Operation(summary = "Delete user by id",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User deleted",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "500", description = "Error internal Server",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @DeleteMapping("/deleteById/{id}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id){
+        userHandler.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.USER_DELETED_MESSAGE));
+    }
 }

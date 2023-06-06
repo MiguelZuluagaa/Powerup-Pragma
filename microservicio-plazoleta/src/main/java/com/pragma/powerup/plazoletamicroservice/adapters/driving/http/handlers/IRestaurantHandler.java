@@ -11,5 +11,6 @@ import java.util.List;
 public interface IRestaurantHandler {
     List<RestaurantResponseDto> getAllRestaurants();
     void saveRestaurant(RestaurantRequestDto restaurant);
+    void deleteRestaurant(Long id);
     List<RestaurantForCustomersResponseDto> getRestaurantsWithPagination(Long pageSize, Long offset);
 }

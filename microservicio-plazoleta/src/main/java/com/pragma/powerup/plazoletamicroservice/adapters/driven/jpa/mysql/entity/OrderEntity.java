@@ -42,4 +42,7 @@ public class OrderEntity {
     @JoinColumn(name ="id_restaurant")
     private RestaurantEntity idRestaurant;
 
+    public OrderEntity(Long idOrder) {
+        this.id = idOrder;
+    }
 }

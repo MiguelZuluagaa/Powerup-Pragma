@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,8 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
     Optional<OrderEntity> findFirstByIdUserAndIdStatus(Long idUser, OrderStatusEntity status);
     Optional<List<OrderEntity>> findAllByIdRestaurantAndIdStatus(RestaurantEntity restaurant, OrderStatusEntity status, PageRequest pageRequest);
     Optional<List<OrderEntity>> findAllByIdRestaurantAndIdStatus(RestaurantEntity idRestaurant, OrderStatusEntity status);
+    Optional<List<OrderEntity>> findAllByIdRestaurant(RestaurantEntity idRestaurant);
+    void deleteByIdRestaurant(RestaurantEntity idRestaurant);
 
     @Query(value = "SELECT id_chef, AVG(completion_time_minutes) AS prom\n" +
             "FROM plazoleta.order_head\n" +
@@ -33,6 +36,12 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
             "AND timestampdiff(MINUTE, order_head.date, now()) > restaurant.max_processing_time_order;", nativeQuery = true)
     Optional<List<Long>> getAllOrdersWithMaxProcessingTime();
 
+    @Query(value = "SELECT * FROM plazoleta.order_head WHERE id_status != 5 AND id_status != 6 AND id_restaurant = :idRestaurant", nativeQuery = true)
+    Optional<List<OrderEntity>> getOrdersInCurseByIdRestaurant(@Param("idRestaurant") Long idRestaurant);
+
+    //restaurantId
+    //restaurantId
+    //restaurantId
     //jpql
     //Criteria Hibernate
 }
