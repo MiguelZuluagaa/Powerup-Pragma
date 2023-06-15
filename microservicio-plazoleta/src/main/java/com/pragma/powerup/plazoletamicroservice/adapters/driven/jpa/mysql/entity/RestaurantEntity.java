@@ -23,9 +23,9 @@ public class RestaurantEntity {
     private String direction;
     private String phone;
     private String urlLogo;
-    @JoinColumn(name = "id_user_owner")
+    @Column(name = "id_user_owner")
     private Long idUserOwner;
-    @JoinColumn(name = "max_processing_time_order")
+    @Column(name = "max_processing_time_order")
     private Long maxProcessingTimeOrder;
     @JoinColumn(name = "id_restaurant_status")
     @ManyToOne

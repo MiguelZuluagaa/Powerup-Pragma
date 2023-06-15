@@ -364,6 +364,7 @@ public class OrderUseCase implements IOrderServicePort {
             }
         }else{
             restaurantFound.get().setIdRestaurantStatus(new RestaurantStatus(RESTAURANT_STATUS_DELETED_ID,null,null));
+            trackingFeignClient.trackingRestaurant(new TrackingRestaurant(idRestaurant,new Date(),restaurantFound.get().getIdRestaurantStatus().getName(),RESTAURANT_STATUS_DELETED_NAME));
             restaurantPersistencePort.saveRestaurant(restaurantFound.get());
         }
     }
