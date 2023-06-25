@@ -251,5 +251,16 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, RESTAURANT_NOT_AVAILABLE));
     }
-
+    @ExceptionHandler(ComplementNotValidException.class)
+    public ResponseEntity<Map<String, String>> handlerComplementNotValidException(
+            ComplementNotValidException complementNotValidException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, COMPLEMENT_NOT_VALID));
+    }
+    @ExceptionHandler(ComplementNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handlerComplementNotFoundException(
+            ComplementNotFoundException complementNotFoundException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, COMPLEMENT_NOT_FOUND));
+    }
 }

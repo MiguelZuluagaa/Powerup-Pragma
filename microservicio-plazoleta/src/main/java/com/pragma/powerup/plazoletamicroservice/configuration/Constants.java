@@ -91,6 +91,8 @@ public class Constants {
     public static final String USER_CANNOT_CANCEL_ORDER_ITS_NOT_OWNER = "Sorry, you can't cancel the order, you are not the owner of the order";
     public static final String USER_CANNOT_DELETE_RESTAURANT = "Sorry, you can't delete the restaurant, you are not the owner of the restaurant";
     public static final String RESTAURANT_NOT_AVAILABLE = "Sorry, the restaurant is not available";
+    public static final String COMPLEMENT_NOT_VALID = "The complement is not valid, not corresponds to the dish";
+    public static final String COMPLEMENT_NOT_FOUND = "Sorry, the complement does not exist";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the role provided";
     public static final String RESTAURANT_ALREADY_EXISTS_MESSAGE = "A restaurant already exists with the nit provided";

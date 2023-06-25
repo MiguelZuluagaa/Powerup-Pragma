@@ -1,5 +1,8 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.impl;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.TypeDishEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.UpdateDishRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.DishResponseDto;
@@ -8,9 +11,11 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IDi
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.mapper.IRestaurantResponseMapper;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -31,7 +36,17 @@ public class IDishHandlerImpl implements IDishHandler {
 
     @Override
     public void saveDish(DishRequestDto dish) {
-        dishServicePort.saveDish(dishResponseMapper.toDish(dish));
+        HashMap<Long, String> complements = null;
+        if(dish.getComplements() != null) complements = dish.getComplements();
+
+        Dish dishModel = new Dish();
+        dishModel.setName(dish.getName());
+        dishModel.setDescription(dish.getDescription());
+        dishModel.setPrice(dish.getPrice());
+        dishModel.setIdCategory(new CategoryEntity(dish.getIdCategory()));
+        dishModel.setIdRestaurant(new RestaurantEntity(dish.getIdRestaurant()));
+        dishModel.setIdTypeDish(new TypeDishEntity(dish.getIdTypeDish()));
+        dishServicePort.saveDish(dishModel, complements);
     }
 
     @Override

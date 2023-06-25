@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_IN_PENDING_ID;
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.STATUS_ORDER_PENDING;
@@ -38,6 +39,8 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long> {
 
     @Query(value = "SELECT * FROM plazoleta.order_head WHERE id_status != 5 AND id_status != 6 AND id_restaurant = :idRestaurant", nativeQuery = true)
     Optional<List<OrderEntity>> getOrdersInCurseByIdRestaurant(@Param("idRestaurant") Long idRestaurant);
+
+    Optional<Set<OrderEntity>> getAllByIdChefIsNullAndIdRestaurant(RestaurantEntity idRestaurant);
 
     //restaurantId
     //restaurantId

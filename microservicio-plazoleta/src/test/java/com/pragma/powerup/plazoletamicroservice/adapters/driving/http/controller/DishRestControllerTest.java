@@ -44,7 +44,7 @@ class DishRestControllerTest {
         restaurant = new RestaurantEntity(11L);
 
         dish = new Dish(null,"TEST DISH","TEST DISH",200.0,
-                        "http://www.test.com.co/",null,category,restaurant);
+                        "http://www.test.com.co/",null,category,restaurant, null);
 
         String email = "owner@gmail.com";
         String password = "123";

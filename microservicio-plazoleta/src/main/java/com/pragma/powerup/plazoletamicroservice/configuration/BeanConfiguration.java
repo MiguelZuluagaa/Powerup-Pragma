@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients
 @EnableScheduling
 public class BeanConfiguration {
+
     private final IRestaurantRepository restaurantRepository;
     private final IRestaurantEntityMapper restaurantEntityMapper;
 
@@ -32,6 +33,25 @@ public class BeanConfiguration {
 
     private final IOrderDishRepository orderDishRepository;
     private final IOrderDishEntityMapper orderDishEntityMapper;
+
+    private final IDishAttributeValueRepository dishAttributeValueRepository;
+    private final IDishAttributeValueEntityMapper dishAttributeValueEntityMapper;
+
+    private final IValueAttributeDishRepository valueAttributeDishRepository;
+    private final IValueAttributeDishEntityMapper valueAttributeDishEntityMapper;
+
+    private final IAttributeDishRepository attributeDishRepository;
+    private final IAttributeDishEntityMapper attributeDishEntityMapper;
+
+    @Bean
+    public ValueAttributeDishUseCase valueAttributeDishUseCase() {
+        return new ValueAttributeDishUseCase(valueAttributeDishPersistencePort());
+    }
+
+    @Bean
+    public DishAttributeValueUseCase dishAttributeValueUseCase() {
+        return new DishAttributeValueUseCase(dishAttributeValuePersistencePort());
+    }
 
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
@@ -81,5 +101,35 @@ public class BeanConfiguration {
     @Bean
     public IOrderDishPersistencePort orderDishPersistencePort() {
         return new OrderDishMysqlAdapter(orderDishRepository, orderDishEntityMapper);
+    }
+
+    @Bean
+    public IDishAttributeValueServicePort dishAttributeValueServicePort() {
+        return new DishAttributeValueUseCase(dishAttributeValuePersistencePort());
+    }
+
+    @Bean
+    public IDishAttributeValuePersistencePort dishAttributeValuePersistencePort() {
+        return new DishAttributeValueMysqlAdapter(dishAttributeValueRepository, dishAttributeValueEntityMapper);
+    }
+
+    @Bean
+    public IValueAttributeDishServicePort valueAttributeDishServicePort() {
+        return new ValueAttributeDishUseCase(valueAttributeDishPersistencePort());
+    }
+
+    @Bean
+    public IValueAttributeDishPersistencePort valueAttributeDishPersistencePort() {
+        return new ValueAttributeDishMysqlAdapter(valueAttributeDishRepository, valueAttributeDishEntityMapper);
+    }
+
+    @Bean
+    public IAttributeDishServicePort attributeDishServicePort() {
+        return new AttributeDishUseCase(attributeDishPersistencePort());
+    }
+
+    @Bean
+    public IAttributeDishPersistencePort attributeDishPersistencePort() {
+        return new AttributeDishMysqlAdapter(attributeDishRepository, attributeDishEntityMapper);
     }
 }

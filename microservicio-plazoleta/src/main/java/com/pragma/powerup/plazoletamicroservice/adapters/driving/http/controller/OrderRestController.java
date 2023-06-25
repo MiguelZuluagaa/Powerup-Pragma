@@ -1,5 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
@@ -18,9 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController()
 @RequestMapping("/order")
@@ -43,6 +43,19 @@ public class OrderRestController {
                                                                     @PathVariable Long pageSize,
                                                                     @PathVariable Long page) {
         return ResponseEntity.ok(orderHandler.getOrdersByStatus(idRestaurant,idStatus,page,pageSize));
+    }
+
+    @Operation(summary = "Get orders orders by priority",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Orders returned",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "No data found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/pendingOrders /{idRestaurant}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>>> getPendingOrders(@PathVariable Long idRestaurant) {
+        return ResponseEntity.ok(orderHandler.getPendingOrders(idRestaurant));
     }
 
     @Operation(summary = "Get reported of the orders completed",

@@ -25,5 +25,9 @@ public class OrderDishEntity {
     @JoinColumn(name = "id_dish")
     private DishEntity idDish;
 
+    @ManyToOne
+    @JoinColumn(name = "id_dish_attribute_value")
+    private DishAttributeValueEntity idDishAttributeValue;
+
     private Long quantity;
 }

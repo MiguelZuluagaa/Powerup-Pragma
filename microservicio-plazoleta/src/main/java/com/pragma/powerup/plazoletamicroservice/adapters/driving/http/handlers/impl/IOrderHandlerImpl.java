@@ -1,5 +1,7 @@
 package com.pragma.powerup.plazoletamicroservice.adapters.driving.http.handlers.impl;
 
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderDishEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
@@ -10,8 +12,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,13 @@ public class IOrderHandlerImpl implements IOrderHandler {
     public List<OrderResponseDto> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize) {
         return orderResponseMapper.toResponseDto(orderServicePort.getOrdersByStatus(idRestaurant,idStatus,offset,pageSize));
     }
+
+    @Override
+    public ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> getPendingOrders(Long idRestaurant) {
+        return orderServicePort.getPendingOrders(idRestaurant);
+    }
+
+
 
     @Override
     public List<OrdersCompletedResponseDto> getReportOfOrdersCompleted(Long idRestaurant) {

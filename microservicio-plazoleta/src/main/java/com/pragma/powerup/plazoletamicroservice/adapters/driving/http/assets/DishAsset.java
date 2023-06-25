@@ -11,4 +11,5 @@ public class DishAsset {
 
     private Long idDish;
     private Long quantity;
+    private Long idComplement;
 }

@@ -1,7 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.domain.model;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.CategoryEntity;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 
 public class Dish {
     private Long id;
@@ -12,8 +11,9 @@ public class Dish {
     private Boolean active;
     private CategoryEntity idCategory;
     private RestaurantEntity idRestaurant;
+    private TypeDishEntity idTypeDish;
 
-    public Dish(Long id, String name, String description, Double price, String urlImage, Boolean active, CategoryEntity idCategory, RestaurantEntity idRestaurant) {
+    public Dish(Long id, String name, String description, Double price, String urlImage, Boolean active, CategoryEntity idCategory, RestaurantEntity idRestaurant, TypeDishEntity idTypeDish) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -22,6 +22,11 @@ public class Dish {
         this.active = active;
         this.idCategory = idCategory;
         this.idRestaurant = idRestaurant;
+        this.idTypeDish = idTypeDish;
+    }
+
+    public Dish(){
+
     }
 
     public Long getId() {
@@ -86,5 +91,13 @@ public class Dish {
 
     public void setIdRestaurant(RestaurantEntity idRestaurant) {
         this.idRestaurant = idRestaurant;
+    }
+
+    public TypeDishEntity getIdTypeDish() {
+        return idTypeDish;
+    }
+
+    public void setIdTypeDish(TypeDishEntity idTypeDish) {
+        this.idTypeDish = idTypeDish;
     }
 }

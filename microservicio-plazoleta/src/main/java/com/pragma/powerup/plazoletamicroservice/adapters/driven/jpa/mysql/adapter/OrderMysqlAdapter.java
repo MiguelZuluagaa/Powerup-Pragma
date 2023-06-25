@@ -16,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
 
@@ -71,6 +73,11 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     public List<Order> getOrdersByIdRestaurant(Long idRestaurant) {
         Optional<List<OrderEntity>> ordersFound = orderRepository.findAllByIdRestaurant(new RestaurantEntity(idRestaurant));
         return orderEntityMapper.toOrderList(ordersFound.get());
+    }
+
+    @Override
+    public Set<Order> getOrdersByIdRestaurantWithSet(Long idRestaurant) {
+        return null;
     }
 
     @Override
@@ -141,6 +148,11 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
     @Override
     public Optional<List<Long>> getAllOrdersWithMaxProcessingTime(){
         return orderRepository.getAllOrdersWithMaxProcessingTime();
+    }
+
+    @Override
+    public Optional<Set<OrderEntity>> getAllByIdChefIsNullAndIdRestaurant(Long idRestaurant) {
+        return orderRepository.getAllByIdChefIsNullAndIdRestaurant(new RestaurantEntity(idRestaurant));
     }
 
     @Override

@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.HashMap;
+
 @AllArgsConstructor
 @Getter
 public class DishRequestDto {
@@ -27,8 +29,13 @@ public class DishRequestDto {
     private String urlImage;
 
     @NotNull(message = "The idCategory cannot be empty")
-    private CategoryEntity idCategory;
+    private Long idCategory;
 
     @NotNull(message = "The idRestaurant cannot be empty")
-    private RestaurantEntity idRestaurant;
+    private Long idRestaurant;
+
+    @NotNull(message = "The idTypeDish cannot be empty")
+    private Long idTypeDish;
+
+    private HashMap<Long, String> complements;
 }

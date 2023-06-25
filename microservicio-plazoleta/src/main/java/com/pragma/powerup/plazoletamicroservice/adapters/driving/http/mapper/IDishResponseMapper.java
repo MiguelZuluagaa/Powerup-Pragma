@@ -17,6 +17,6 @@ import java.util.List;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IDishResponseMapper {
     List<DishResponseDto> toDishResponseList(List<Dish> dishList);
-    Dish toDish(DishRequestDto dishRequestDto);
+    //Dish toDish(DishRequestDto dishRequestDto);
     Dish toDish(UpdateDishRequestDto updateDishRequestDto);
 }

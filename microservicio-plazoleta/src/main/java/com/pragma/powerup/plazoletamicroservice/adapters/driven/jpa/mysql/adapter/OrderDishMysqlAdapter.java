@@ -8,6 +8,8 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistence
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class OrderDishMysqlAdapter implements IOrderDishPersistencePort {
@@ -22,5 +24,10 @@ public class OrderDishMysqlAdapter implements IOrderDishPersistencePort {
     @Override
     public void deleteOrderByOrderId(Long idOrder) {
         orderDishRepository.deleteByIdOrder(new OrderEntity(idOrder));
+    }
+
+    @Override
+    public Optional<Set<OrderDishEntity>> getOrderDishesByIdOrder(Long idOrder) {
+       return orderDishRepository.getAllByIdOrder(new OrderEntity(idOrder));
     }
 }

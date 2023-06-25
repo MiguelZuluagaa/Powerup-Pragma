@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "dish")
@@ -32,4 +31,12 @@ public class DishEntity {
     @ManyToOne
     @JoinColumn(name ="id_restaurant")
     private RestaurantEntity idRestaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "id_type_dish")
+    private TypeDishEntity idTypeDish;
+
+    public DishEntity(Long idDish) {
+        this.id = idDish;
+    }
 }

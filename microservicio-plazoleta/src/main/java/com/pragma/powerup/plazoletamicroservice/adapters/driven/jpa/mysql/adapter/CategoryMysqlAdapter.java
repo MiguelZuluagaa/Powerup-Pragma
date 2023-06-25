@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Optional;
 
-    @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class CategoryMysqlAdapter implements ICategoryPersistencePort {
 
     private final ICategoryRepository categoryRepository;

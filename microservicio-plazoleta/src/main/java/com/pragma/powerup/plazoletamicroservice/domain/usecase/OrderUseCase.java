@@ -1,10 +1,10 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IMessengerFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.ITrackingFeignClient;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.assets.DishAsset;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.CreateOrderRequestDto;
 import com.pragma.powerup.plazoletamicroservice.adapters.driving.http.dto.request.FinishOrderDto;
@@ -17,7 +17,6 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderDishPersistence
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.Temporal;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.*;
@@ -49,7 +49,7 @@ public class OrderUseCase implements IOrderServicePort {
     @Autowired
     private ITrackingFeignClient trackingFeignClient;
     @Autowired
-    private IUserFeignClient userFeignClient;
+    private DishAttributeValueUseCase dishAttributeValueUseCase;
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort) {
         this.orderPersistencePort = orderPersistencePort;
@@ -66,6 +66,229 @@ public class OrderUseCase implements IOrderServicePort {
     @Override
     public List<Order> getReportOfOrdersCompleted(Long idRestaurant) {
         return orderPersistencePort.findAllByIdRestaurantAndIdStatus(idRestaurant,STATUS_ORDER_FINISHED);
+    }
+
+    @Override
+    public ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> getPendingOrders(Long idRestaurant) {
+        Optional<Set<OrderEntity>> recordsFound = orderPersistencePort.getAllByIdChefIsNullAndIdRestaurant(idRestaurant);
+        if(recordsFound.get().size() < 0){
+            throw new NoDataFoundException();
+        }
+
+        Set<OrderEntity> recordsOrderPending = recordsFound.get()
+                .stream().
+                filter(record -> record.getIdStatus().getName().contains("PENDING"))
+                .collect(Collectors.toSet());
+
+        HashMap<OrderEntity, Set<OrderDishEntity>> ordersWithDetails = new HashMap<>();
+        recordsOrderPending.stream().forEach(record -> {
+            Optional<Set<OrderDishEntity>> detailsOrder = orderDishPersistencePort.getOrderDishesByIdOrder(record.getId());
+            ordersWithDetails.put(record,detailsOrder.get());
+        });
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> ordersSorted = sortOrders(ordersWithDetails);
+
+        return ordersSorted;
+    }
+
+    private ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> sortOrders(HashMap<OrderEntity, Set<OrderDishEntity>> orders){
+
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> arrayOrdersMeat = new ArrayList<>();
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> arrayOrdersSoups = new ArrayList<>();
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> arrayOrdersDesserts = new ArrayList<>();
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> arrayOrdersOthers = new ArrayList<>();
+
+        for (Map.Entry<OrderEntity, Set<OrderDishEntity>> order : orders.entrySet()) {
+            Set<OrderDishEntity> detailOrder = order.getValue();
+            ArrayList<String> typesDishes = new ArrayList<>();
+
+            detailOrder.stream().forEach(record ->{
+                String typeDish = record.getIdDish().getIdTypeDish().getName();
+                typesDishes.add(typeDish);
+            });
+
+
+            HashMap<OrderEntity, Set<OrderDishEntity>> hashMap = new HashMap<>();
+            if(typesDishes.stream().anyMatch(type -> type.contains("MEAT"))){
+                hashMap.put(order.getKey(), order.getValue());
+                arrayOrdersMeat.add(hashMap);
+            }else if(typesDishes.stream().anyMatch(type -> type.contains("SOUP"))){
+                hashMap.put(order.getKey(), order.getValue());
+                arrayOrdersSoups.add(hashMap);
+            }else if(typesDishes.stream().anyMatch(type -> type.contains("DESSERTS"))){
+                hashMap.put(order.getKey(), order.getValue());
+                arrayOrdersDesserts.add(hashMap);
+            }else{
+                hashMap.put(order.getKey(), order.getValue());
+                arrayOrdersOthers.add(hashMap);
+            }
+        }
+
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> ordersToReturn = new ArrayList<>();
+
+        arrayOrdersMeat = sortOrdersMeat(arrayOrdersMeat);
+        arrayOrdersSoups = sortOrdersSoups(arrayOrdersSoups);
+        arrayOrdersDesserts = sortOrdersDesserts(arrayOrdersDesserts);
+
+        arrayOrdersMeat.forEach(record -> ordersToReturn.add(record));
+        arrayOrdersSoups.forEach(record -> ordersToReturn.add(record));
+        arrayOrdersDesserts.forEach(record -> ordersToReturn.add(record));
+        arrayOrdersOthers.forEach(record -> ordersToReturn.add(record));
+
+        return ordersToReturn;
+    }
+
+    private ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> sortOrdersMeat(ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> orders){
+        int n = orders.size();
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - 1; j++) {
+                HashMap<OrderEntity, Set<OrderDishEntity>> orderOne = orders.get(j);
+                HashMap<OrderEntity, Set<OrderDishEntity>> orderTwo = orders.get(j+1);
+
+                //Get max value of order one
+                AtomicInteger maxValueOrderOne = new AtomicInteger();
+                Set<OrderDishEntity> orderOneDetail = orderOne.values().stream().findFirst().get();
+                orderOneDetail.forEach(record -> {
+                    if(record.getIdDishAttributeValue() != null && record.getIdDishAttributeValue().getIdAttributeDish().getName().contains("GRAMOS")){
+                        AtomicInteger newMeat = new AtomicInteger();
+                        newMeat.set(Integer.parseInt(record.getIdDishAttributeValue().getIdValueAttributeDish().getValue()));
+                        if(maxValueOrderOne.longValue() < newMeat.longValue()){
+                            maxValueOrderOne.set(newMeat.intValue());
+                        }
+                    }
+                });
+
+                //Get max value of order two
+                AtomicInteger maxValueOrderTwo = new AtomicInteger();
+                Set<OrderDishEntity> orderTwoDetail = orderTwo.values().stream().findFirst().get();
+                orderTwoDetail.forEach(record -> {
+                    if(record.getIdDishAttributeValue() != null && record.getIdDishAttributeValue().getIdAttributeDish().getName().contains("GRAMOS")){
+                        AtomicInteger newMeat = new AtomicInteger();
+                        newMeat.set(Integer.parseInt(record.getIdDishAttributeValue().getIdValueAttributeDish().getValue()));
+                        if(maxValueOrderTwo.longValue() < newMeat.longValue()){
+                            maxValueOrderTwo.set(newMeat.intValue());
+                        }
+                    }
+                });
+
+                if(maxValueOrderOne.longValue() < maxValueOrderTwo.longValue()){
+                    HashMap<OrderEntity, Set<OrderDishEntity>> temp = orders.get(j+1);
+                    orders.set(j+1,orders.get(j));
+                    orders.set(j,temp);
+                }
+            }
+        }
+
+        return orders;
+
+
+    }
+
+    private ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> sortOrdersSoups(ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> orders){
+        int n = orders.size();
+
+        HashMap<String, Long> prioritySoups = new HashMap<>();
+        prioritySoups.put("ARROZ", 1L);
+        prioritySoups.put("PAPAS", 2L);
+        prioritySoups.put("YUCA", 3L);
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - 1; j++) {
+                HashMap<OrderEntity, Set<OrderDishEntity>> orderOne = orders.get(j);
+                HashMap<OrderEntity, Set<OrderDishEntity>> orderTwo = orders.get(j+1);
+
+                //Get max value of order one
+                AtomicInteger maxValueOrderOne = new AtomicInteger();
+                Set<OrderDishEntity> orderOneDetail = orderOne.values().stream().findFirst().get();
+                orderOneDetail.forEach(record -> {
+                    if(record.getIdDishAttributeValue() != null && record.getIdDishAttributeValue().getIdAttributeDish().getName().contains("SIDE DISH")){
+                        AtomicInteger newMeat = new AtomicInteger();
+                        String typeSideDish = record.getIdDishAttributeValue().getIdValueAttributeDish().getValue();
+                        newMeat.set(prioritySoups.get(typeSideDish).intValue());
+                        newMeat.set(newMeat.intValue());
+                        if(maxValueOrderOne.longValue() < newMeat.longValue()){
+                            maxValueOrderOne.set(newMeat.intValue());
+                        }
+                    }
+                });
+
+                //Get max value of order two
+                AtomicInteger maxValueOrderTwo = new AtomicInteger();
+                Set<OrderDishEntity> orderTwoDetail = orderTwo.values().stream().findFirst().get();
+                orderTwoDetail.forEach(record -> {
+                    if(record.getIdDishAttributeValue() != null && record.getIdDishAttributeValue().getIdAttributeDish().getName().contains("SIDE DISH")){
+                        AtomicInteger newMeat = new AtomicInteger();
+                        String typeSideDish = record.getIdDishAttributeValue().getIdValueAttributeDish().getValue();
+                        newMeat.set(prioritySoups.get(typeSideDish).intValue());
+                        newMeat.set(newMeat.intValue());
+                        if(maxValueOrderTwo.longValue() < newMeat.longValue()){
+                            maxValueOrderTwo.set(newMeat.intValue());
+                        }
+                    }
+                });
+
+                if(maxValueOrderOne.longValue() < maxValueOrderTwo.longValue()){
+                    HashMap<OrderEntity, Set<OrderDishEntity>> temp = orders.get(j+1);
+                    orders.set(j+1,orders.get(j));
+                    orders.set(j,temp);
+                }
+            }
+        }
+
+        return orders;
+    }
+
+    private ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> sortOrdersDesserts(ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> orders){
+        int n = orders.size();
+
+        HashMap<String, Long> priorityDesserts = new HashMap<>();
+        priorityDesserts.put("HELADOS", 1L);
+        priorityDesserts.put("FLANES", 2L);
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - 1; j++) {
+                HashMap<OrderEntity, Set<OrderDishEntity>> orderOne = orders.get(j);
+                HashMap<OrderEntity, Set<OrderDishEntity>> orderTwo = orders.get(j+1);
+
+                //Get max value of order one
+                AtomicInteger maxValueOrderOne = new AtomicInteger();
+                Set<OrderDishEntity> orderOneDetail = orderOne.values().stream().findFirst().get();
+                orderOneDetail.forEach(record -> {
+                    if(record.getIdDishAttributeValue() != null && record.getIdDishAttributeValue().getIdAttributeDish().getName().contains("DESSERT")){
+                        AtomicInteger newMeat = new AtomicInteger();
+                        String typeSideDish = record.getIdDishAttributeValue().getIdValueAttributeDish().getValue();
+                        newMeat.set(priorityDesserts.get(typeSideDish).intValue());
+                        newMeat.set(newMeat.intValue());
+                        if(maxValueOrderOne.longValue() < newMeat.longValue()){
+                            maxValueOrderOne.set(newMeat.intValue());
+                        }
+                    }
+                });
+
+                //Get max value of order two
+                AtomicInteger maxValueOrderTwo = new AtomicInteger();
+                Set<OrderDishEntity> orderTwoDetail = orderTwo.values().stream().findFirst().get();
+                orderTwoDetail.forEach(record -> {
+                    if(record.getIdDishAttributeValue() != null && record.getIdDishAttributeValue().getIdAttributeDish().getName().contains("DESSERT")){
+                        AtomicInteger newMeat = new AtomicInteger();
+                        String typeSideDish = record.getIdDishAttributeValue().getIdValueAttributeDish().getValue();
+                        newMeat.set(priorityDesserts.get(typeSideDish).intValue());
+                        newMeat.set(newMeat.intValue());
+                        if(maxValueOrderTwo.longValue() < newMeat.longValue()){
+                            maxValueOrderTwo.set(newMeat.intValue());
+                        }
+                    }
+                });
+
+                if(maxValueOrderOne.longValue() < maxValueOrderTwo.longValue()){
+                    HashMap<OrderEntity, Set<OrderDishEntity>> temp = orders.get(j+1);
+                    orders.set(j+1,orders.get(j));
+                    orders.set(j,temp);
+                }
+            }
+        }
+
+        return orders;
     }
 
     @Override
@@ -228,6 +451,8 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.findOrderById(idOrder).get().getIdStatus().getName();
     }
 
+
+
     private String generatePin(){
         return "1234";
     }
@@ -279,7 +504,7 @@ public class OrderUseCase implements IOrderServicePort {
         return order;
     }
 
-    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<DishAsset> dishesRequestDto, Long idRestaurant, OrderEntity order){
+    private ArrayList<OrderDishEntity> validateDishesToSave(ArrayList<DishAsset> dishesRequestDto, OrderEntity order){
         ArrayList<OrderDishEntity> dishesToSave = new ArrayList<>();
 
         for(DishAsset dish : dishesRequestDto){
@@ -293,7 +518,15 @@ public class OrderUseCase implements IOrderServicePort {
                     throw new QuantityDishInvalidException();
                 }
 
-                dishesToSave.add(new OrderDishEntity(null, order, dishEntity, dish.getQuantity()));
+                if(dish.getIdComplement() != null){
+                    DishAttributeValueEntity complementFound = dishAttributeValueUseCase.findById(dish.getIdComplement());
+                    if(complementFound.getIdDish().getId() != dish.getIdDish()){
+                        throw new ComplementNotValidException();
+                    }
+                    dishesToSave.add(new OrderDishEntity(null, order, dishEntity, complementFound, dish.getQuantity()));
+                }else {
+                    dishesToSave.add(new OrderDishEntity(null, order, dishEntity, null, dish.getQuantity()));
+                }
             }else{
                 deleteOrderById(order.getId());
                 throw new SomeDishesAreNotFromRestaurantException();
@@ -314,7 +547,7 @@ public class OrderUseCase implements IOrderServicePort {
             OrderEntity order = initializeOrder(restaurantDto);
             orderPersistencePort.createOrder(order);
 
-            ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), restaurantDto.getId(), order);
+            ArrayList<OrderDishEntity> dishesToSave = validateDishesToSave(createOrderRequestDto.getDishes(), order);
             orderDishPersistencePort.saveOrderDishes(dishesToSave);
             sendNotificationToUser("Order #"+order.getId()+" created successfully", "+573004469428");
             createLoggOrder(order, "",STATUS_ORDER_PENDING);
@@ -325,7 +558,7 @@ public class OrderUseCase implements IOrderServicePort {
         orderPersistencePort.deleteOrderById(idOrder);
     }
 
-    @Scheduled(cron = "0 * * * * ?") // Check every minute
+    /*@Scheduled(cron = "0 * * * * ?") // Check every minute
     public void validateOrdersExpired(){
         Optional<List<Long>> ordersFound = orderPersistencePort.getAllOrdersWithMaxProcessingTime();
         System.out.println("Executing validateOrdersExpire!!");
@@ -334,7 +567,7 @@ public class OrderUseCase implements IOrderServicePort {
                 closeOrderExpired(order);
             });
         }
-    }
+    }*/
 
     private void closeOrderExpired(Long idOrder){
         Optional<OrderEntity> orderFound = orderPersistencePort.findOrderById(idOrder);

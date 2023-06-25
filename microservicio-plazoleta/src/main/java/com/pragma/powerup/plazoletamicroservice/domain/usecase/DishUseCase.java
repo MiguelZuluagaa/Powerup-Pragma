@@ -1,7 +1,6 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.PrincipalUser;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.CategoryDontExistException;
+import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.UserItsNotOwner;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyActiveException;
@@ -9,6 +8,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishIsAlreadyD
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.DishNotFound;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserItsNotOwnerOfTheRestaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Dish;
+import com.pragma.powerup.plazoletamicroservice.domain.model.DishAttributeValue;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.ICategoryPersistencePort;
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IDishPersistencePort;
@@ -16,8 +16,11 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistenc
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.pragma.powerup.plazoletamicroservice.configuration.Constants.ROLE_OWNER;
@@ -27,9 +30,11 @@ public class DishUseCase implements IDishServicePort {
 
     @Autowired
     private IRestaurantPersistencePort restaurantPersistencePort;
-
     @Autowired
     private ICategoryPersistencePort categoryPersistencePort;
+    @Autowired
+    private DishAttributeValueUseCase dishAttributeValueUseCase;
+
 
     public DishUseCase(IDishPersistencePort dishPersistencePort) {
         this.dishPersistencePort = dishPersistencePort;
@@ -47,14 +52,26 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public void saveDish(Dish dish) {
+    @Transactional
+    public void saveDish(Dish dish, HashMap<Long, String> complements) {
         if(itsOwner()){ // Validate de user, need be owner to create a dish
             if(userAuthenticatedItsOwnerOfTheRestaurant(dish.getIdRestaurant().getId())){ // Validate if the user authenticated is the owner of the restaurant
                 if(categoryPersistencePort.existCategoryById(dish.getIdCategory().getId())){ // Validate if the category of the dish exist
                     dish.setActive(true); // Always the dish is active when the owner create it
-                    dishPersistencePort.saveDish(dish);
+                    DishEntity dishSaved = dishPersistencePort.saveDish(dish);
+                    if(complements != null) insertComplements(dishSaved.getId(),complements);
                 }
             }
+        }
+    }
+
+    public void insertComplements(Long idDish, HashMap<Long, String> complements){
+        for (Map.Entry<Long, String> entry : complements.entrySet()) {
+            DishAttributeValue record = new DishAttributeValue();
+            record.setIdDish(new DishEntity(idDish));
+            record.setIdAttributeDish(new AttributeDishEntity(entry.getKey()));
+            record.setIdValueAttributeDish(new ValueAttributeDishEntity(null,entry.getValue()));
+            dishAttributeValueUseCase.save(record);
         }
     }
 

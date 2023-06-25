@@ -1,7 +1,5 @@
 package com.pragma.powerup.plazoletamicroservice.domain.usecase;
 
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.PrincipalUser;
-import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.ITrackingFeignClient;
 import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.client.IUserFeignClient;
@@ -9,7 +7,6 @@ import com.pragma.powerup.plazoletamicroservice.adapters.driven.microservices.dt
 import com.pragma.powerup.plazoletamicroservice.configuration.security.jwt.JwtTokenFilter;
 import com.pragma.powerup.plazoletamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazoletamicroservice.domain.exceptions.PageAndOffsetMustBePositive;
-import com.pragma.powerup.plazoletamicroservice.domain.exceptions.UserCantDeleteRestaurantException;
 import com.pragma.powerup.plazoletamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazoletamicroservice.domain.model.RestaurantStatus;
 import com.pragma.powerup.plazoletamicroservice.domain.model.TrackingRestaurant;
@@ -18,10 +15,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.spi.IOrderPersistencePort
 import com.pragma.powerup.plazoletamicroservice.domain.spi.IRestaurantPersistencePort;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;

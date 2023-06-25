@@ -84,9 +84,11 @@ class OrderRestControllerTest {
         ArrayList<DishAsset> dishes = new ArrayList<>();
         dishes.add(new DishAsset(
                     1L,
+                    2L,
                     2L));
 
         dishes.add(new DishAsset(
+                2L,
                 2L,
                 2L));
 

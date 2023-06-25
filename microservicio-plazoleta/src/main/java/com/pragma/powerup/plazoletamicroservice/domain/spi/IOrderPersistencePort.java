@@ -5,6 +5,7 @@ import com.pragma.powerup.plazoletamicroservice.domain.model.Order;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface IOrderPersistencePort {
     void createOrder(OrderEntity orderEntity);
@@ -18,8 +19,10 @@ public interface IOrderPersistencePort {
     Boolean existsOrdersInCurseByIdRestaurant(Long idRestaurant);
     List<Order> getOrdersByStatus(Long idRestaurant, Long idStatus, Long offset, Long pageSize);
     List<Order> getOrdersByIdRestaurant(Long idRestaurant);
+    Set<Order> getOrdersByIdRestaurantWithSet(Long idRestaurant);
     List<Order> findAllByIdRestaurantAndIdStatus(Long idRestaurant,Long idStatus);
     Optional<OrderEntity> findOrderById(Long idOrder);
     Optional<List<Object>> testMethod();
     Optional<List<Long>> getAllOrdersWithMaxProcessingTime();
+    Optional<Set<OrderEntity>> getAllByIdChefIsNullAndIdRestaurant(Long idRestaurant);
 }
