@@ -53,6 +53,11 @@ public class IOrderHandlerImpl implements IOrderHandler {
     }
 
     @Override
+    public HashMap<OrderEntity, Set<OrderDishEntity>> takeOrderWithPriority(Long idRestaurant) {
+        return orderServicePort.takeOrderWithPriority(idRestaurant);
+    }
+
+    @Override
     public void markAsReady(Long idOrder) {
         orderServicePort.markAsReady(idOrder);
     }

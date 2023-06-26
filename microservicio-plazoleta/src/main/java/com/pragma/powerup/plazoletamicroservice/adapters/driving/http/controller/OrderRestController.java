@@ -98,6 +98,18 @@ public class OrderRestController {
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
     }
 
+    @Operation(summary = "Take a new order with priority",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order with priority took successfully",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "error creating order",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @GetMapping("/takeOrderWithPriority/{idRestaurant}")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<HashMap<OrderEntity, Set<OrderDishEntity>>> takeOrderWithPriority(@PathVariable Long idRestaurant) {
+        return ResponseEntity.ok(orderHandler.takeOrderWithPriority(idRestaurant));
+    }
+
     @Operation(summary = "Take a new order",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Order took",

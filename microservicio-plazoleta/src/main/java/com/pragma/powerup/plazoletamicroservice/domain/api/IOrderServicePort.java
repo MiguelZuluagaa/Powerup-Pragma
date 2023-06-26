@@ -15,6 +15,7 @@ public interface IOrderServicePort {
     ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> getPendingOrders(Long idRestaurant);
     Map<Long, Double> getReportOfOrdersCompletedByEmployee(Long idRestaurant);
     void takeOrder(Long idOrder);
+    HashMap<OrderEntity, Set<OrderDishEntity>> takeOrderWithPriority(Long idRestaurant);
     void markAsReady(Long idOrder);
     void cancelOrder(Long idOrder);
     void finishOrder(FinishOrderDto finishOrderDto);

@@ -16,6 +16,7 @@ public interface IOrderHandler {
     List<OrdersCompletedResponseDto> getReportOfOrdersCompleted(Long idRestaurant);
     Map<Long, Double> getReportOfOrdersCompletedByEmployee(Long idRestaurant);
     void takeOrder(Long idOrder);
+    HashMap<OrderEntity, Set<OrderDishEntity>> takeOrderWithPriority(Long idRestaurant);
     void markAsReady(Long idOrder);
     void cancelOrder(Long idOrder);
     void finishOrder(FinishOrderDto finishOrderDto);

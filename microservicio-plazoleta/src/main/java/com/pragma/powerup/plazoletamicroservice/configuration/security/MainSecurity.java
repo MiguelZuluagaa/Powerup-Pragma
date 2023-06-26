@@ -47,7 +47,7 @@ public class MainSecurity {
                         // Public endpoints
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
                         // Private endpoints
-                        .requestMatchers("/order/getOrdersByStatus/**","/order/takeOrder/**","/order/markAsReady/**","/order/markAsFinished/","/order/pendingOrders/**").hasAnyRole(ROLE_EMPLOYEE)
+                        .requestMatchers("/order/getOrdersByStatus/**","/order/takeOrder/**","/order/takeOrderWithPriority/**","/order/markAsReady/**","/order/markAsFinished/","/order/pendingOrders/**").hasAnyRole(ROLE_EMPLOYEE)
                         .requestMatchers("/order/","/restaurant/getRestaurantsWithPagination/**","/dish/getDishesByCategory/**").hasAnyRole(ROLE_CUSTOMER)
                         .requestMatchers("/restaurant/","/restaurant/**","/category/**","/category/","/restaurant/delete/**").hasAnyRole(ROLE_ADMIN)
                         .requestMatchers("/dish/","/dish/**","/order/getReportOfOrdersCompleted/**","/order/getReportOfOrdersCompletedByEmployee/**").hasAnyRole(ROLE_OWNER)

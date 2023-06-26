@@ -350,6 +350,26 @@ public class OrderUseCase implements IOrderServicePort {
     }
 
     @Override
+    @Transactional
+    public HashMap<OrderEntity, Set<OrderDishEntity>> takeOrderWithPriority(Long idRestaurant) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // Get the user authenticated
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal(); // Get the user authenticated
+        Long idUserAuthenticated = principalUser.getId(); // Get the id of the user authenticated
+
+        ArrayList<HashMap<OrderEntity, Set<OrderDishEntity>>> orders = getPendingOrders(idRestaurant);
+        if(orders.size() < 0){
+            throw new NoDataFoundException();
+        }
+
+        HashMap<OrderEntity, Set<OrderDishEntity>> orderToTake = orders.get(0);
+        Long idOrder = orderToTake.keySet().iterator().next().getId();
+
+        takeOrder(idOrder);
+
+        return orderToTake;
+    }
+
+    @Override
     public void markAsReady(Long idOrder) {
         if (idOrder < 0) {
             throw new ParametersNegativesException();
@@ -450,9 +470,7 @@ public class OrderUseCase implements IOrderServicePort {
     public String getOrderStatusById(Long idOrder) {
         return orderPersistencePort.findOrderById(idOrder).get().getIdStatus().getName();
     }
-
-
-
+    
     private String generatePin(){
         return "1234";
     }
